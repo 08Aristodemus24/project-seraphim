@@ -332,3 +332,41 @@ def normalize_rating_matrix(Y, R):
     Y_mean = np.sum(Y * R, axis=1) / (np.sum(R, axis=1) + 1e-12).reshape(-1)
     Y_normed = Y - (Y_mean * R)
     return [Y_normed, Y_mean]
+
+def get_top_models(models_train, models_cross, pool_size: int=10):
+    """
+    takes in the dataframes returned by either LazyClassifier or LazyPredict
+    e.g. clf = LazyRegressor(
+        verbose=0, 
+        ignore_warnings=True, 
+        custom_metric=None, 
+        regressors=[LinearRegression, Ridge, Lasso, DecisionTreeRegressor, RandomForestRegressor, XGBRegressor, SVR])
+    models_train, predictions_train = clf.fit(ch_X_trains, ch_X_trains, ch_Y_trains, ch_Y_trains)
+    models_cross, predictions_cross = clf.fit(ch_X_trains, ch_X_cross, ch_Y_trains, ch_Y_cross)
+
+    args:
+        models_train - 
+        models_cross - 
+        pool_size - number of rows to take into consideration when merging the
+        dataframes of model train and cross validation metric values
+    """
+
+    # merge both first pool_size rows of training and cross 
+    # validation model dataframes
+    models_train = models_train[:pool_size].reset_index()
+    models_cross = models_cross[:pool_size].reset_index()
+
+    # rename columsn f each dataframe to avoid duplication during merge
+    models_train.rename(columns={'Adjusted R-Squared': 'Train Adjusted R-Squared'}, inplace=True)
+    models_train.rename(columns={'R-Squared': 'Train R-Squared'}, inplace=True)
+    models_train.rename(columns={'RMSE': 'Train RMSE'}, inplace=True)
+    models_train.rename(columns={'Time Taken': 'Train Time Taken'}, inplace=True)
+    models_cross.rename(columns={'Adjusted R-Squared': 'Cross Adjusted R-Squared'}, inplace=True)
+    models_cross.rename(columns={'R-Squared': 'Cross R-Squared'}, inplace=True)
+    models_cross.rename(columns={'RMSE': 'Cross RMSE'}, inplace=True)
+    models_cross.rename(columns={'Time Taken': 'Cross Time Taken'}, inplace=True)
+    
+    # merge model dataframes on 'Model' column
+    top_models = models_train.merge(models_cross, how='inner', left_on='Model', right_on='Model')
+
+    return top_models
