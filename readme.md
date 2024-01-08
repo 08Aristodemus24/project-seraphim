@@ -75,5 +75,6 @@ Visualizers:
 * plot_evolution ~
 * view_clusters_3d ~
 * ModelResults
+* plot_all_vars ~
 
 * to implement pairplot for newly encoded featuress

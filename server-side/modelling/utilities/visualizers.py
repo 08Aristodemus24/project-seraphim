@@ -12,8 +12,11 @@ from sklearn.manifold import TSNE
 
 import itertools
 
+
 def plot_train_cross_features(X_trains, X_cross, feature_1, feature_2, color: list=['#4248f5', '#f542a1'], img_title: str="untitled", save_img: bool=True):
     """
+    suitable for all continuous input
+
     args:
         X_trains - 
         X_cross - 
@@ -26,8 +29,8 @@ def plot_train_cross_features(X_trains, X_cross, feature_1, feature_2, color: li
     fig = plt.figure(figsize=(15, 10))
     axis = fig.add_subplot()
 
-    axis.scatter(X_trains[:, 0], X_trains[:, 1], alpha=0.25, c=color[0], marker='p', label='training data')
-    axis.scatter(X_cross[:, 0], X_cross[:, 1], alpha=0.25, c=color[1], marker='.', label='test data')
+    axis.scatter(X_trains[:, feature_1], X_trains[:, feature_2], alpha=0.25, c=color[0], marker='p', label='training data')
+    axis.scatter(X_cross[:, feature_1], X_cross[:, feature_2], alpha=0.25, c=color[1], marker='.', label='test data')
     axis.set_xlabel(feature_1)
     axis.set_ylabel(feature_2)
     axis.legend()
@@ -38,6 +41,8 @@ def plot_train_cross_features(X_trains, X_cross, feature_1, feature_2, color: li
 
 def analyze(X_trains, feature_names: list, fig_dims: tuple=(4, 2), color: str="#036bfc", img_title: str="untitled", save_img: bool=True):
     """
+    suitable for all continuous input
+
     to write:
     dynamic division of features insteawd of 4, 2 what if there are 12 features 
     of the data? 20? 32? 15? What then?
@@ -124,6 +129,8 @@ def data_split_metric_values(Y_true, Y_pred):
 
 def view_words(word_vec: dict, word_range: int, title: str="untitled", save_img: bool=True):
     """
+    suitable for all discrete input
+
     args:
         word_vec - key value pairs of the words and respective embeddings
 
@@ -183,6 +190,8 @@ def view_words(word_vec: dict, word_range: int, title: str="untitled", save_img:
 
 def view_value_frequency(word_counts, colormap: str="plasma", title: str="untitled", save_img: bool=True, kind: str='barh', limit: int=6):
     """
+    suitable for all discrete input
+
     plots either a horizontal bar graph to display frequency of words top 'limit' 
     words e.g. top 20 or a pie chart to display the percentages of the top 'limit' 
     words e.g. top 20, specified by the argument kind which can be either
@@ -329,6 +338,8 @@ def view_classified_labels(df, img_title: str="untitled", save_img: bool=True, c
 
 def view_label_freq(label_freq, img_title: str="untitled", save_img: bool=True, labels: list | pd.Series | np.ndarray=["DER", "NDG", "OFF", "HOM"], horizontal: bool=True):
     """
+    suitable for all discrete input
+
     main args:
         label_freq - is actually a the returned value of the method
         of a pandas series, e.g.
@@ -355,6 +366,8 @@ def view_label_freq(label_freq, img_title: str="untitled", save_img: bool=True, 
 
 def disp_cat_feat(df, cat_cols: list, fig_dims: tuple=(3, 2)):
     """
+    suitable for all discrete input
+
     displays frequency of categorical features of a dataframe
     """
 
@@ -401,6 +414,23 @@ def disp_cat_feat(df, cat_cols: list, fig_dims: tuple=(3, 2)):
         print(col)
 
     plt.show()
+
+def plot_all_features(X, hue=None, colormap: str='mako'):
+    """
+    suitable for: all discrete inputs, both discrete and continuous inputs,
+    and all continuous inputs
+
+    args:
+        X - teh dataset we want all features to be visualized whether
+        discrete or continuous
+
+        hue - a string that if provided will make the diagonals
+        of the pairplot to be bell curves of the provided string feature
+    """
+    
+
+    sb.set_palette(colormap)
+    sb.pairplot(X, hue=hue, plot_kws={'marker': 'p', 'linewidth': 1})
 
 # for recommendation
 def describe_col(df: pd.DataFrame, column: str):
