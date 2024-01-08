@@ -421,7 +421,7 @@ def plot_all_features(X, hue=None, colormap: str='mako'):
     and all continuous inputs
 
     args:
-        X - teh dataset we want all features to be visualized whether
+        X - the dataset we want all features to be visualized whether
         discrete or continuous
 
         hue - a string that if provided will make the diagonals
