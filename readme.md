@@ -23,3 +23,55 @@
 * https://medium.com/omics-diary/how-to-use-the-lazy-predict-library-to-select-the-best-machine-learning-model-65378bf4568e
 
 2. evaluating ensemble models:
+
+# Pre-built template functions for projects:
+* - done
+^ - needs further testing
+$ - needs further understanding
+# - needs further tweaking
+
+Loaders:
+* load_corpus
+* get_chars
+* load_lookup_array
+* save_lookup_array
+* load_meta_data
+* save_meta_data
+* construct_embedding_dict
+* construct_embedding_matrix
+* get_cat_cols*
+
+Preprocessors:
+* map_value_to_index
+* remove_contractions
+* rem_non_alpha_num
+* capitalize
+* filter_valid
+* partition_corpus
+* rem_stop_words
+* stem_corpus_words
+* lemmatize_corpus_words
+* string_list_to_list
+* flatten_series_of_lists
+* sentences_to_avgs
+* normalize_ratings
+* normalize_rating_matrix
+* normalize_train_cross
+* encode_features
+
+Visualizers:
+* plot_train_cross_features
+* analyze
+* view_words
+* data_split_metric_values
+* view_value_frequency
+* multi_class_heatmap
+* view_metric_values
+* view_classified_labels
+* view_label_freq
+* disp_cat_feat
+* describe_col
+* visualize_graph
+* plot_evolution
+* view_clusters_3d
+* ModelResults

@@ -205,12 +205,12 @@ def view_value_frequency(word_counts, colormap: str="plasma", title: str="untitl
 
     cmap = cm.get_cmap(colormap)
     fig = plt.figure(figsize=(15, 10))
-    _, axis = fig.subplots()
+    axis = fig.add_subplot()
     
     if kind == 'barh':        
         axis.barh(data.index, data.values, color=cmap(np.linspace(0, 1, len(data))))
         axis.set_xlabel('frequency')
-        axis.set_ylabel('words')
+        axis.set_ylabel('value')
         axis.set_title(title)
         
     elif kind == 'pie':
@@ -327,7 +327,7 @@ def view_classified_labels(df, img_title: str="untitled", save_img: bool=True, c
         plt.savefig(f'./figures & images/{img_title}.png')
         plt.show()
 
-def view_label_freq(label_freq, img_title: str="untitled", save_img: bool=True, labels: list=["DER", "NDG", "OFF", "HOM"]):
+def view_label_freq(label_freq, img_title: str="untitled", save_img: bool=True, labels: list | pd.Series | np.ndarray=["DER", "NDG", "OFF", "HOM"], horizontal: bool=True):
     """
     main args:
         label_freq - is actually a the returned value of the method
@@ -340,12 +340,67 @@ def view_label_freq(label_freq, img_title: str="untitled", save_img: bool=True, 
     """
 
     # plots the unique labels against the count of these unique labels
-    axis = sb.barplot(x=labels, y=label_freq.values, palette="flare")
+
+    axis = sb.barplot(x=label_freq.values, y=labels, palette="flare") \
+        if horizontal == True else sb.barplot(x=labels, y=label_freq.values, palette="flare")
+    x_label = "frequency" if horizontal == True else "value"
+    y_label = "value" if horizontal == True else "frequency"
+    axis.set_xlabel(x_label)
+    axis.set_ylabel(y_label)
     axis.set_title(img_title)
 
     if save_img:
         plt.savefig(f'./figures & images/{img_title}.png')
         plt.show()
+
+def disp_cat_feat(df, cat_cols: list, fig_dims: tuple=(3, 2)):
+    """
+    displays frequency of categorical features of a dataframe
+    """
+
+    # unpack dimensions of figure
+    rows, cols = fig_dims
+    
+    # setup figure
+    # fig, axes = plt.subplots(rows, cols, figsize=(15, 15), gridspec_kw={'width_ratios': [3, 3], 'height_ratios': [5, 5, 5]})
+    fig, axes = plt.subplots(rows, cols, figsize=(15, 15), gridspec_kw={'width_ratios': [3, 3]})
+    axes = axes.flat
+    fig.tight_layout(pad=7)
+
+    def hex_color_gen():
+        rgb_gen = lambda: np.random.randint(0, 255)
+        color = "#%02X%02X%02X" % (rgb_gen(), rgb_gen(), rgb_gen())
+        return color
+
+    # loop through all categorical features and see their frequencies
+    for index, col in enumerate(cat_cols):
+        # get value and respective counts of current categorical column
+        val_counts = df[col].value_counts()
+
+        # count the number of unique values
+        n_unqiue = val_counts.shape[0]
+
+        # get all unqiue categories of the feature/column
+        keys = list(val_counts.keys())
+
+        colors = [hex_color_gen() for _ in range(n_unqiue)]
+        print(colors, n_unqiue)
+        chosen_colors = np.random.choice(colors, n_unqiue, replace=False)
+        # list all categorical columns no of occurences of each of their unique values
+        ax = val_counts.plot(kind='barh', ax=axes[index], color=chosen_colors)
+
+        # annotate bars using axis.containers[0] since it contains
+        # all 
+        print(ax.containers[0])
+        ax.bar_label(ax.containers[0])
+        ax.set_ylabel('no. of occurences')
+        ax.set_xlabel(col)
+        ax.legend()
+
+        # current column
+        print(col)
+
+    plt.show()
 
 # for recommendation
 def describe_col(df: pd.DataFrame, column: str):

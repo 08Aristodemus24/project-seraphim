@@ -131,3 +131,18 @@ def construct_embedding_matrix(val_to_index, embedding_dict, emb_dim):
                 embedding_matrix[index] = vector[:emb_dim]
 
     return embedding_matrix
+
+def get_cat_cols(df):
+    """
+    returns all categorical columns/features names
+    as a list
+    """
+    
+    cols = df.columns
+
+    num_cols = df._get_numeric_data().columns.to_list()
+
+    # get complement of set of columns and numerical columns
+    cat_cols = list(set(cols) - set(num_cols))
+    
+    return cat_cols

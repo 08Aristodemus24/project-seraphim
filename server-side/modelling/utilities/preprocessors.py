@@ -5,15 +5,28 @@ from nltk.stem.snowball import SnowballStemmer
 from nltk.stem import WordNetLemmatizer
 from nltk.corpus import stopwords
 
-from sklearn.preprocessing import StandardScaler, MinMaxScaler
+from sklearn.preprocessing import StandardScaler, MinMaxScaler, OrdinalEncoder
 
 import pandas as pd
 import numpy as np
 import ast
 # import tensorflow as tf
 
+def encode_features(feature, X):
+    """
+    encodes the categorical features of a dataset into numerical values
+    given the desired feature to encode and the input X to transform
+    """
+
+    oe = OrdinalEncoder(dtype=np.int64)
+    enc_feats = oe.fit_transform(X[feature])
+    return enc_feats
+
 def normalize_train_cross(X_trains, X_cross, scaler='min_max'):
     """
+    normalizes training and cross validation datasets using either
+    a standard z-distribution or min max scaler
+
     args:
         X_trains - 
         X_cross - 
