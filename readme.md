@@ -25,7 +25,7 @@
 2. evaluating ensemble models:
 
 # Pre-built template functions for projects:
-* - done
+~ - done
 ^ - needs further testing
 $ - needs further understanding
 # - needs further tweaking
@@ -39,7 +39,7 @@ Loaders:
 * save_meta_data
 * construct_embedding_dict
 * construct_embedding_matrix
-* get_cat_cols*
+* get_cat_cols ~
 
 Preprocessors:
 * map_value_to_index
@@ -57,21 +57,23 @@ Preprocessors:
 * normalize_ratings
 * normalize_rating_matrix
 * normalize_train_cross
-* encode_features
+* encode_features $ because i'm still confused about the mapping from e.g. CPU to nubmer 8
 
 Visualizers:
 * plot_train_cross_features
 * analyze
 * view_words
 * data_split_metric_values
-* view_value_frequency
+* view_value_frequency # has no x label
 * multi_class_heatmap
 * view_metric_values
 * view_classified_labels
-* view_label_freq
-* disp_cat_feat
+* view_label_freq # has no x label
+* disp_cat_feat # has x labels but bars are too compressed especially if n unique is large
 * describe_col
 * visualize_graph
-* plot_evolution
-* view_clusters_3d
+* plot_evolution ~
+* view_clusters_3d ~
 * ModelResults
+
+* to implement pairplot for newly encoded featuress
