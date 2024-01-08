@@ -68,6 +68,28 @@ def load_meta_data(path: str):
 
     return meta_data
 
+def save_model(model, path: str):
+    """
+    saves partcularly an sklearn model in a .pkl file
+    for later testing
+    """
+
+    with open(path, 'wb') as file:
+        pickle.dump(model, file)
+        file.close()
+
+def load_model(path: str):
+    """
+    loads the sklearn model stored in a .pkl file
+    for later testing
+    """
+
+    with open(path, 'rb') as file:
+        model = pickle.load(file)
+        file.close()
+
+    return model
+
 def construct_embedding_dict(emb_path):
     """
     returns an embedding dictionary populated with all the unique 
@@ -147,7 +169,7 @@ def get_cat_cols(df):
     
     return cat_cols
 
-def get_top_models(models_train, models_cross, pool_size: int=10):
+def get_top_models(models_train, models_cross, pool_size: int=10, model_type: str="regressor"):
     """
     takes in the dataframes returned by either LazyClassifier or LazyPredict
     e.g. clf = LazyRegressor(
@@ -165,20 +187,15 @@ def get_top_models(models_train, models_cross, pool_size: int=10):
         dataframes of model train and cross validation metric values
     """
 
+    # rename columns for each dataframe to avoid duplication during merge
+    for col in models_train.columns:
+        models_train.rename(columns={f"{col}": f"Train {col}"}, inplace=True)
+        models_cross.rename(columns={f"{col}": f"Cross {col}"}, inplace=True)
+
     # merge both first pool_size rows of training and cross 
     # validation model dataframes
     models_train = models_train[:pool_size].reset_index()
     models_cross = models_cross[:pool_size].reset_index()
-
-    # rename columsn f each dataframe to avoid duplication during merge
-    models_train.rename(columns={'Adjusted R-Squared': 'Train Adjusted R-Squared'}, inplace=True)
-    models_train.rename(columns={'R-Squared': 'Train R-Squared'}, inplace=True)
-    models_train.rename(columns={'RMSE': 'Train RMSE'}, inplace=True)
-    models_train.rename(columns={'Time Taken': 'Train Time Taken'}, inplace=True)
-    models_cross.rename(columns={'Adjusted R-Squared': 'Cross Adjusted R-Squared'}, inplace=True)
-    models_cross.rename(columns={'R-Squared': 'Cross R-Squared'}, inplace=True)
-    models_cross.rename(columns={'RMSE': 'Cross RMSE'}, inplace=True)
-    models_cross.rename(columns={'Time Taken': 'Cross Time Taken'}, inplace=True)
     
     # merge model dataframes on 'Model' column
     top_models = models_train.merge(models_cross, how='inner', left_on='Model', right_on='Model')
