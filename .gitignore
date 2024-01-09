@@ -1,4 +1,5 @@
 /server-side/modelling/weights/
+/server-side/modelling/data/
 /shop-visual-aids/*.mp4
 /shop-visual-aids/*.mov
 /.env
