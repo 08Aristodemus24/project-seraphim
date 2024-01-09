@@ -3,6 +3,11 @@ import numpy as np
 import tqdm
 import pickle
 import json
+import os
+
+from pathlib import Path
+from splitfolders import ratio
+from tensorflow.keras.preprocessing.image import ImageDataGenerator
 
 
 # for NLP data
@@ -202,3 +207,65 @@ def get_top_models(models_train, models_cross, pool_size: int=10, model_type: st
     top_models.sort_values(by="Cross Adjusted R-Squared" if model_type == "regressor" else "Cross F1 Score")
 
     return top_models
+
+def create_image_set(root_dir: str, img_dims: tuple=(256, 256)):
+    temp = sorted(os.listdir(root_dir))
+
+    # creates new copies of the subdirectories of train, cross, and
+    # testing folders under each class/label subdirectory e.g. 
+    # Amoeba will have now train, cross, and testing folders in it
+    sub_dirs = Path(root_dir)
+    output_dir = f'{root_dir[:-1]}_Split'
+    ratio(sub_dirs, output=output_dir, seed=0, ratio=(0.7, 0.15, 0.15), group_prefix=None)
+
+    # augments the unbalanced image data we currently have
+    # by rotating, flipping, distorting images to produce
+    # more of a balanced image set
+    gen = ImageDataGenerator(
+        # instead of our rgb values being between 0 and 255 doing 
+        # this rescales the rgb values between 0 and 1
+        rescale=1.0 / 255,
+
+        # degree range for random rotations.
+        rotation_range=10,
+
+        # Randomly flip inputs horizontally
+        horizontal_flip=True,
+
+        vertical_flip=True,
+
+        # values lie between 0 being dark and 1 being bright
+        brightness_range=[0.3, 0.8]
+    )
+
+    # gen.flow_from_directory actually returns a generator object
+    # which recall we can use the next() with to get the next element
+    train_gen = gen.flow_from_directory(
+        # this arg should contain one subdirectory per class. Any PNG, JPG, 
+        # BMP, PPM or TIF images inside each of the subdirectories directory 
+        # tree will be included in the generator
+        f'{output_dir}/train',
+        target_size=img_dims,
+
+        # means the labels/targets produced by generator will be
+        # a one encoding of each of our different classes e.g.
+        # amoeba will have [1, 0, 0, 0, 0, 0, 0, 0]
+        class_mode='categorical',
+        subset='training'
+    )
+
+    cross_gen = gen.flow_from_directory(
+        f'{output_dir}/val',
+        target_size=img_dims,
+        class_mode='categorical',
+        shuffle=False
+    )
+
+    test_gen = gen.flow_from_directory(
+        f'{output_dir}/test',
+        target_size=img_dims,
+        class_mode='categorical',
+        shuffle=False
+    )
+
+    return train_gen, cross_gen, test_gen

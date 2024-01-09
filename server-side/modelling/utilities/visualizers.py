@@ -631,7 +631,7 @@ class ModelResults:
         axis.set_title(img_title)
         axis.legend()
 
-        if save_img is True:
+        if save_img == True:
             plt.savefig(f'./figures & images/{img_title}.png')
             plt.show()
 
@@ -723,6 +723,52 @@ def view_clusters_3d(X, features: list):
     ax.set_ylabel(f'y: {features[1]}')
     ax.set_zlabel(f'z: {features[2]}')
     plt.show()
+
+def view_images(data_gen, grid_dims: tuple=(2, 6), size: tuple=(25, 10), model=None, img_title="untitled", save_img: bool=True):
+    """
+    views images created by the ImageGenerator() class 
+    from tensorflow.keras.preprocessing.image
+
+    args: 
+        data_gen - the data generator created from the ImageGenerator()
+        method self.flow_from_directory()
+    """
+    class_names = list(data_gen.class_indices.keys())
+    
+    # The plotting configurations
+    n_rows, n_cols = grid_dims
+    n_images = n_rows * n_cols
+    plt.figure(figsize=size)
+    
+    # Data for visualization
+    images, labels = next(data_gen) # This process can take a little time because of the large batch size
+    
+    # Iterate through the subplots.
+    for i in range(1, n_images + 1):
+        
+        # select random images. This is a dynamic function 
+        # because for validation data and training data, 
+        # the length of total images is different.
+        id = np.random.randint(len(images))
+        image, label = images[id], class_names[np.argmax(labels[id], axis=0)]
+        
+        # Plot the sub plot
+        plt.subplot(n_rows, n_cols, i)
+        plt.imshow(image)
+        plt.axis('off')
+        
+        # If model is available make predictions
+        if model is not None:
+            pred = class_names[np.argmax(model.predict(image[np.newaxis,...]))]
+            title = f"Class : {label}\nPred : {pred}"
+        else:
+            title = f"Class : {label}"
+        
+        plt.title(title)
+    
+    if save_img == True:
+        plt.savefig(f'./figures & images/{img_title}.png')
+        plt.show()
 # K means code snippet may be important rather than implementing k means from
 # scratch just to get centroids at each iteration
 # kmeans = KMeans(n_clusters=3, random_state=0,max_iter=1).fit(X)
