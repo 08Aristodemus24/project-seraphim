@@ -769,20 +769,3 @@ def view_images(data_gen, grid_dims: tuple=(2, 6), size: tuple=(25, 10), model=N
     if save_img == True:
         plt.savefig(f'./figures & images/{img_title}.png')
         plt.show()
-# K means code snippet may be important rather than implementing k means from
-# scratch just to get centroids at each iteration
-# kmeans = KMeans(n_clusters=3, random_state=0,max_iter=1).fit(X)
-# kmeans.predict([[0, 0], [2, 2],[6, 4]])
-# As a result we have
-
-#  kmeans.cluster_centers_
-# array([[ 2.75      ,  0.5       ],
-#        [ 1.83333333,  3.16666667],
-#        [ 1.        ,  8.5       ]])
-# If you increase number of iterations
-
-# kmeans = KMeans(n_clusters=3, random_state=0,max_iter=10).fit(X)
-# kmeans.cluster_centers_
-# array([[ 1.        ,  8.5       ],
-#        [ 2.75      ,  0.5       ],
-#        [ 1.83333333,  3.16666667]])
