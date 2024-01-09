@@ -27,8 +27,8 @@
 # Pre-built template functions for projects:
 ~ - done
 ^ - needs further testing
-$ - needs further understanding
-# - needs further tweaking
+& - needs further understanding
+! - needs further tweaking
 
 Loaders:
 * load_corpus
@@ -57,24 +57,34 @@ Preprocessors:
 * normalize_ratings
 * normalize_rating_matrix
 * normalize_train_cross
-* encode_features $ because i'm still confused about the mapping from e.g. CPU to nubmer 8
+* encode_features ~
 
 Visualizers:
 * plot_train_cross_features
 * analyze
 * view_words
 * data_split_metric_values
-* view_value_frequency # has no x label
+* view_value_frequency ! has no x label
 * multi_class_heatmap
 * view_metric_values
 * view_classified_labels
-* view_label_freq # has no x label
-* disp_cat_feat # has x labels but bars are too compressed especially if n unique is large
+* view_label_freq ! has no x label
+* disp_cat_feat ! has x labels but bars are too compressed especially if n unique is large
 * describe_col
 * visualize_graph
 * plot_evolution ~
 * view_clusters_3d ~
-* ModelResults
+* ModelResults ! since there might be a shorter version of code for it from the micro-organism-classifier kaggle code
 * plot_all_vars ~
-
 * to implement pairplot for newly encoded featuress
+
+# Prebuilt template components for client-side:
+* WE NEED TO IMPLEMENT NOW THESE TEMPLATES FOR OUR MICRO-ORGANISM-CLASSIFIER
+* submit button
+* 100vh section for landing page
+* text input fields
+* range input fields
+* number input fields
+* file input fields
+* select fields
+* textarea fields

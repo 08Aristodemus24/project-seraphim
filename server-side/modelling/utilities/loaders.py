@@ -199,5 +199,6 @@ def get_top_models(models_train, models_cross, pool_size: int=10, model_type: st
     
     # merge model dataframes on 'Model' column
     top_models = models_train.merge(models_cross, how='inner', left_on='Model', right_on='Model')
+    top_models.sort_values(by="Cross Adjusted R-Squared" if model_type == "regressor" else "Cross F1 Score")
 
     return top_models
