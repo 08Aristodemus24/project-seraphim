@@ -1,22 +1,31 @@
 <script>
-    import { onMount, onDestroy, createEventDispatcher } from "svelte";
+    import { onMount, onDestroy, createEventDispatcher, afterUpdate } from "svelte";
 
     // bind the passed state from Contact component to the form
     // element in this Form component
     export let form;
 
     let countries = [];
+    let model_names = [];
 
     let first_name = "";
     let last_name = "";
     let email_address = "";
     let country_code = "";
+    let model_name = "";
+
     let mobile_num = "";
+    const phone_reg = `[0-9]{'{'}3{'}'}-[0-9]{'{'}3{'}'}-[0-9]{'{'}4{'}'}`;
+
     let message = "";
+    let prompt = "";
+    let temperature = 1.0;
+    let seq_len = 250;
+    let images = null;
 
     let dispatch = createEventDispatcher();
 
-    onMount(async () => {
+    const get_country_codes = async () => {
         const url = 'https://gist.githubusercontent.com/anubhavshrimal/75f6183458db8c453306f93521e93d37/raw/f77e7598a8503f1f70528ae1cbf9f66755698a16/CountryCodes.json';
         const response = await fetch(url);
 
@@ -36,7 +45,38 @@
         }else{
             console.log(`retrieval unsuccessful. Response status ${response.status} occured`)
         }
+    };
+
+    const get_model_names = async () => {
+        const url = 'http://127.0.0.1:5000/model-names';
+        const response = await fetch(url);
+
+        if(response.status === 200){
+            console.log("retrieval successful");
+
+            const data = await response.json();
+
+            // returned data consists of key value pairs 
+            // particularly the model_names and the list of names
+            model_names = [...data['model_names']];
+
+            // on mount set state of model_name to 
+            // first model_name in model_names list
+            model_name = model_names[0];
+
+        }else{
+            console.log(`retrieval unsuccessful. Response status ${response.status} occured`)
+        }
+    }
+
+    onMount(async () => {
+        get_country_codes();
+        get_model_names();
     });
+
+    afterUpdate(async () => {
+        console.log(images);
+    })
 
     const handle_submit = (event) => {
         const mail = {
@@ -48,10 +88,10 @@
             message: message
         };
 
-        dispatch('sendMail', mail);
+        dispatch('sendData', mail);
     };
 
-    const phone_reg = `[0-9]{'{'}3{'}'}-[0-9]{'{'}3{'}'}-[0-9]{'{'}4{'}'}`;
+    
 </script>
 
 <form class="form" on:submit|preventDefault={handle_submit} method="post" bind:this={form}>
@@ -83,5 +123,35 @@
         <label for="message" class="message-label">Message</label>
         <textarea id="message" rows="5" name="message" class="message-field" placeholder="Your message here" bind:value={message} required></textarea>
     </div>
+    <div class="model-name-container">
+        <label for="model-name" class="model-name-label">Model Name</label>
+        <select name="model_name" id="model-name" class="model-name-field" bind:value={model_name}>
+            {#each model_names as model_name}
+                <option value={model_name} label={model_name}></option>
+            {/each}
+        </select>
+    </div>
+    <div class="prompt-container">
+        <label for="prompt" class="prompt-label">Prompt</label>
+        <input bind:value={prompt} id="prompt" class="prompt-field" type="text" placeholder="Type a prompt e.g. Dostoevsky"/>
+    </div>
+    <div class="temp-container">
+        <label for="temp" class="temp-label">Temperature</label>
+        <input bind:value={temperature} type="range" min={0.0} max={2.0} step={0.01} id="field" class="temp-field"/>
+    </div>
+    <div class="seq-len-container">
+        <label for="seq-len" class="seq-len-label">Sequence Length</label>
+        <input bind:value={seq_len} type="number" id="seq-len" class="seq-len-field" placeholder="250"/>
+    </div>
+    <div class="image-upload-container">
+        <label for="image-upload" class="image-upload-label">Image</label>
+        <input type="file" id="image-upload" class="image-upload-field" bind:files={images}>
+        
+        <!-- when image is uploaded images becomes are not null anymore
+        but when another upload occurs and is cancelled images becomes
+        a list of length 0 -->
+        <img class="uploaded-image" src={images != null ? images.length != 0 ? URL.createObjectURL(images[0]) : null : null} alt="">
+    </div>
+
     <button type="submit" class="submit-btn">Submit</button>
 </form>

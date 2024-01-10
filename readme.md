@@ -80,11 +80,14 @@ Visualizers:
 
 # Prebuilt template components for client-side:
 * WE NEED TO IMPLEMENT NOW THESE TEMPLATES FOR OUR MICRO-ORGANISM-CLASSIFIER
-* submit button
-* 100vh section for landing page
-* text input fields
-* range input fields
-* number input fields
-* file input fields
-* select fields
-* textarea fields
+* submit button ~
+* 100vh section for landing page ~
+* text input fields ~
+* range input fields ~
+* number input fields ~
+* file input fields ~
+* select fields ~
+* textarea fields ~
+* create custom themed classes to switch between themes for components
+* create two column and one column form
+ 
