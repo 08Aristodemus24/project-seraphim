@@ -251,7 +251,8 @@ def create_image_set(root_dir: str, img_dims: tuple=(256, 256)):
         # a one encoding of each of our different classes e.g.
         # amoeba will have [1, 0, 0, 0, 0, 0, 0, 0]
         class_mode='categorical',
-        subset='training'
+        subset='training',
+        batch_size=128
     )
 
     cross_gen = gen.flow_from_directory(

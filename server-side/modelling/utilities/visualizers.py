@@ -740,16 +740,19 @@ def view_images(data_gen, grid_dims: tuple=(2, 6), size: tuple=(25, 10), model=N
     n_images = n_rows * n_cols
     plt.figure(figsize=size)
     
-    # Data for visualization
-    images, labels = next(data_gen) # This process can take a little time because of the large batch size
-    
+    # gets a batch of the image data for visualization
+    # This process can take a little time because of 
+    # the large batch size
+    images, labels = next(data_gen) 
+
+    # sample n_images of indeces from array of indeces 
+    # of length len(images) without replacement
+    sampled_indeces = np.random.choice([num for num in range(len(images))], n_images, replace=False)
+
     # Iterate through the subplots.
-    for i in range(1, n_images + 1):
-        
-        # select random images. This is a dynamic function 
-        # because for validation data and training data, 
-        # the length of total images is different.
-        id = np.random.randint(len(images))
+    for i, id in enumerate(sampled_indeces, start=1):
+        # use the randomly sampled id as index to access 
+        # an image and its respective label
         image, label = images[id], class_names[np.argmax(labels[id], axis=0)]
         
         # Plot the sub plot
