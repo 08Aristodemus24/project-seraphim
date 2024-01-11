@@ -1,6 +1,11 @@
 <script>
     import { onMount } from "svelte";
 
+    export let style = "sharp-minimal";
+    export let primary_color = "white";
+    export let secondary_color = "black";
+    export let tertiary_color = "rgba(255, 255, 255, 0.267)";
+
     let countries = [];
     let country_code = "";
 
@@ -36,7 +41,7 @@
     });
 </script>
 
-<div class="country-code-container">
+<div class={`country-code-container ${style}`} style:--primary-color={primary_color} style:--secondary-color={secondary_color} style:--tertiary-color={tertiary_color}>
     <label for="country-code" class="country-code-label">Country Code</label>
     <select name="country_code" id="country-code" class="country-code-field" bind:value={country_code}>
         {#each countries as country}
@@ -44,3 +49,51 @@
         {/each}
     </select>
 </div>
+
+<style>
+    .sharp-minimal .country-code-label{
+        /* design */
+        font-family: 'Nunito Sans', sans-serif;
+    }
+
+    .country-code-label{
+        /* design */
+        font-weight: 300;
+        font-size: clamp(12px, 1vw, 1rem);
+        color: var(--primary-color);
+
+        /* spacing */
+        margin-block: 1em;
+
+        /* display */
+        display: block;
+    }
+
+    .sharp-minimal .country-code-field{
+        /* design */
+        font-family: 'Nunito Sans', sans-serif;
+    }
+
+    .country-code-field{
+        /* design */
+        background-color: transparent;
+        color: var(--primary-color);
+        font-size: clamp(12px, 1vw, 1rem);
+        border-top: none;
+        border-right: none;
+        border-left: none;
+        border-bottom: 1px solid var(--primary-color);
+
+        width: 12rem;
+        /* width: 30rem; */
+
+        /* display */
+        display: block;
+    }
+
+    .country-code-field option{
+        /* design */
+        background-color: rgba(255, 0, 0, 0);
+        color: black;
+    }
+</style>

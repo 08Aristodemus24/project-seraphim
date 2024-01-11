@@ -98,6 +98,8 @@
     outline: 1px solid salmon;
 }
 
+.fname-label, 
+.lname-label, 
 .email-label, 
 .country-code-label, 
 .mobile-num-label, 
@@ -121,6 +123,8 @@
     display: block;
 }
 
+.fname-field,
+.lname-field,
 .email-field,
 .country-code-field,
 .mobile-num-field,

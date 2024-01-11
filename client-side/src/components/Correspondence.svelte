@@ -1,5 +1,6 @@
 <script>
     import Form from "./Form.svelte";
+    import Alert from "./Alert.svelte";
     import Section from "./Section.svelte";
 
     // pass this state as props to Form component
@@ -59,19 +60,18 @@
     <div class="form-container">
         <Form on:sendData={send_data} bind:form/>
     </div>
-    <div class="alert-container" class:show={msg_status !== undefined} on:click={(event) => {
-        // remove class from alert container to hide it again
-        event.target.classList.remove('show');
-
-        // reset msg_status to undefined in case of another submission
-        msg_status = undefined;
-    }}>
-        <div class="alert-wrapper">
-            {#if msg_status === "success" || msg_status === "failed"}
-                <span class="alert">Message has been sent with code {response?.status}</span>    
-            {:else}
-                <span class="alert">Submission denied. Error '{error_type}'' occured</span>
-            {/if}
-        </div>
-    </div>
+    <Alert msg_status={msg_status} error_type={error_type} response={response}/>
 </Section>
+
+<style>
+    .form-container{
+        /* design */
+        outline: 1px solid yellow;
+
+        /* size */
+        /* width: 100%; */
+
+        /* spacing */
+        margin-block: 1rem;
+    }
+</style>

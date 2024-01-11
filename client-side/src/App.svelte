@@ -3,7 +3,7 @@
   import Content from "./components/Content.svelte";
   import Correspondence from "./components/Correspondence.svelte";
 
-  import './assets/stylesheets/content.css';
+  // import './assets/stylesheets/content.css';
   import './index.css';
   
 </script>
