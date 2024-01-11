@@ -6,7 +6,7 @@
     export let form;
 
     let countries = [];
-    let model_names = [];
+    let model_names = ['------------------------'];
 
     let first_name = "";
     let last_name = "";
@@ -26,47 +26,58 @@
     let dispatch = createEventDispatcher();
 
     const get_country_codes = async () => {
-        const url = 'https://gist.githubusercontent.com/anubhavshrimal/75f6183458db8c453306f93521e93d37/raw/f77e7598a8503f1f70528ae1cbf9f66755698a16/CountryCodes.json';
-        const response = await fetch(url);
+        try{
+            const url = 'https://gist.githubusercontent.com/anubhavshrimal/75f6183458db8c453306f93521e93d37/raw/f77e7598a8503f1f70528ae1cbf9f66755698a16/CountryCodes.json';
+            const response = await fetch(url);
 
-        if(response.status === 200){
-            console.log("retrieval successful");
+            if(response.status === 200){
+                console.log("retrieval successful");
 
-            const data = await response.json();
+                const data = await response.json();
 
-            // returned data list consists of dictionaries containing
-            // keys name, dial_code, and code e.g. 'Afghanistan', '+93', 'AF'
-            countries = [...data];
+                // returned data list consists of dictionaries containing
+                // keys name, dial_code, and code e.g. 'Afghanistan', '+93', 'AF'
+                countries = [...data];
 
-            // on mount set state of country code to dial code of first country
-            country_code = countries[0]['dial_code'];
-            // console.table(countries);
+                // on mount set state of country code to dial code of first country
+                country_code = countries[0]['dial_code'];
+                // console.table(countries);
 
-        }else{
-            console.log(`retrieval unsuccessful. Response status ${response.status} occured`)
+            }else{
+                console.log(`retrieval unsuccessful. Response status ${response.status} occured`)
+            }    
+
+        }catch(error){
+            console.log(`Server access denied. Error '${error}' occured`);
         }
     };
 
     const get_model_names = async () => {
-        const url = 'http://127.0.0.1:5000/model-names';
-        const response = await fetch(url);
+        try{
+            const url = 'http://127.0.0.1:5000/model-names';
+            const response = await fetch(url);
 
-        if(response.status === 200){
-            console.log("retrieval successful");
+            if(response.status === 200){
+                console.log("retrieval successful");
 
-            const data = await response.json();
+                const data = await response.json();
 
-            // returned data consists of key value pairs 
-            // particularly the model_names and the list of names
-            model_names = [...data['model_names']];
+                // returned data consists of key value pairs 
+                // particularly the model_names and the list of names
+                model_names = [...data['model_names']];
 
-            // on mount set state of model_name to 
-            // first model_name in model_names list
-            model_name = model_names[0];
+                // on mount set state of model_name to 
+                // first model_name in model_names list
+                model_name = model_names[0];
 
-        }else{
-            console.log(`retrieval unsuccessful. Response status ${response.status} occured`)
+            }else{
+                console.log(`retrieval unsuccessful. Response status ${response.status} occured`)
+            }
+
+        }catch(error){
+            console.log(`Server access denied. Error '${error}' occured`);
         }
+        
     }
 
     onMount(async () => {
@@ -94,18 +105,18 @@
     
 </script>
 
-<form class="form" on:submit|preventDefault={handle_submit} method="post" bind:this={form}>
+<form class="form one-col" on:submit|preventDefault={handle_submit} method="post" bind:this={form}>
     <div class="fname-container">
         <label for="first-name" class="fname-label">First name</label>
-        <input type="text" name="first_name" id="first-name" class="fname-field" placeholder="Larry Miguel" bind:value={first_name}/>
+        <input type="text" name="first_name" id="first-name" class="fname-field" placeholder="John Smith" bind:value={first_name}/>
     </div>
     <div class="lname-container">
         <label for="last-name" class="lname-label">Last name</label>
-        <input type="text" name="last_name" id="last-name" class="lname-field" placeholder="Cueva" bind:value={last_name}/>
+        <input type="text" name="last_name" id="last-name" class="lname-field" placeholder="Meyer" bind:value={last_name}/>
     </div>
     <div class="email-container">
         <label for="email-address" class="email-label">Email</label>
-        <input type="email" name="email_address" id="email-address" class="email-field" placeholder="MichaelAveuc571@gmail.com" bind:value={email_address} required/>
+        <input type="email" name="email_address" id="email-address" class="email-field" placeholder="johnmeyer87@gmail.com" bind:value={email_address} required/>
     </div>
     <div class="country-code-container">
         <label for="country-code" class="country-code-label">Country Code</label>
