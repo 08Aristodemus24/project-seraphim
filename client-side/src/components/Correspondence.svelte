@@ -58,7 +58,7 @@
 
 <Section name="data-form">
     <div class="form-container">
-        <Form on:sendData={send_data} bind:form/>
+        <Form on:sendData={send_data} bind:form theme="light"/>
     </div>
     <Alert msg_status={msg_status} error_type={error_type} response={response}/>
 </Section>

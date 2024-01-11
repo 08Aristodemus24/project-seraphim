@@ -2,9 +2,20 @@
     import { afterUpdate } from "svelte";
 
     export let style = "sharp-minimal";
-    export let primary_color = "white";
-    export let secondary_color = "black";
-    export let tertiary_color = "rgba(255, 255, 255, 0.267)";
+    export let theme = "dark";
+
+    $:palette = {
+        dark: {
+            primary_color: "white",
+            secondary_color: "black",
+            tertiary_color: "rgba(255, 255, 255, 0.267)"    
+        },
+        light: {
+            primary_color: "black",
+            secondary_color: "white",
+            tertiary_color: "rgba(0, 0, 0, 0.267)"    
+        }
+    };
 
     let images = null;
 
@@ -13,13 +24,15 @@
     });
 </script>
 
-<div class={`image-upload-container ${style}`} style:--primary-color={primary_color} style:--secondary-color={secondary_color} style:--tertiary-color={tertiary_color}>
+<div class={`image-upload-container ${style}`} style:--primary-color={palette[theme].primary_color} style:--secondary-color={palette[theme].secondary_color} style:--tertiary-color={palette[theme].tertiary_color}>
     <!-- when image is uploaded images becomes are not null anymore
     but when another upload occurs and is cancelled images becomes
     a list of length 0 -->
     <img class="uploaded-image" src={images != null ? images.length != 0 ? URL.createObjectURL(images[0]) : null : null} alt="">
     <div class="image-upload-field-wrapper">
-        <label for="image-upload" class="image-upload-label">Image</label>
+        {#if style != "neomorphic"}
+            <label for="image-upload" class="image-upload-label">Image</label>    
+        {/if}
         <input type="file" id="image-upload" class="image-upload-field" bind:files={images}>
     </div>
 </div>

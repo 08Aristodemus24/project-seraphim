@@ -1,13 +1,24 @@
 <script>
     export let style = "sharp-minimal";
-    export let primary_color = "white";
-    export let secondary_color = "black";
-    export let tertiary_color = "rgba(255, 255, 255, 0.267)";
+    export let theme = "dark";
+
+    $:palette = {
+        dark: {
+            primary_color: "white",
+            secondary_color: "black",
+            tertiary_color: "rgba(255, 255, 255, 0.267)"    
+        },
+        light: {
+            primary_color: "black",
+            secondary_color: "white",
+            tertiary_color: "rgba(0, 0, 0, 0.267)"    
+        }
+    };
 
     let prompt = "";
 </script>
 
-<div class={`prompt-container ${style}`} style:--primary-color={primary_color} style:--secondary-color={secondary_color} style:--tertiary-color={tertiary_color}>
+<div class={`prompt-container ${style}`} style:--primary-color={palette[theme].primary_color} style:--secondary-color={palette[theme].secondary_color} style:--tertiary-color={palette[theme].tertiary_color}>
     <label for="prompt" class="prompt-label">Prompt</label>
     <input bind:value={prompt} id="prompt" class="prompt-field" type="text" placeholder="Type a prompt e.g. Dostoevsky"/>
 </div>

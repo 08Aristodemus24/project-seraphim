@@ -13,6 +13,21 @@
     import ImageInput from './ImageInput.svelte';
     import Button from "./Button.svelte";
     
+    export let style = "sharp-minimal";
+    export let theme = "dark";
+
+    $:palette = {
+        dark: {
+            primary_color: "black",
+            secondary_color: "white",
+            tertiary_color: "rgba(0, 0, 0, 0.267)"    
+        },
+        light: {
+            primary_color: "rgb(201, 201, 201)",
+            secondary_color: "black",
+            tertiary_color: "rgba(255, 255, 255, 0.267)"    
+        }
+    };
 
     // bind the passed state from Contact component to the form
     // element in this Form component
@@ -35,54 +50,45 @@
     
 </script>
 
-<form class="form one-col" on:submit|preventDefault={handle_submit} method="post" bind:this={form}>
-    <NameInput name_type="first" style="sharp-minimal" primary_color="white"/>
-    <NameInput name_type="last" style="sharp-minimal" primary_color="white"/>
-    <EmailInput primary_color="black" secondary_color="white"/>
-    <MobileNumberInput primary_color="black" secondary_color="white"/>
-    <CountryCodeInput primary_color="black" secondary_color="white"/>
-    <MessageInput primary_color="black" secondary_color="white"/>
-    <ModelNameInput primary_color="black" secondary_color="white"/>
-    <PromptInput primary_color="black" secondary_color="white"/>
-    <SequenceLengthInput primary_color="black" secondary_color="white"/>
-    <TemperatureInput primary_color="black" secondary_color="white"/>
-    <ImageInput style="soft-minimal" primary_color="black" secondary_color="white"/>
-    <Button style="soft-minimal"/>
+<form 
+    class={`form ${style}`}
+    style:--primary-color={palette[theme].primary_color} 
+    style:--secondary-color={palette[theme].secondary_color} 
+    style:--tertiary-color={palette[theme].tertiary_color}
+    on:submit|preventDefault={handle_submit} 
+    method="post" 
+    bind:this={form}
+>
+    <NameInput name_type="first" theme="light"/>
+    <NameInput name_type="last" theme="light"/>
+    <EmailInput theme="light"/>
+    <MobileNumberInput theme="light"/>
+    <CountryCodeInput theme="light"/>
+    <MessageInput theme="light"/>
+    <ModelNameInput theme="light"/>
+    <PromptInput theme="light"/>
+    <SequenceLengthInput theme="light"/>
+    <TemperatureInput theme="light"/>
+    <ImageInput style="soft-minimal" theme="light"/>
+    <Button style="neomorphic" theme="light"/>
 </form>
 
 <style>
-    .form.two-col{
-        /* display */
-        /* display: grid; */
-
-        /* size of columns and rows */
-        /* grid-template-columns: repeat(auto-fit, 1fr); */
-
-        /* alignment */
-        /* align-items: center; */
-
-        /* spacing */
-        /* row-gap: 2rem;
-        column-gap: 1.5rem; */
-
-        /* design */
-        /* outline: 2px solid lightgreen; */
-    }
-
-    .form.one-col{
+    .form{
         /* display */
         display: flex;
         align-items: center;
         flex-direction: column;
         gap: 1rem;
 
-        /* outline */
-        outline: 2px solid lightskyblue;
+        /* size */
+        padding: 5px;
 
+        /* outline */
+        /* outline: 2px solid red; */
     }
 
-    .form div[class*="container"]{
-        /*  */
-        outline: 1px solid salmon;
-    }   
+    .form.sharp-minimal{
+        background-color: var(--primary-color);
+    }
 </style>

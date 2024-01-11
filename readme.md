@@ -93,3 +93,4 @@ Visualizers:
 * fix image upload fields upload button ~
 * fix image upload fields image height ! needs to be responsive from 1600px to 320px
 * create custom themed classes to switch between themes for components
+* implement dark and light theme for components

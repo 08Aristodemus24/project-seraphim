@@ -1,34 +1,35 @@
 <script>
     export let style = "sharp-minimal";
-    export let primary_color = "white";
-    export let secondary_color = "black";
-    export let tertiary_color = "rgba(255, 255, 255, 0.267)";
+    export let theme = "dark";
+
+    $:palette = {
+        dark: {
+            primary_color: "white",
+            secondary_color: "black",
+            tertiary_color: "rgba(255, 255, 255, 0.267)"    
+        },
+        light: {
+            primary_color: "black",
+            secondary_color: "white",
+            tertiary_color: "rgba(0, 0, 0, 0.267)"    
+        }
+    };
 </script>
 
 <button 
     type="submit" 
     class={`submit-btn ${style}`} 
-    style:--primary-color={primary_color} 
-    style:--secondary-color={secondary_color} 
-    style:--tertiary-color={tertiary_color}
->Submit</button>
+    style:--primary-color={palette[theme].primary_color} 
+    style:--secondary-color={palette[theme].secondary_color} 
+    style:--tertiary-color={palette[theme].tertiary_color}
+>
+    Submit
+</button>
 
 <style>
-    .sharp-minimal.submit-btn{
+    .submit-btn.sharp-minimal{
         /* design */
         font-family: 'Nunito Sans', sans-serif;
-    }
-
-    .soft-minimal.submit-btn{
-        /* design */
-        font-family: 'Poppins', sans-serif;
-
-        /* size */
-        border-radius: 10px;
-    }
-
-    .submit-btn{
-        /* design */
         background-color: transparent;
         font-size: clamp(12px, 1vw, 1rem);
         color: var(--primary-color);
@@ -47,11 +48,32 @@
         transition-timing-function: ease-in-out, ease-in-out;
     }
 
-    .submit-btn:hover{
+    .submit-btn.sharp-minimal:hover{
         /* design */
         cursor: pointer;
         background-color: var(--primary-color);
         color: var(--secondary-color);
         outline: 1px solid var(--primary-color);
-    }    
+    }
+
+    .submit-btn.neomorphic{
+        /* design */
+        
+        background-color: transparent;
+        box-shadow: 
+            12px 12px 16px 0 rgba(0, 0, 0, 0.25),
+            -8px -8px 12px 0 rgba(255, 255, 255, 0.507);
+        
+        font-family: 'Nunito Sans', sans-serif;
+        font-size: clamp(12px, 1vw, 1rem);
+        color: var(--primary-color);
+        border-radius: 50px;
+        border: none;
+
+        /* size */
+        padding: .5em 5em;
+
+        /* alignment */
+        justify-self: center;
+    }
 </style>

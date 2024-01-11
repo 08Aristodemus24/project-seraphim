@@ -1,9 +1,20 @@
 <script>
     export let name_type;
     export let style = "sharp-minimal";
-    export let primary_color = "white";
-    export let secondary_color = "black";
-    export let tertiary_color = "rgba(255, 255, 255, 0.267)";
+    export let theme = "dark";
+
+    $:palette = {
+        dark: {
+            primary_color: "white",
+            secondary_color: "black",
+            tertiary_color: "rgba(255, 255, 255, 0.267)"    
+        },
+        light: {
+            primary_color: "black",
+            secondary_color: "white",
+            tertiary_color: "rgba(0, 0, 0, 0.267)"    
+        }
+    }
     
     let name_code = name_type === 'first' ? 'f' : 'l';
     let placeholder = name_type === 'first' ? 'John Smith' : 'Meyer';
@@ -13,7 +24,7 @@
     const capitalize = (string) => string[0].toUpperCase() + string.substring(1);
 </script>
 
-<div class={`${name_code}name-container ${style}`} style:--primary-color={primary_color} style:--secondary-color={secondary_color} style:--tertiary-color={tertiary_color}>
+<div class={`${name_code}name-container ${style}`} style:--primary-color={palette[theme].primary_color} style:--secondary-color={palette[theme].secondary_color} style:--tertiary-color={palette[theme].tertiary_color}>
     <label for="last-name" class={`${name_code}name-label`}>{`${capitalize(name_type)} name`}</label>
     <input type="text" name={`${name_type}_name`} id={`${name_type}-name`} class={`${name_code}name-field`} placeholder={placeholder} bind:value={name}/>
 </div>
