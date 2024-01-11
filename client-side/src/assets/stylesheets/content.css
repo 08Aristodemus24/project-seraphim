@@ -225,9 +225,37 @@
     outline: 1px solid red;
 
     /* display */
-    display: flex;
+    /* display: flex;
     align-items: center;
     justify-content: center;
+    flex-direction: column;
+    gap: 2rem; */
+
+    /* spacing */
+    padding-block: 5px;
+}
+
+.uploaded-image{
+    /* design */
+    outline: 1px dashed white;
+    outline-offset: 5px;
+    border: 1px dashed white;
+
+    /* size */
+    height: 200px;
+    width: 200px;
+
+    /* display */
+    display: block;
+}
+
+.image-upload-field-wrapper{
+    /* design */
+    /* outline: 1px solid white; */
+
+    /* display */
+    display: flex;
+    align-items: center;
     gap: 1rem;
 }
 
@@ -257,8 +285,6 @@
   
     /* display */
     display: block;
-
-
 }
 
 .image-upload-field::-webkit-file-upload-button{
@@ -274,6 +300,7 @@
     /* size */
     border: 1px solid white;
     padding: .5em 1.5em;
+    margin-right: 1rem;
     
     /* display */
     display: inline-block;
@@ -289,21 +316,6 @@
     background-color: white;
     color: black;
 }
-
-.uploaded-image{
-    /* design */
-    outline: 1px dashed white;
-    outline-offset: 5px;
-    border: 1px dashed white;
-
-    /* size */
-    height: 200px;
-    width: 200px;
-
-    /* display */
-    display: block;
-}
-
 
 .submit-btn{
     /* design */
