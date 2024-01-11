@@ -80,17 +80,16 @@ Visualizers:
 
 # Prebuilt template components for client-side:
 * WE NEED TO IMPLEMENT NOW THESE TEMPLATES FOR OUR MICRO-ORGANISM-CLASSIFIER
-* submit button ~
-* 100vh section for landing page ~
-* text input fields ~
-* range input fields ~
-* number input fields ~
-* file input fields ~
-* select fields ~
-* textarea fields ~
+* <s>submit button ~</s>
+* <s>100vh section for landing page ~</s>
+* <s>text input fields ~</s>
+* <s>range input fields ~</s>
+* <s>number input fields ~</s>
+* <s>file input fields ~</s>
+* <s>select fields ~</s>
+* <s>textarea fields ~</s>
+* <s>fix width of data-form-content why does it not expand the width of the parent? ~ it was because of its parent data-form-section being set to display flex and shrinking it to the width of childrens size, or in other words in auto</s>
+* fix image upload field spacing ~
+* fix image upload fields upload button ~
+* fix image upload fields image height ! needs to be responsive from 1600px to 320px
 * create custom themed classes to switch between themes for components
-* create two column and one column form
-* fix width of data-form-content why does it not expand the width of the parent? ~
-* fix image upload field spacing
-* fix image upload fields image height
-* fix image upload fields upload button ! tweaking but fixed overall issues

@@ -35,8 +35,8 @@
 </script>
 
 <form class="form one-col" on:submit|preventDefault={handle_submit} method="post" bind:this={form}>
-    <NameInput name_type="first"/>
-    <NameInput name_type="last"/>
+    <NameInput name_type="first" style="sharp-minimal" primary_color="white" tertiary_color="blue"/>
+    <NameInput name_type="last" style="sharp-minimal" primary_color="white" tertiary_color="blue"/>
     <EmailInput/>
     <CountryCodeInput/>
     <MessageInput/>

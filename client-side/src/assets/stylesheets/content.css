@@ -9,15 +9,16 @@
     position: relative;
 
     /* display */
-    /* display: flex;
+    display: flex;
     justify-content: center;
-    align-items: center; */
+    align-items: center;
   
     /* design */
     border: 2px solid lightseagreen;
 }
   
 #data-form-section::after{
+    /* size */
     width: 100%;
     height: 100%;
 
@@ -29,12 +30,6 @@
     bottom: 0;
     /* to not affect contents color place pseudo element behind content */
     z-index: -1;
-
-    /* alignment */ 
-    /*   margin-left: auto;
-    margin-right: auto;
-    margin-top: auto;
-    margin-bottom: auto; */
 
     /* design */
     content: '';
@@ -103,8 +98,6 @@
     outline: 1px solid salmon;
 }
 
-.fname-label, 
-.lname-label, 
 .email-label, 
 .country-code-label, 
 .mobile-num-label, 
@@ -128,8 +121,6 @@
     display: block;
 }
 
-.fname-field,
-.lname-field,
 .email-field,
 .country-code-field,
 .mobile-num-field,
