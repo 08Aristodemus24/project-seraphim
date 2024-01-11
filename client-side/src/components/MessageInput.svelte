@@ -6,7 +6,7 @@
         dark: {
             primary_color: "white",
             secondary_color: "black",
-            tertiary_color: "rgba(255, 255, 255, 0.267)"    
+            tertiary_color: "rgba(255, 255, 255, 0.267)"
         },
         light: {
             primary_color: "black",
