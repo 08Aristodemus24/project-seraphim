@@ -228,7 +228,7 @@
     display: flex;
     align-items: center;
     justify-content: center;
-
+    gap: 1rem;
 }
 
 .image-upload-label{
@@ -237,7 +237,7 @@
     font-weight: 300;
     font-size: clamp(12px, 1vw, 1rem);
     color: white;
-    outline: 1px solid yellow;
+    /* outline: 1px solid yellow; */
 
     /* spacing */
     margin-top: 1em;
@@ -253,40 +253,57 @@
     font-family: 'Nunito Sans', sans-serif;
     font-size: clamp(12px, 1vw, 1rem);
     color: white;
-    outline: 1px solid yellow;
-
-    /* size */
-    /* width: clamp(12rem, 100%, 1800px); */
+    text-align: center;
   
     /* display */
     display: block;
-    position: relative;
+
+
 }
 
 .image-upload-field::-webkit-file-upload-button{
-    visibility: hidden;
-}
-
-.image-upload-field::before{
     /* design */
     content: 'choose image';
-    text-align: center;
+    color: white;
+    background-color: transparent;
+    cursor: pointer;
+    font-family: 'Nunito Sans', sans-serif;
+    font-size: clamp(12px, 1vw, 1rem);
+    -webkit-user-select: none;
+    
+    /* size */
+    border: 1px solid white;
+    padding: .5em 1.5em;
+    
+    /* display */
+    display: inline-block;
 
-    /* position */
-    position: absolute;
+    /* transition */
+    transition-property: background-color, color;
+    transition-duration: 250ms, 250ms;
+    transition-timing-function: ease-in-out, ease-in-out;
+}
+
+.image-upload-field::-webkit-file-upload-button:hover{
+    /* design */
+    background-color: white;
+    color: black;
 }
 
 .uploaded-image{
     /* design */
-    outline: 1px solid yellow;
+    outline: 1px dashed white;
+    outline-offset: 5px;
+    border: 1px dashed white;
 
     /* size */
-    height: 100px;
-    width: 100px;
+    height: 200px;
+    width: 200px;
 
     /* display */
     display: block;
 }
+
 
 .submit-btn{
     /* design */

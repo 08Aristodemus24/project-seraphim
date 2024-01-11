@@ -93,4 +93,4 @@ Visualizers:
 * fix width of data-form-content why does it not expand the width of the parent? ~
 * fix image upload field spacing
 * fix image upload fields image height
-* fix image upload fields upload button
+* fix image upload fields upload button ! tweaking but fixed overall issues
