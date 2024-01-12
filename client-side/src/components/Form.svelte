@@ -59,17 +59,17 @@
     method="post" 
     bind:this={form}
 >
-    <NameInput name_type="first" theme="light"/>
-    <NameInput name_type="last" theme="light"/>
-    <EmailInput theme="light"/>
-    <MobileNumberInput theme="light"/>
-    <CountryCodeInput theme="light"/>
-    <MessageInput theme="light"/>
-    <ModelNameInput theme="light"/>
-    <PromptInput theme="light"/>
-    <SequenceLengthInput theme="light"/>
-    <TemperatureInput theme="light"/>
-    <ImageInput style="soft-minimal" theme="light"/>
+    <NameInput name_type="first" style="neomorphic" theme="light"/>
+    <NameInput name_type="last" style="neomorphic" theme="light"/>
+    <EmailInput style="neomorphic" theme="light"/>
+    <MobileNumberInput style="neomorphic" theme="light"/>
+    <CountryCodeInput style="neomorphic" theme="light"/>
+    <MessageInput style="neomorphic" theme="light"/>
+    <ModelNameInput style="neomorphic" theme="light"/>
+    <PromptInput style="neomorphic" theme="light"/>
+    <SequenceLengthInput style="neomorphic" theme="light"/>
+    <TemperatureInput style="neomorphic" theme="light"/>
+    <ImageInput style="neomorphic" theme="light"/>
     <Button style="neomorphic" theme="light"/>
 </form>
 

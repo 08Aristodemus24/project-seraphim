@@ -3,15 +3,33 @@
     export let theme = "dark";
 
     $:palette = {
-        dark: {
-            primary_color: "white",
-            secondary_color: "black",
-            tertiary_color: "rgba(255, 255, 255, 0.267)"    
+        'sharp-minimal':{
+            dark: {
+                primary_color: "white",
+                secondary_color: "black",
+                tertiary_color: "rgba(255, 255, 255, 0.267)"    
+            },
+            light: {
+                primary_color: "black",
+                secondary_color: "white",
+                tertiary_color: "rgba(0, 0, 0, 0.267)"
+            }
         },
-        light: {
-            primary_color: "black",
-            secondary_color: "white",
-            tertiary_color: "rgba(0, 0, 0, 0.267)"    
+        'neomorphic': {
+            dark: {
+                primary_color: "white",
+                secondary_color: "black",
+                tertiary_color: "rgba(255, 255, 255, 0.267)",
+                primary_shadow: "rgba(0, 0, 0, 0.25)",
+                secondary_shadow: "rgba(255, 255, 255, 0.5)"
+            },
+            light: {
+                primary_color: "black",
+                secondary_color: "rgb(210, 210, 210)",
+                tertiary_color: "rgba(0, 0, 0, 0.267)",
+                primary_shadow: "rgba(0, 0, 0, 0.25)",
+                secondary_shadow: "rgba(255, 255, 255, 0.5)"
+            }
         }
     };
 
@@ -19,7 +37,13 @@
     const phone_reg = `[0-9]{'{'}3{'}'}-[0-9]{'{'}3{'}'}-[0-9]{'{'}4{'}'}`;
 </script>
 
-<div class={`mobile-num-container ${style}`} style:--primary-color={palette[theme].primary_color} style:--secondary-color={palette[theme].secondary_color} style:--tertiary-color={palette[theme].tertiary_color}>
+<div class={`mobile-num-container ${style}`} 
+    style:--primary-color={palette[style][theme].primary_color} 
+    style:--secondary-color={palette[style][theme].secondary_color} 
+    style:--tertiary-color={palette[style][theme].tertiary_color}
+    style:--primary-shadow={palette[style][theme].primary_shadow}
+    style:--secondary-shadow={palette[style][theme].secondary_shadow}
+>
     <label for="mobile-number" class="mobile-num-label">Phone</label>
     <input type="tel" pattern={phone_reg} name="mobile_number" id="mobile-number" class="mobile-num-field" placeholder="XXX-XXX-XXXX" bind:value={mobile_num}/>
 </div>
@@ -28,10 +52,6 @@
     .sharp-minimal .mobile-num-label{
         /* design */
         font-family: 'Nunito Sans', sans-serif;
-    }
-
-    .mobile-num-label{
-        /* design */
         font-weight: 300;
         font-size: clamp(12px, 1vw, 1rem);
         color: var(--primary-color);
@@ -46,13 +66,10 @@
     .sharp-minimal .mobile-num-field{
         /* design */
         font-family: 'Nunito Sans', sans-serif;
-    }
-
-    .mobile-num-field{
-        /* design */
+        font-weight: 300;
+        font-size: clamp(12px, 1vw, 1rem);
         background-color: transparent;
         color: var(--primary-color);
-        font-size: clamp(12px, 1vw, 1rem);
         border-top: none;
         border-right: none;
         border-left: none;
@@ -66,18 +83,77 @@
     }
 
     /* Chrome, Firefox, Opera, Safari 10.1+ */
-    .mobile-num-field::placeholder{
+    .sharp-minimal .mobile-num-field::placeholder{
         color: var(--tertiary-color);
         opacity: 1; /* Firefox */
     }
 
     /* Internet Explorer 10-11 */
-    .mobile-num-field:-ms-input-placeholder{
+    .sharp-minimal .mobile-num-field:-ms-input-placeholder{
         color: var(--tertiary-color);
     }
 
     /* Microsoft Edge */
-    .mobile-num-field::-ms-input-placeholder{
+    .sharp-minimal .mobile-num-field::-ms-input-placeholder{
         color: var(--tertiary-color);
+    }
+
+    .neomorphic.mobile-num-container{
+        /* design */
+        background-color: rgb(210, 210, 210);
+
+        /* size */
+        padding: 1em;
+    }
+    
+    .neomorphic .mobile-num-label{
+        /* design */
+        font-family: 'Poppins', sans-serif;
+        font-weight: 300;
+        font-size: clamp(12px, 1vw, 1rem);
+        color: var(--primary-color);
+        background-color: var(--secondary-color);
+        /* outline: 1px solid brown; */
+
+        /* spacing */
+        margin-block: 1em;
+    
+        /* display */
+        display: block;
+    }
+
+    .neomorphic .mobile-num-field{
+        /* design */
+        color: var(--primary-color);
+        background-color: var(--secondary-color);
+        font-family: 'Poppins', sans-serif;
+        font-size: clamp(12px, 1vw, 1rem);
+        font-weight: 300;
+        box-shadow: 
+            inset 3px 3px 7px 0 var(--primary-shadow),
+            inset -3px -3px 7px 0 var(--secondary-shadow);
+        border-radius: 50px;
+        border: none;
+
+        /* size */
+        width: 12rem;
+        padding: 0.5em 1em;
+        /* width: 30rem; */
+
+        /* display */
+        display: block;
+    }
+
+    .neomorphic .mobile-num-field::placeholder{
+        color: var(--tertiary-color);
+        opacity: 1;            
+    }
+
+    .neomorphic .mobile-num-field:-ms-input-placeholder{
+        color: var(--tertiary-color);                
+    }
+
+    .neomorphic .mobile-num-field::-ms-input-placeholder{
+        color: var(--tertiary-color);                
     }
 </style>

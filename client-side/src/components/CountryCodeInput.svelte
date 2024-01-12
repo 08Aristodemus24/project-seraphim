@@ -5,15 +5,33 @@
     export let theme = "dark";
 
     $:palette = {
-        dark: {
-            primary_color: "white",
-            secondary_color: "black",
-            tertiary_color: "rgba(255, 255, 255, 0.267)"    
+        'sharp-minimal':{
+            dark: {
+                primary_color: "white",
+                secondary_color: "black",
+                tertiary_color: "rgba(255, 255, 255, 0.267)"    
+            },
+            light: {
+                primary_color: "black",
+                secondary_color: "white",
+                tertiary_color: "rgba(0, 0, 0, 0.267)"
+            }
         },
-        light: {
-            primary_color: "black",
-            secondary_color: "white",
-            tertiary_color: "rgba(0, 0, 0, 0.267)"    
+        'neomorphic': {
+            dark: {
+                primary_color: "white",
+                secondary_color: "black",
+                tertiary_color: "rgba(255, 255, 255, 0.267)",
+                primary_shadow: "rgba(0, 0, 0, 0.25)",
+                secondary_shadow: "rgba(255, 255, 255, 0.5)"
+            },
+            light: {
+                primary_color: "black",
+                secondary_color: "rgb(210, 210, 210)",
+                tertiary_color: "rgba(0, 0, 0, 0.267)",
+                primary_shadow: "rgba(0, 0, 0, 0.25)",
+                secondary_shadow: "rgba(255, 255, 255, 0.5)"
+            }
         }
     };
 
@@ -52,7 +70,13 @@
     });
 </script>
 
-<div class={`country-code-container ${style}`} style:--primary-color={palette[theme].primary_color} style:--secondary-color={palette[theme].secondary_color} style:--tertiary-color={palette[theme].tertiary_color}>
+<div class={`country-code-container ${style}`} 
+    style:--primary-color={palette[style][theme].primary_color} 
+    style:--secondary-color={palette[style][theme].secondary_color} 
+    style:--tertiary-color={palette[style][theme].tertiary_color}
+    style:--primary-shadow={palette[style][theme].primary_shadow}
+    style:--secondary-shadow={palette[style][theme].secondary_shadow}
+>
     <label for="country-code" class="country-code-label">Country Code</label>
     <select name="country_code" id="country-code" class="country-code-field" bind:value={country_code}>
         {#each countries as country}
@@ -65,10 +89,6 @@
     .sharp-minimal .country-code-label{
         /* design */
         font-family: 'Nunito Sans', sans-serif;
-    }
-
-    .country-code-label{
-        /* design */
         font-weight: 300;
         font-size: clamp(12px, 1vw, 1rem);
         color: var(--primary-color);
@@ -82,14 +102,11 @@
 
     .sharp-minimal .country-code-field{
         /* design */
-        font-family: 'Nunito Sans', sans-serif;
-    }
-
-    .country-code-field{
-        /* design */
         background-color: transparent;
         color: var(--primary-color);
+        font-family: 'Nunito Sans', sans-serif;
         font-size: clamp(12px, 1vw, 1rem);
+        font-weight: 300;
         border-top: none;
         border-right: none;
         border-left: none;
@@ -102,9 +119,53 @@
         display: block;
     }
 
-    .country-code-field option{
+    .sharp-minimal .country-code-field option{
         /* design */
         background-color: rgba(255, 0, 0, 0);
         color: black;
+    }
+
+    .neomorphic.country-code-container{
+        /* design */
+        background-color: rgb(210, 210, 210);
+
+        /* size */
+        padding: 1em;
+    }
+
+    .neomorphic .country-code-label{
+        /* design */
+        font-family: 'Poppins', sans-serif;
+        font-weight: 300;
+        font-size: clamp(12px, 1vw, 1rem);
+        color: var(--primary-color);
+
+        /* spacing */
+        margin-block: 1em;
+
+        /* display */
+        display: block;
+    }
+
+    .neomorphic .country-code-field{
+        /* design */
+        color: var(--primary-color);
+        background-color: var(--secondary-color);
+        font-family: 'Poppins', sans-serif;
+        font-size: clamp(12px, 1vw, 1rem);
+        font-weight: 300;
+        box-shadow:
+            3px 3px 8px 0 var(--primary-shadow),
+            -3px -3px 8px 0 var(--secondary-shadow);;
+        border-radius: 10px;
+        border: none;
+
+        /* size */
+        width: 12rem;
+        padding: 0.5em 1em;
+        /* width: 30rem; */
+
+        /* display */
+        display: block;
     }
 </style>

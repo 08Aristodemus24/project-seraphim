@@ -25,39 +25,45 @@
             },
             light: {
                 primary_color: "black",
-                secondary_color: "white",
+                secondary_color: "rgb(210, 210, 210)",
                 tertiary_color: "rgba(0, 0, 0, 0.267)",
                 primary_shadow: "rgba(0, 0, 0, 0.25)",
                 secondary_shadow: "rgba(255, 255, 255, 0.5)"
             }
         }
     };
+
+    $:toggler = style === 'neomorphic' ? (event) => {
+        event.preventDefault();
+        if(event.target.classList.contains('clicked')){
+            console.log(1)
+            event.target.classList.remove('clicked');
+        }else{
+            event.target.classList.add('clicked');
+        }
+    } : null;
 </script>
 
-<button 
-    type="submit"
-    class={`submit-btn ${style}`} 
+<div 
+    class={`submit-btn-container ${style}`} 
     style:--primary-color={palette[style][theme].primary_color} 
     style:--secondary-color={palette[style][theme].secondary_color} 
     style:--tertiary-color={palette[style][theme].tertiary_color}
     style:--primary-shadow={palette[style][theme].primary_shadow}
     style:--secondary-shadow={palette[style][theme].secondary_shadow}
-    on:click|preventDefault={(event) => {
-        if(event.target.classList.contains('clicked')){
-            event.target.classList.remove('clicked');
-        }else{
-            event.target.classList.add('clicked');
-        }
-    }}
 >
-    Submit
-</button>
+    <button type="submit" class="submit-btn" on:mousedown={toggler} on:mouseup={toggler} on:click|preventDefault>
+        Submit
+    </button>
+</div>
+
 
 <style>
-    .submit-btn.sharp-minimal{
+    .sharp-minimal .submit-btn{
         /* design */
-        font-family: 'Nunito Sans', sans-serif;
         background-color: transparent;
+        font-family: 'Nunito Sans', sans-serif;
+        font-weight: 300;
         font-size: clamp(12px, 1vw, 1rem);
         color: var(--primary-color);
         border: none;
@@ -75,22 +81,30 @@
         transition-timing-function: ease-in-out, ease-in-out;
     }
 
-    .submit-btn.sharp-minimal:hover{
+    .sharp-minimal .submit-btn:hover{
         /* design */
         cursor: pointer;
         background-color: var(--primary-color);
         color: var(--secondary-color);
-        outline: 1px solid var(--primary-color);
     }
 
-    .submit-btn.neomorphic{
+    .neomorphic.submit-btn-container{
         /* design */
-        background-color: transparent;
+        background-color: rgb(210, 210, 210);
+
+        /* size */
+        padding: 1em;
+    }
+
+    .neomorphic .submit-btn{
+        /* design */
+        background-color: var(--secondary-color);
         box-shadow: 
-            12px 12px 24px 0 var(--primary-shadow),
-            -12px -12px 24px 0 var(--secondary-shadow);
-        font-family: 'Nunito Sans', sans-serif;
+            10px 10px 15px 0 var(--primary-shadow),
+            -10px -10px 15px 0 var(--secondary-shadow);
+        font-family: 'Poppins', sans-serif;
         font-size: clamp(12px, 1vw, 1rem);
+        font-weight: 300;
         color: var(--primary-color);
         border-radius: 50px;
         border: none;
@@ -102,7 +116,7 @@
         justify-self: center;
     }
 
-    .submit-btn.neomorphic.clicked{
+    .submit-btn.clicked{
         /* design */
         box-shadow: 
             inset 3px 3px 7px 0 var(--primary-shadow),

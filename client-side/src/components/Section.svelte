@@ -25,7 +25,8 @@
         align-items: center;
     
         /* design */
-        border: 2px solid lightseagreen;
+        background-color: rgb(210, 210, 210);
+        /* border: 2px solid lightseagreen; */
     }
     
     #data-form-section::after{
@@ -60,6 +61,6 @@
         align-items: center;
 
         /* design */
-        outline: 3px solid purple;
+        /* outline: 3px solid purple; */
     }
 </style>

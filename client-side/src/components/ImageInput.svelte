@@ -5,17 +5,44 @@
     export let theme = "dark";
 
     $:palette = {
-        dark: {
-            primary_color: "white",
-            secondary_color: "black",
-            tertiary_color: "rgba(255, 255, 255, 0.267)"    
+        'sharp-minimal':{
+            dark: {
+                primary_color: "white",
+                secondary_color: "black",
+                tertiary_color: "rgba(255, 255, 255, 0.267)"    
+            },
+            light: {
+                primary_color: "black",
+                secondary_color: "white",
+                tertiary_color: "rgba(0, 0, 0, 0.267)"
+            }
         },
-        light: {
-            primary_color: "black",
-            secondary_color: "white",
-            tertiary_color: "rgba(0, 0, 0, 0.267)"    
+        'neomorphic': {
+            dark: {
+                primary_color: "white",
+                secondary_color: "black",
+                tertiary_color: "rgba(255, 255, 255, 0.267)",
+                primary_shadow: "rgba(0, 0, 0, 0.25)",
+                secondary_shadow: "rgba(255, 255, 255, 0.5)"
+            },
+            light: {
+                primary_color: "black",
+                secondary_color: "rgb(210, 210, 210)",
+                tertiary_color: "rgba(0, 0, 0, 0.267)",
+                primary_shadow: "rgba(0, 0, 0, 0.25)",
+                secondary_shadow: "rgba(255, 255, 255, 0.5)"
+            }
         }
     };
+
+    $:toggler = style === 'neomorphic' ? (event) => {
+        console.log(event.target.classList);
+        if(event.target.classList.contains('clicked')){
+            event.target.classList.remove('clicked');
+        }else{
+            event.target.classList.add('clicked');
+        }
+    } : null;
 
     let images = null;
 
@@ -24,16 +51,21 @@
     });
 </script>
 
-<div class={`image-upload-container ${style}`} style:--primary-color={palette[theme].primary_color} style:--secondary-color={palette[theme].secondary_color} style:--tertiary-color={palette[theme].tertiary_color}>
+<div 
+    class={`image-upload-container ${style}`} 
+    style:--primary-color={palette[style][theme].primary_color} 
+    style:--secondary-color={palette[style][theme].secondary_color} 
+    style:--tertiary-color={palette[style][theme].tertiary_color}
+    style:--primary-shadow={palette[style][theme].primary_shadow}
+    style:--secondary-shadow={palette[style][theme].secondary_shadow}    
+>
     <!-- when image is uploaded images becomes are not null anymore
     but when another upload occurs and is cancelled images becomes
     a list of length 0 -->
     <img class="uploaded-image" src={images != null ? images.length != 0 ? URL.createObjectURL(images[0]) : null : null} alt="">
     <div class="image-upload-field-wrapper">
-        {#if style != "neomorphic"}
-            <label for="image-upload" class="image-upload-label">Image</label>    
-        {/if}
-        <input type="file" id="image-upload" class="image-upload-field" bind:files={images}>
+        <label for="image-upload" class="image-upload-label">Image</label>    
+        <input type="file" id="image-upload" class="image-upload-field" bind:files={images} on:mousedown={toggler} on:mouseup={toggler}>
     </div>
 </div>
 
@@ -55,10 +87,26 @@
         padding: 5px;
     }
 
-    .uploaded-image{
+    .sharp-minimal .uploaded-image{
         /* design */
         outline: 1px dashed var(--primary-color);
         outline-offset: 5px;
+
+        /* size */
+        height: 200px;
+        width: 200px;
+
+        /* display */
+        display: block;
+    }
+
+    .neomorphic .uploaded-image{
+        /* design */
+        background-color: var(--secondary-color);
+        box-shadow: 
+            inset 3px 3px 7px 0 var(--primary-shadow),
+            inset -3px -3px 7px 0 var(--secondary-shadow);
+        border-radius: 20px;
 
         /* size */
         height: 200px;
@@ -81,15 +129,6 @@
     .sharp-minimal .image-upload-label{
         /* design */
         font-family: 'Nunito Sans', sans-serif;
-    }
-
-    .soft-minimal .image-upload-label{
-        /* design */
-        font-family: 'Poppins', sans-serif;
-    }
-
-    .image-upload-label{
-        /* design */
         font-weight: 300;
         font-size: clamp(12px, 1vw, 1rem);
         color: var(--primary-color);
@@ -104,17 +143,9 @@
 
     .sharp-minimal .image-upload-field{
         /* design */
-        font-family: 'Nunito Sans', sans-serif;
-    }
-
-    .soft-minimal .image-upload-field{
-        /* design */
-        font-family: 'Poppins', sans-serif;
-    }
-
-    .image-upload-field{
-        /* design */
         background-color: transparent;
+        font-family: 'Nunito Sans', sans-serif;
+        font-weight: 300;
         font-size: clamp(12px, 1vw, 1rem);
         color: var(--primary-color);
         text-align: center;
@@ -129,22 +160,11 @@
 
     .sharp-minimal .image-upload-field::-webkit-file-upload-button{
         /* design */
-        font-family: 'Nunito Sans', sans-serif;
-    }
-
-    .soft-minimal .image-upload-field::-webkit-file-upload-button{
-        /* design */
-        font-family: 'Poppins', sans-serif;
-
-        /* size */
-        border-radius: 10px;
-    }
-
-    .image-upload-field::-webkit-file-upload-button{
-        /* design */
         color: var(--primary-color);
         background-color: transparent;
         cursor: pointer;
+        font-family: 'Nunito Sans', sans-serif;
+        font-weight: 300;
         font-size: clamp(12px, 1vw, 1rem);
         -webkit-user-select: none;
         
@@ -162,9 +182,85 @@
         transition-timing-function: ease-in-out, ease-in-out;
     }
 
-    .image-upload-field::-webkit-file-upload-button:hover{
+    .sharp-minimal .image-upload-field::-webkit-file-upload-button:hover{
         /* design */
         background-color: var(--primary-color);
         color: var(--secondary-color);
+    }
+
+    .neomorphic.image-upload-container{
+        /* design */
+        background-color: rgb(210, 210, 210);
+
+        /* size */
+        padding: 1em;
+    }
+
+    .neomorphic .image-upload-label{
+        /* design */
+        background-color: var(--secondary-color);
+        font-family: 'Poppins', sans-serif;
+        font-weight: 300;
+        font-size: clamp(12px, 1vw, 1rem);
+        color: var(--primary-color);
+        /* outline: 1px solid yellow; */
+
+        /* spacing */
+        margin-block: 1em;
+    
+        /* display */
+        display: block;
+    }
+
+    .neomorphic .image-upload-field{
+        /* design */
+        background-color: var(--secondary-color);
+        font-family: 'Poppins', sans-serif;
+        font-size: clamp(12px, 1vw, 1rem);
+        font-weight: 300;
+        color: var(--primary-color);
+        text-align: center;
+        /* outline: 1px solid greenyellow; */
+    
+        /* display */
+        display: flex;
+
+        /* size */
+        padding: 1em;
+    }
+
+    .neomorphic .image-upload-field::-webkit-file-upload-button{
+        /* design */
+        color: var(--primary-color);
+        background-color: rgb(210, 210, 210);
+        box-shadow: 
+            3px 3px 8px 0 var(--primary-shadow),
+            -3px -3px 8px 0 var(--secondary-shadow);
+        border-radius: 50px;
+        cursor: pointer;
+        font-weight: 300;
+        font-family: 'Poppins', sans-serif;
+        font-size: clamp(12px, 1vw, 1rem);
+        -webkit-user-select: none;
+        
+        /* size */
+        border: none;
+        padding: .5em 1.5em;
+        margin-right: 2.5rem;
+        
+        /* display */
+        display: inline-block;
+
+        /* transition */
+        transition-property: background-color, color;
+        transition-duration: 250ms, 250ms;
+        transition-timing-function: ease-in-out, ease-in-out;
+    }
+
+    .image-upload-field.clicked::-webkit-file-upload-button{
+        /* design */
+        box-shadow: 
+            inset 3px 3px 7px 0 var(--primary-shadow),
+            inset -3px -3px 7px 0 var(--secondary-shadow);
     }
 </style>
