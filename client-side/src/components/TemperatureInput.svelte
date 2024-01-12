@@ -25,7 +25,7 @@
             },
             light: {
                 primary_color: "black",
-                secondary_color: "rgb(210, 210, 210)",
+                secondary_color: "rgb(231, 238, 246)",
                 tertiary_color: "rgba(0, 0, 0, 0.267)",
                 primary_shadow: "rgba(0, 0, 0, 0.25)",
                 secondary_shadow: "rgba(255, 255, 255, 0.5)"
@@ -128,7 +128,7 @@
 
     .neomorphic.temp-container{
         /* design */
-        background-color: rgb(210, 210, 210);
+        background-color: var(--secondary-color);
 
         /* size */
         padding: 1em;

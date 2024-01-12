@@ -25,7 +25,7 @@
         align-items: center;
     
         /* design */
-        background-color: rgb(210, 210, 210);
+        background-color: rgb(231, 238, 246);
         /* border: 2px solid lightseagreen; */
     }
     

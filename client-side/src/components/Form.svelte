@@ -23,7 +23,7 @@
             tertiary_color: "rgba(0, 0, 0, 0.267)"    
         },
         light: {
-            primary_color: "rgb(210, 210, 210)",
+            primary_color: "rgb(231, 238, 246)",
             secondary_color: "black",
             tertiary_color: "rgba(255, 255, 255, 0.267)"    
         }
@@ -84,11 +84,8 @@
         /* size */
         padding: 5px;
 
-        /* outline */
+        /* design */
         /* outline: 2px solid red; */
-    }
-
-    .form.sharp-minimal{
         background-color: var(--primary-color);
     }
 </style>
