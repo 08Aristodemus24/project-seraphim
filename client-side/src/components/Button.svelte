@@ -20,8 +20,8 @@
                 primary_color: "white",
                 secondary_color: "rgb(38,39,43)",
                 tertiary_color: "rgba(255, 255, 255, 0.267)",
-                primary_shadow: "rgba(0, 0, 0, 0.25)",
-                secondary_shadow: "rgba(255, 255, 255, 0.5)"
+                primary_shadow: "rgba(100, 100, 100, 0.5)",
+                secondary_shadow: "rgba(0, 0, 0, 0.25)",
             },
             light: {
                 primary_color: "black",
@@ -100,8 +100,8 @@
         /* design */
         background-color: var(--secondary-color);
         box-shadow: 
-            3px 3px 8px 0 var(--primary-shadow),
-            -10px -10px 15px 0 var(--secondary-shadow);
+            10px 10px 8px 0 var(--secondary-shadow),
+            -2px -2px 8px 0 var(--primary-shadow);
         font-family: 'Poppins', sans-serif;
         font-size: clamp(12px, 1vw, 1rem);
         font-weight: 300;
@@ -119,7 +119,7 @@
     .submit-btn.clicked{
         /* design */
         box-shadow: 
-            inset 3px 3px 7px 0 var(--primary-shadow),
-            inset -3px -3px 7px 0 var(--secondary-shadow);
+            inset 3px 3px 7px 0 var(--secondary-shadow),
+            inset -3px -3px 7px 0 var(--primary-shadow);
     }
 </style>
