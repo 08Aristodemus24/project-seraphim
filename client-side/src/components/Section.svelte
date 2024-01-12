@@ -26,7 +26,7 @@
     
         /* design */
         background-color: rgb(231, 238, 246);
-        /* background-color: black; */
+        background-color: #26272b;
         /* border: 2px solid lightseagreen; */
     }
     

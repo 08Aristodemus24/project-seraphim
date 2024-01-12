@@ -70,7 +70,7 @@
     <SequenceLengthInput style="neomorphic" theme="dark"/>
     <TemperatureInput style="neomorphic" theme="dark"/>
     <ImageInput style="neomorphic" theme="dark"/>
-    <Button style="neomorphic" theme="dark"/>
+    <Button style="light-neomorphic" theme="light"/>
 </form>
 
 <style>
