@@ -18,7 +18,7 @@
         'neomorphic': {
             dark: {
                 primary_color: "white",
-                secondary_color: "black",
+                secondary_color: "rgb(38,39,43)",
                 tertiary_color: "rgba(255, 255, 255, 0.267)",
                 primary_shadow: "rgba(0, 0, 0, 0.25)",
                 secondary_shadow: "rgba(255, 255, 255, 0.5)"

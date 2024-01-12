@@ -26,6 +26,7 @@
     
         /* design */
         background-color: rgb(231, 238, 246);
+        /* background-color: black; */
         /* border: 2px solid lightseagreen; */
     }
     

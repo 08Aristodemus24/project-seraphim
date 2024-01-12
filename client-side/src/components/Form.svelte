@@ -18,7 +18,7 @@
 
     $:palette = {
         dark: {
-            primary_color: "black",
+            primary_color: "rgb(38,39,43)",
             secondary_color: "white",
             tertiary_color: "rgba(0, 0, 0, 0.267)"    
         },
@@ -59,18 +59,18 @@
     method="post" 
     bind:this={form}
 >
-    <NameInput name_type="first" style="neomorphic" theme="light"/>
-    <NameInput name_type="last" style="neomorphic" theme="light"/>
-    <EmailInput style="neomorphic" theme="light"/>
-    <MobileNumberInput style="neomorphic" theme="light"/>
-    <CountryCodeInput style="neomorphic" theme="light"/>
-    <MessageInput style="neomorphic" theme="light"/>
-    <ModelNameInput style="neomorphic" theme="light"/>
-    <PromptInput style="neomorphic" theme="light"/>
-    <SequenceLengthInput style="neomorphic" theme="light"/>
-    <TemperatureInput style="neomorphic" theme="light"/>
-    <ImageInput style="neomorphic" theme="light"/>
-    <Button style="neomorphic" theme="light"/>
+    <NameInput name_type="first" style="neomorphic" theme="dark"/>
+    <NameInput name_type="last" style="neomorphic" theme="dark"/>
+    <EmailInput style="neomorphic" theme="dark"/>
+    <MobileNumberInput style="neomorphic" theme="dark"/>
+    <CountryCodeInput style="neomorphic" theme="dark"/>
+    <MessageInput style="neomorphic" theme="dark"/>
+    <ModelNameInput style="neomorphic" theme="dark"/>
+    <PromptInput style="neomorphic" theme="dark"/>
+    <SequenceLengthInput style="neomorphic" theme="dark"/>
+    <TemperatureInput style="neomorphic" theme="dark"/>
+    <ImageInput style="neomorphic" theme="dark"/>
+    <Button style="neomorphic" theme="dark"/>
 </form>
 
 <style>
