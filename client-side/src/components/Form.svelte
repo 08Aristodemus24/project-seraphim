@@ -23,7 +23,7 @@
             tertiary_color: "rgba(0, 0, 0, 0.267)"    
         },
         light: {
-            primary_color: "rgb(201, 201, 201)",
+            primary_color: "rgb(210, 210, 210)",
             secondary_color: "black",
             tertiary_color: "rgba(255, 255, 255, 0.267)"    
         }
