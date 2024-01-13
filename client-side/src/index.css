@@ -41,9 +41,3 @@ body{
     /* set to 100% not vw since it will not ake into account scrollbar */
     width: 100%;
 }
-
-h1{
-    /* design */
-    font-family: 'Poppins', sans-serif;
-    font-weight: 600;
-}

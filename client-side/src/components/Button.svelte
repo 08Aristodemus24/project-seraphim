@@ -57,17 +57,17 @@
         },
         'dark-neomorphic': {
             dark: {
-                primary_color: "white",
+                primary_color: "rgb(231, 238, 246)",
                 secondary_color: "rgb(38,39,43)",
                 tertiary_color: "rgba(255, 255, 255, 0.267)",
                 primary_shadow: "rgba(0, 0, 0, 0.25)",
-                secondary_shadow: "rgba(255, 255, 255, 0.5)"
+                secondary_shadow: "rgba(210, 210, 210, 0.5)"
             },
         }
     };
 
     $:toggler = style.includes('neomorphic') ? (event) => {
-        if(event.type === 'mousedown' && event.target.classList.contains('clicked')){
+        if(event.target.classList.contains('clicked')){
             console.log('closed');
             event.target.classList.remove('clicked');
         }else{
@@ -78,14 +78,14 @@
 </script>
 
 <div 
-    class={`submit-btn-container ${style}`} 
+    class={`submit-btn-container ${style}`}
     style:--primary-color={palette[style][theme].primary_color} 
     style:--secondary-color={palette[style][theme].secondary_color} 
     style:--tertiary-color={palette[style][theme].tertiary_color}
     style:--primary-shadow={palette[style][theme].primary_shadow}
     style:--secondary-shadow={palette[style][theme].secondary_shadow}
 >
-    <button type="submit" class="submit-btn" on:mousedown={toggler} on:mouseup={toggler} on:click|preventDefault>
+    <button type="submit" class={`submit-btn ${style}`} on:mousedown={toggler} on:mouseup={toggler} on:click|preventDefault>
         Submit
     </button>
 </div>
@@ -149,6 +149,13 @@
         justify-self: center;
     }
 
+    .light-neomorphic.submit-btn.clicked{
+        /* design */
+        box-shadow: 
+            inset 3px 3px 7px 0 var(--primary-shadow),
+            inset -3px -3px 7px 0 var(--secondary-shadow);
+    }
+
     .dark-neomorphic.submit-btn-container{
         /* design */
         background-color: var(--secondary-color);
@@ -161,8 +168,8 @@
         /* design */
         background-color: var(--secondary-color);
         box-shadow: 
-            3px 3px 8px 0 var(--primary-shadow),
-            -3px -3px 8px 0 var(--secondary-shadow);
+            3px 7px 8px 0 var(--primary-shadow),
+            -2px -2px 8px 0 var(--secondary-shadow);
         font-family: 'Poppins', sans-serif;
         font-size: clamp(12px, 1vw, 1rem);
         font-weight: 300;
@@ -177,10 +184,10 @@
         justify-self: center;
     }
 
-    .light-neomorphic .submit-btn.clicked{
+    .dark-neomorphic.submit-btn.clicked{
         /* design */
         box-shadow: 
-            inset 3px 3px 7px 0 var(--primary-shadow),
-            inset -3px -3px 7px 0 var(--secondary-shadow);
+            inset 3px 7px 8px 0 var(--primary-shadow),
+            inset -2px -2px 5px 0 var(--secondary-shadow);
     }
 </style>

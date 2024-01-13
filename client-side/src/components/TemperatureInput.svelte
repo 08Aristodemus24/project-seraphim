@@ -15,14 +15,7 @@
                 tertiary_color: "rgba(0, 0, 0, 0.267)"
             }
         },
-        'neomorphic': {
-            dark: {
-                primary_color: "white",
-                secondary_color: "rgb(38,39,43)",
-                tertiary_color: "rgba(255, 255, 255, 0.267)",
-                primary_shadow: "rgba(100, 100, 100, 0.5)",
-                secondary_shadow: "rgba(0, 0, 0, 0.25)",
-            },
+        'light-neomorphic': {
             light: {
                 primary_color: "black",
                 secondary_color: "rgb(231, 238, 246)",
@@ -30,6 +23,15 @@
                 primary_shadow: "rgba(0, 0, 0, 0.25)",
                 secondary_shadow: "rgba(255, 255, 255, 0.5)"
             }
+        },
+        'dark-neomorphic': {
+            dark: {
+                primary_color: "rgb(231, 238, 246)",
+                secondary_color: "rgb(38,39,43)",
+                tertiary_color: "rgba(255, 255, 255, 0.267)",
+                primary_shadow: "rgba(0, 0, 0, 0.25)",
+                secondary_shadow: "rgba(210, 210, 210, 0.5)"
+            },
         }
     };
 
@@ -45,7 +47,7 @@
     style:--secondary-shadow={palette[style][theme].secondary_shadow}
 >
     <label for="temp" class="temp-label">Temperature</label>
-    <input bind:value={temperature} type="range" min={0.0} max={2.0} step={0.01} id="field" class="temp-field"/>
+    <input bind:value={temperature} type="range" min={0.0} max={2.0} step={0.01} id="field" class={`temp-field ${style}`}/>
 </div>
 
 <style>
@@ -126,7 +128,7 @@
         -webkit-appearance: none;
     }
 
-    .neomorphic.temp-container{
+    .light-neomorphic.temp-container{
         /* design */
         background-color: var(--secondary-color);
 
@@ -134,7 +136,7 @@
         padding: 1em;
     }
 
-    .neomorphic .temp-label{
+    .light-neomorphic .temp-label{
         /* design */
         font-family: 'Poppins', sans-serif;
         font-weight: 300;
@@ -150,7 +152,7 @@
         display: block;
     }
 
-    .neomorphic .temp-field{
+    .light-neomorphic .temp-field{
         /* size */
         width: 12rem;
         /* width: 30rem; */
@@ -164,7 +166,7 @@
         -webkit-appearance: none;
     }
 
-    .neomorphic .temp-field::-webkit-slider-runnable-track{
+    .light-neomorphic .temp-field::-webkit-slider-runnable-track{
         /* size */
         height: 20px;
 
@@ -176,7 +178,7 @@
         appearance: none;
     }
 
-    .neomorphic .temp-field::-ms-track{
+    .light-neomorphic .temp-field::-ms-track{
         /* size */
         height: 20px;
 
@@ -188,7 +190,7 @@
         appearance: none;
     }
 
-    .neomorphic .temp-field::-webkit-slider-thumb{
+    .light-neomorphic .temp-field::-webkit-slider-thumb{
         /* size */
         height: 20px;
         width: 20px;
@@ -209,7 +211,69 @@
         margin-top: -0.5px;
     }
 
-    .sharp-minimal .temp-field::-ms-thumb{
+    .dark-neomorphic.temp-container{
+        /* design */
+        background-color: var(--secondary-color);
+
+        /* size */
+        padding: 1em;
+    }
+
+    .dark-neomorphic .temp-label{
+        /* design */
+        font-family: 'Poppins', sans-serif;
+        font-weight: 300;
+        font-size: clamp(12px, 1vw, 1rem);
+        color: var(--primary-color);
+        background-color: var(--secondary-color);
+        /* outline: 1px solid brown; */
+
+        /* spacing */
+        margin-block: 1em;
+    
+        /* display */
+        display: block;
+    }
+
+    .dark-neomorphic .temp-field{
+        /* size */
+        width: 12rem;
+        /* width: 30rem; */
+
+        /* design */
+        background-color: var(--secondary-color);
+        border-radius: 10px;
+        box-shadow: 
+            inset 3px 7px 8px 0 var(--primary-shadow),
+            inset -2px -2px 5px -2px var(--secondary-shadow);
+        -webkit-appearance: none;
+    }
+
+    .dark-neomorphic .temp-field::-webkit-slider-runnable-track{
+        /* size */
+        height: 20px;
+
+        /* design */
+        cursor: pointer;
+        border-radius: 10px;
+        border: 0px solid black;
+        box-shadow: none;
+        appearance: none;
+    }
+
+    .dark-neomorphic .temp-field::-ms-track{
+        /* size */
+        height: 20px;
+
+        /* design */
+        cursor: pointer;
+        border-radius: 10px;
+        border: 0px solid black;
+        box-shadow: none;
+        appearance: none;
+    }
+
+    .dark-neomorphic .temp-field::-webkit-slider-thumb{
         /* size */
         height: 20px;
         width: 20px;
@@ -217,9 +281,8 @@
         /* design */
         background-color: var(--secondary-color);
         box-shadow: 
-            3px 3px 10px 0 var(--primary-shadow),
-            -3px -3px 10px 0 var(--secondary-shadow),
-            -3px 3px 10px 0 var(--primary-shadow);
+            3px 2px 8px 1px var(--primary-shadow),
+            -2px -1.5px 5px -1px var(--secondary-shadow);
             
         border-radius: 50%;
         border: 0px solid black;

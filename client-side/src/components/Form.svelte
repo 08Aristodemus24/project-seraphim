@@ -68,9 +68,9 @@
     <ModelNameInput style="neomorphic" theme="dark"/>
     <PromptInput style="neomorphic" theme="dark"/>
     <SequenceLengthInput style="neomorphic" theme="dark"/>
-    <TemperatureInput style="neomorphic" theme="dark"/>
-    <ImageInput style="neomorphic" theme="dark"/>
-    <Button style="light-neomorphic" theme="light"/>
+    <TemperatureInput style="dark-neomorphic" theme="dark"/>
+    <ImageInput style="dark-neomorphic" theme="dark"/>
+    <Button style="dark-neomorphic" theme="dark"/>
 </form>
 
 <style>
