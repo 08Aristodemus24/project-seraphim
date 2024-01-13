@@ -95,3 +95,19 @@ Visualizers:
 * <s>implement dark</s>
 * <s>tweak light shadow of light theme</s>
 * fix image upload fields image height ! needs to be responsive from 1600px to 320px
+
+# Prebuilt template functions for server-side
+
+* for general models
+* for tensorflow models
+* using a pipeline for preprocessing user input from client-side using a preprocessing function
+e.g. featture vector -> normalizer loaded with specific mean and standard deviation, do I use a saved .json object with these hyper params, or use a sklearn object instead? But a sklearn object like a normalizer I cannot save
+
+def predict(self, X):
+        # normalize on training mean and standard dev first
+        X = (X - self.mean) / self.std_dev
+
+        # predict then return prediction value
+        return self.linear(X)
+
+use instead your own implementation of a normalizer function and then loading the respective hyper params like mean and standard deviation to pass into this from scratch implementation of a normalizer
