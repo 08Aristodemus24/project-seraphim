@@ -57,21 +57,6 @@
 </script>
 
 <Section name="data-form">
-    <div class="form-container">
-        <Form on:sendData={send_data} bind:form theme="dark"/>
-    </div>
+    <Form on:sendData={send_data} bind:form theme="dark"/>
     <Alert msg_status={msg_status} error_type={error_type} response={response}/>
 </Section>
-
-<style>
-    .form-container{
-        /* design */
-        /* outline: 1px solid yellow; */
-
-        /* size */
-        /* width: 100%; */
-
-        /* spacing */
-        margin-block: 1rem;
-    }
-</style>

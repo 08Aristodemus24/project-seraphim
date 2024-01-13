@@ -74,7 +74,7 @@
 <style>
     .image-upload-container{
         /* design */
-        /* outline: 1px solid red; */
+        outline: 1px solid red;
 
         /* display */
         display: flex;
@@ -125,10 +125,11 @@
             inset 3px 7px 8px 0 var(--primary-shadow),
             inset -2px -2px 5px 0 var(--secondary-shadow);
         border-radius: 20px;
+        outline: 1px solid rebeccapurple;
 
         /* size */
-        height: 200px;
-        width: 200px;
+        height: 500px;
+        width: 500px;
 
         /* display */
         display: block;

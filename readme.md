@@ -89,9 +89,9 @@ Visualizers:
 * <s>select fields ~</s>
 * <s>textarea fields ~</s>
 * <s>fix width of data-form-content why does it not expand the width of the parent? ~ it was because of its parent data-form-section being set to display flex and shrinking it to the width of childrens size, or in other words in auto</s>
-* fix image upload field spacing ~
-* fix image upload fields upload button ~
+* <s>fix image upload field spacing ~</s>
+* <s>fix image upload fields upload button ~</s>
+* <s>create custom themed classes to switch between themes for components</s>
+* <s>implement dark</s>
+* <s>tweak light shadow of light theme</s>
 * fix image upload fields image height ! needs to be responsive from 1600px to 320px
-* create custom themed classes to switch between themes for components
-* implement dark
-* tweak light shadow of light theme

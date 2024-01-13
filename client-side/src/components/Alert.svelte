@@ -23,21 +23,21 @@
 
 <style>
     .alert-container{
-    /* position */
-    position: fixed;
-    inset: 0;
-    margin: auto;
-    z-index: 20;
+        /* position */
+        position: fixed;
+        inset: 0;
+        margin: auto;
+        z-index: 20;
 
-    /* design */
-    opacity: 0%;
-    visibility: hidden;
-    background-color: rgba(0, 0, 0, 0.377);
+        /* design */
+        opacity: 0%;
+        visibility: hidden;
+        background-color: rgba(0, 0, 0, 0.377);
 
-    /* transition */
-    transition: 
-        opacity 0.25s ease-in-out,
-        visibility 0.25s ease-in-out;
+        /* transition */
+        transition: 
+            opacity 0.25s ease-in-out,
+            visibility 0.25s ease-in-out;
     }
 
     .alert-container.show{

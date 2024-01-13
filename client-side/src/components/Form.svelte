@@ -50,30 +50,43 @@
     
 </script>
 
-<form 
-    class={`form ${style}`}
-    style:--primary-color={palette[theme].primary_color} 
-    style:--secondary-color={palette[theme].secondary_color} 
-    style:--tertiary-color={palette[theme].tertiary_color}
-    on:submit|preventDefault={handle_submit} 
-    method="post" 
-    bind:this={form}
->
-    <NameInput name_type="first" style="dark-neomorphic" theme="dark"/>
-    <NameInput name_type="last" style="dark-neomorphic" theme="dark"/>
-    <EmailInput style="dark-neomorphic" theme="dark"/>
-    <MobileNumberInput style="dark-neomorphic" theme="dark"/>
-    <CountryCodeInput style="dark-neomorphic" theme="dark"/>
-    <MessageInput style="dark-neomorphic" theme="dark"/>
-    <ModelNameInput style="dark-neomorphic" theme="dark"/>
-    <PromptInput style="dark-neomorphic" theme="dark"/>
-    <SequenceLengthInput style="dark-neomorphic" theme="dark"/>
-    <TemperatureInput style="dark-neomorphic" theme="dark"/>
-    <ImageInput style="dark-neomorphic" theme="dark"/>
-    <Button style="dark-neomorphic" theme="dark"/>
-</form>
+<div class="form-container">
+    <form 
+        class={`form ${style}`}
+        style:--primary-color={palette[theme].primary_color} 
+        style:--secondary-color={palette[theme].secondary_color} 
+        style:--tertiary-color={palette[theme].tertiary_color}
+        on:submit|preventDefault={handle_submit} 
+        method="post" 
+        bind:this={form}
+    >
+        <NameInput name_type="first" style="dark-neomorphic" theme="dark"/>
+        <NameInput name_type="last" style="dark-neomorphic" theme="dark"/>
+        <EmailInput style="dark-neomorphic" theme="dark"/>
+        <MobileNumberInput style="dark-neomorphic" theme="dark"/>
+        <CountryCodeInput style="dark-neomorphic" theme="dark"/>
+        <MessageInput style="dark-neomorphic" theme="dark"/>
+        <ModelNameInput style="dark-neomorphic" theme="dark"/>
+        <PromptInput style="dark-neomorphic" theme="dark"/>
+        <SequenceLengthInput style="dark-neomorphic" theme="dark"/>
+        <TemperatureInput style="dark-neomorphic" theme="dark"/>
+        <ImageInput style="dark-neomorphic" theme="dark"/>
+        <Button style="dark-neomorphic" theme="dark"/>
+    </form>
+</div>
 
 <style>
+    .form-container{
+        /* design */
+        outline: 1px solid yellow;
+
+        /* size */
+        /* width: 100%; */
+
+        /* spacing */
+        margin-block: 1rem;
+    }
+
     .form{
         /* display */
         display: flex;
