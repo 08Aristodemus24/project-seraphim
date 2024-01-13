@@ -4,6 +4,7 @@ import tqdm
 import pickle
 import json
 import os
+import pandas as pd
 
 from pathlib import Path
 from splitfolders import ratio
@@ -270,3 +271,44 @@ def create_image_set(root_dir: str, img_dims: tuple=(256, 256)):
     )
 
     return train_gen, cross_gen, test_gen
+
+def create_metrics_df(train_metric_values, val_metric_values, test_metric_values):
+    """
+    creates a metrics dataframe
+    """
+
+    train_acc, train_prec, train_rec, train_f1 = train_metric_values
+    val_acc, val_prec, val_rec, val_f1 = val_metric_values
+    test_acc, test_prec, test_rec, test_f1 = test_metric_values
+
+    metrics_df = pd.DataFrame({
+        'data_split': ['training', 'validation', 'testing'],
+        'accuracy': [train_acc, val_acc, test_acc], 
+        'precision': [train_prec, val_prec, test_prec], 
+        'recall': [train_rec, val_rec, test_rec], 
+        'f1-score': [train_f1, val_f1, test_f1]
+    })
+
+    return metrics_df
+
+def create_classified_df(train_conf_matrix, val_conf_matrix, test_conf_matrix, train_labels, val_labels, test_labels):
+    """
+    creates a dataframe that represents all classified and 
+    misclassified values
+    """
+
+    num_right_cm_train = train_conf_matrix.trace()
+    num_right_cm_val = val_conf_matrix.trace()
+    num_right_cm_test = test_conf_matrix.trace()
+
+    num_wrong_cm_train = train_labels.shape[0] - num_right_cm_train
+    num_wrong_cm_val = val_labels.shape[0] - num_right_cm_val
+    num_wrong_cm_test = test_labels.shape[0] - num_right_cm_test
+
+    classified_df = pd.DataFrame({
+        'data_split': ['training', 'validation', 'testing'],
+        'classified': [num_right_cm_train, num_right_cm_val, num_right_cm_test], 
+        'misclassified': [num_wrong_cm_train, num_wrong_cm_val, num_wrong_cm_test]}, 
+        index=["training set", "validation set", "testing set"])
+    
+    return classified_df

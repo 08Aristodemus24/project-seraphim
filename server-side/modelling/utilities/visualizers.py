@@ -231,7 +231,7 @@ def view_value_frequency(word_counts, colormap: str="plasma", title: str="untitl
         plt.savefig(f'./figures & images/{title}.png')
         plt.show()
 
-def multi_class_heatmap(conf_matrix, img_title: str, cmap: str='YlGnBu', save_img: bool=True):
+def multi_class_heatmap(conf_matrix, img_title: str="untitled", cmap: str='YlGnBu', save_img: bool=True):
     """
     takes in the confusion matrix returned by the confusion_matrix()
     function from sklearn e.g. conf_matrix_train = confusion_matrix(

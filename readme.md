@@ -31,17 +31,29 @@
 ! - needs further tweaking
 
 Loaders:
+NLP
 * load_corpus
 * get_chars
+* construct_embedding_dict
+* construct_embedding_matrix
+
+General
 * load_lookup_array
 * save_lookup_array
 * load_meta_data
 * save_meta_data
-* construct_embedding_dict
-* construct_embedding_matrix
-* get_cat_cols ~
+* get_cat_cols
+* get_top_models
+* load_model
+* save_model
+* create_metrics_df ~
+* create_classified_df ~
+
+Image Processing
+* create_image_set
 
 Preprocessors:
+NLP
 * map_value_to_index
 * remove_contractions
 * rem_non_alpha_num
@@ -54,20 +66,27 @@ Preprocessors:
 * string_list_to_list
 * flatten_series_of_lists
 * sentences_to_avgs
+* init_sequences
+* decode_id_sequences
+* decode_one_hot ~
+
+Recommendation
 * normalize_ratings
 * normalize_rating_matrix
+
+General
 * normalize_train_cross
 * encode_features ~
 
 Visualizers:
-* plot_train_cross_features
-* analyze
+* plot_train_cross_features ~
+* analyze ~ 
 * view_words
-* data_split_metric_values
+* data_split_metric_values ~
 * view_value_frequency ! has no x label
-* multi_class_heatmap
-* view_metric_values
-* view_classified_labels
+* multi_class_heatmap ~
+* view_metric_values ~
+* view_classified_labels ~
 * view_label_freq ! has no x label
 * disp_cat_feat ! has x labels but bars are too compressed especially if n unique is large
 * describe_col
@@ -76,7 +95,6 @@ Visualizers:
 * view_clusters_3d ~
 * ModelResults ! since there might be a shorter version of code for it from the micro-organism-classifier kaggle code
 * plot_all_vars ~
-* to implement pairplot for newly encoded featuress
 
 # Prebuilt template components for client-side:
 * WE NEED TO IMPLEMENT NOW THESE TEMPLATES FOR OUR MICRO-ORGANISM-CLASSIFIER

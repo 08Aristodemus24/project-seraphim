@@ -290,7 +290,7 @@ def sentences_to_avgs(sentences, word_to_vec_dict: dict):
     
     return avgs
 
-def init_sequences_b(corpus: str, char_to_idx: dict, T_x: int):
+def init_sequences(corpus: str, char_to_idx: dict, T_x: int):
     """
     generates a input and target dataset by:
 
@@ -338,10 +338,11 @@ def init_sequences_b(corpus: str, char_to_idx: dict, T_x: int):
 
     return char_to_idx(in_seqs), char_to_idx(out_seqs)
 
-def decode_predictions(pred_ids, idx_to_char):
+def decode_id_sequences(pred_ids, idx_to_char):
     """
-    decodes the predictions by inference model and converts
-    them into the full generated sentence itself
+    decodes the sequence of id predictions by inference 
+    model and converts them into the full generated sentence 
+    itself
     """
 
     char_list = idx_to_char(pred_ids)
@@ -351,9 +352,52 @@ def decode_predictions(pred_ids, idx_to_char):
 
     return final_seq
 
-# write decoder for 
-# vectors to image class
-# vectors to sentiment/emotional reaction class
+def decode_one_hot(Y_preds, labels=['Appropriative', 'Derogatory', 'Non-Derogatory', 'Homonym']):
+    """
+    whether for image, sentiment, or general classification
+    this function takes in an (m x 1) or (m x n_y) matrix of
+    the predicted values of a classifier
+
+    e.g. if binary the Y_preds would be 
+    [[1], [0], [0], [1], [0], [0]] or [1 0 0 1 0 0]
+
+    then there would be no need to take the argmax along the
+    0th dimension/axis, and once decoded would be just two
+    binary categorial values e.g. spam/not spam, malignant/benign.
+    however if the Y_preds would be multi-class for instance...
+
+    [[0 0 0 1]
+    [1 0 0 0
+    [0 0 1 0]
+    ...
+    [0 1 0 0]]
+
+    then this function would take the argmax along the 0th dimension/
+    axis of the matrix, and once decoded would result in just a vector
+
+    [4 1 3 2]
+
+    main args:
+        Y_preds - 
+        labels - the full name of the classes/labels/categories of
+        the different kinds of or binary outputs. Note this must be
+        of the same length as the number of unique classes/labels/
+        categories of the Y_pred matrix
+    """
+
+    # check if Y_preds is multi-class by checking if shape
+    # of matrix is (m, n_y), (m, m, n_y), or just m
+    if len(Y_preds.shape) >= 2:
+        # take the argmax if Y_preds are multi labeled
+        pred_ids = np.argmax(Y_preds, axis=1)
+    else:
+        pred_ids = np.reshape(Y_preds, (-1,))
+
+    # create vectorized decoder
+    vectorized_decoder = np.vectorize(lambda pred_id: labels[pred_id])
+
+    decoded_ids = vectorized_decoder(pred_ids)
+    return decoded_ids
 
 def normalize_ratings(ratings: pd.DataFrame):
     """
@@ -404,4 +448,3 @@ def normalize_rating_matrix(Y, R):
     Y_mean = np.sum(Y * R, axis=1) / (np.sum(R, axis=1) + 1e-12).reshape(-1)
     Y_normed = Y - (Y_mean * R)
     return [Y_normed, Y_mean]
-
