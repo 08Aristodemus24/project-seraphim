@@ -97,7 +97,6 @@ Visualizers:
 * fix image upload fields image height ! needs to be responsive from 1600px to 320px
 
 # Prebuilt template functions for server-side
-
 * for general models
 * for tensorflow models
 * using a pipeline for preprocessing user input from client-side using a preprocessing function
@@ -111,3 +110,41 @@ def predict(self, X):
         return self.linear(X)
 
 use instead your own implementation of a normalizer function and then loading the respective hyper params like mean and standard deviation to pass into this from scratch implementation of a normalizer
+
+* there needs to be also a meta_data saver like this
+def save_weights(self):
+        meta_data = {
+            'non-bias': self.theta.tolist(),
+            'bias': self.beta.tolist()[0],
+            'mean': self.mean.tolist(),
+            'std_dev': self.std_dev.tolist()
+        }
+
+        # if directory weights does not already exist create 
+        # directory and save weights there
+        if os.path.exists('./weights') != True:
+            os.mkdir('./weights')
+        
+        with open('./weights/meta_data.json', 'w') as out_file:
+            json.dump(meta_data, out_file)
+            out_file.close()
+
+for both general and deep learning models. But since sklearn models can be saved directly without taking into account its hyperparams, we could only now save certain other hyperparams like again mean and standard deviation
+
+or in tensorflow models some meta_data may be important to load later on such as:
+```
+# global variables
+vocab = None
+char_to_idx = None
+idx_to_char = None
+hyper_params = None
+```
+just in case a model only saves its weights, and not the whole model architecture such as hyper_params in this case
+
+but even if the architecture itself is saved its respective hyper params, for preprocessing input in order to feed to the trained model it is important that such hyperparams used in preprocessing the input for having even trained the model in the first place is important, this being vocab, char_to_idx, and idx_to_char for instance
+
+* writing decoders functions for the predictions of our model
+- decoder for categorical data which can range from:
+a. categorical vectors to image class
+b. categorical sequences of vectors to sentences
+c. categorical vectors to sentiments/emotional reactions class (such is the case for NLP)

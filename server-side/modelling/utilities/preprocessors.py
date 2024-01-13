@@ -10,7 +10,7 @@ from sklearn.preprocessing import StandardScaler, MinMaxScaler, OrdinalEncoder, 
 import pandas as pd
 import numpy as np
 import ast
-# import tensorflow as tf
+import tensorflow as tf
 
 
 
@@ -49,21 +49,20 @@ def normalize_train_cross(X_trains, X_cross, scaler='min_max'):
 
 
 def map_value_to_index(unique_tokens: list, inverted=False):
-#     """
-#     returns a lookup table mapping each unique value to an integer. 
-#     This is akin to generating a word to index dictionary where each
-#     unique word based on their freqeuncy will be mapped from indeces
-#     1 to |V|.
+    """
+    returns a lookup table mapping each unique value to an integer. 
+    This is akin to generating a word to index dictionary where each
+    unique word based on their freqeuncy will be mapped from indeces
+    1 to |V|.
 
-#     args:
-#         unique_tokens - 
-#         inverted - 
-#     """
-#     char_to_idx = tf.keras.layers.StringLookup(vocabulary=unique_tokens, mask_token=None)
-#     idx_to_char = tf.keras.layers.StringLookup(vocabulary=char_to_idx.get_vocabulary(), invert=True, mask_token=None)
+    args:
+        unique_tokens - 
+        inverted - 
+    """
+    char_to_idx = tf.keras.layers.StringLookup(vocabulary=unique_tokens, mask_token=None)
+    idx_to_char = tf.keras.layers.StringLookup(vocabulary=char_to_idx.get_vocabulary(), invert=True, mask_token=None)
 
-#     return char_to_idx if inverted == False else idx_to_char
-    pass
+    return char_to_idx if inverted == False else idx_to_char
 
 def remove_contractions(text_string: str):
     """
@@ -291,6 +290,71 @@ def sentences_to_avgs(sentences, word_to_vec_dict: dict):
     
     return avgs
 
+def init_sequences_b(corpus: str, char_to_idx: dict, T_x: int):
+    """
+    generates a input and target dataset by:
+
+    1. partitioning corpus first into sequences of length T_x + 1
+    2. shifting sequences by one character to the left to generate 
+    output/target sequence the model needs to learn
+
+    A sequence length of 0 will not be permitted and this
+    funciton will raise an error should T_x be 0
+    """
+
+    if T_x == 0:
+        raise ValueError("You have entered an unpermitted value for the number of timesteps T_x. Sequence length T_x cannot be 0. Choose a value above 0.")
+
+    # get total length of corpus
+    total_len = len(corpus)
+
+    # will contain our training examples serving as 
+    # our x and y values
+    in_seqs = []
+    out_seqs = []
+
+    # generate pairs of input and output sequences that 
+    # will serve as our training examples x and y
+    # loop through each character and every T_x char append it to the
+    for i in range(0, total_len, T_x + 1):
+        # slice corpus into input and output characters 
+        # and convert each character into their respective 
+        # indeces using char_to_idx mapping
+        partition = [ch for ch in corpus[i: i + (T_x + 1)]]
+        in_seq = partition[:-1]
+        out_seq = partition[1:]
+
+        # append input and output sequences
+        in_seqs.append(in_seq)
+        out_seqs.append(out_seq)
+
+    if total_len % (T_x + 1):
+        # calculate number of chars missing in last training example
+        n_chars_missed = T_x - len(in_seqs[-1])
+
+        # pad with zeroes to example with less than 100 chars
+        in_seqs[-1] = in_seqs[-1] + (['[UNK]'] * n_chars_missed)
+        out_seqs[-1] = out_seqs[-1] + (['[UNK]'] * n_chars_missed)
+
+    return char_to_idx(in_seqs), char_to_idx(out_seqs)
+
+def decode_predictions(pred_ids, idx_to_char):
+    """
+    decodes the predictions by inference model and converts
+    them into the full generated sentence itself
+    """
+
+    char_list = idx_to_char(pred_ids)
+    char_list = tf.reshape(char_list, shape=(-1, ))
+    joined_seq = tf.strings.reduce_join(char_list).numpy()
+    final_seq = joined_seq.decode('UTF-8')
+
+    return final_seq
+
+# write decoder for 
+# vectors to image class
+# vectors to sentiment/emotional reaction class
+
 def normalize_ratings(ratings: pd.DataFrame):
     """
     normalizes the ratings dataframe by subtracting each original
@@ -340,3 +404,4 @@ def normalize_rating_matrix(Y, R):
     Y_mean = np.sum(Y * R, axis=1) / (np.sum(R, axis=1) + 1e-12).reshape(-1)
     Y_normed = Y - (Y_mean * R)
     return [Y_normed, Y_mean]
+
