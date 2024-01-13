@@ -15,14 +15,7 @@
                 tertiary_color: "rgba(0, 0, 0, 0.267)"
             }
         },
-        'neomorphic': {
-            dark: {
-                primary_color: "white",
-                secondary_color: "rgb(38,39,43)",
-                tertiary_color: "rgba(255, 255, 255, 0.267)",
-                primary_shadow: "rgba(0, 0, 0, 0.25)",
-                secondary_shadow: "rgba(255, 255, 255, 0.5)"
-            },
+        'light-neomorphic': {
             light: {
                 primary_color: "black",
                 secondary_color: "rgb(231, 238, 246)",
@@ -30,6 +23,15 @@
                 primary_shadow: "rgba(0, 0, 0, 0.25)",
                 secondary_shadow: "rgba(255, 255, 255, 0.5)"
             }
+        },
+        'dark-neomorphic': {
+            dark: {
+                primary_color: "rgb(231, 238, 246)",
+                secondary_color: "rgb(38,39,43)",
+                tertiary_color: "rgba(255, 255, 255, 0.267)",
+                primary_shadow: "rgba(0, 0, 0, 0.25)",
+                secondary_shadow: "rgba(210, 210, 210, 0.5)"
+            },
         }
     };
 
@@ -45,7 +47,7 @@
     style:--secondary-shadow={palette[style][theme].secondary_shadow}
 >
     <label for="mobile-number" class="mobile-num-label">Phone</label>
-    <input type="tel" pattern={phone_reg} name="mobile_number" id="mobile-number" class="mobile-num-field" placeholder="XXX-XXX-XXXX" bind:value={mobile_num}/>
+    <input type="tel" pattern={phone_reg} name="mobile_number" id="mobile-number" class={`mobile-num-field ${style}`} placeholder="XXX-XXX-XXXX" bind:value={mobile_num}/>
 </div>
 
 <style>
@@ -98,7 +100,7 @@
         color: var(--tertiary-color);
     }
 
-    .neomorphic.mobile-num-container{
+    .light-neomorphic.mobile-num-container{
         /* design */
         background-color: var(--secondary-color);
 
@@ -106,7 +108,7 @@
         padding: 1em;
     }
     
-    .neomorphic .mobile-num-label{
+    .light-neomorphic .mobile-num-label{
         /* design */
         font-family: 'Poppins', sans-serif;
         font-weight: 300;
@@ -122,7 +124,7 @@
         display: block;
     }
 
-    .neomorphic .mobile-num-field{
+    .light-neomorphic .mobile-num-field{
         /* design */
         color: var(--primary-color);
         background-color: var(--secondary-color);
@@ -144,16 +146,78 @@
         display: block;
     }
 
-    .neomorphic .mobile-num-field::placeholder{
+    .light-neomorphic .mobile-num-field::placeholder{
         color: var(--tertiary-color);
         opacity: 1;            
     }
 
-    .neomorphic .mobile-num-field:-ms-input-placeholder{
+    .light-neomorphic .mobile-num-field:-ms-input-placeholder{
         color: var(--tertiary-color);                
     }
 
-    .neomorphic .mobile-num-field::-ms-input-placeholder{
+    .light-neomorphic .mobile-num-field::-ms-input-placeholder{
+        color: var(--tertiary-color);                
+    }
+
+    .dark-neomorphic.mobile-num-container{
+        /* design */
+        background-color: var(--secondary-color);
+
+        /* size */
+        padding: 1em;
+    }
+
+    .dark-neomorphic .mobile-num-label{
+        /* design */
+        font-family: 'Poppins', sans-serif;
+        font-weight: 300;
+        font-size: clamp(12px, 1vw, 1rem);
+        color: var(--primary-color);
+        background-color: var(--secondary-color);
+        /* outline: 1px solid brown; */
+
+        /* spacing */
+        margin-block: 1em;
+    
+        /* display */
+        display: block;
+    }
+
+    .dark-neomorphic .mobile-num-field{
+        /* design */
+        color: var(--primary-color);
+        background-color: var(--secondary-color);
+        font-family: 'Poppins', sans-serif;
+        font-size: clamp(12px, 1vw, 1rem);
+        font-weight: 300;
+        box-shadow: 
+            inset 3px 7px 8px 0 var(--primary-shadow),
+            inset -2px -2px 5px -2px var(--secondary-shadow);
+        border-radius: 10px;
+        border: none;
+
+        /* size */
+        width: 12rem;
+        padding: 0.5em 1em;
+        /* width: 30rem; */
+
+        /* display */
+        display: block;
+
+        /* functionality */
+        resize: none;
+    }
+
+    .dark-neomorphic .mobile-num-field::placeholder{
+        color: var(--tertiary-color);
+        opacity: 1;            
+    }
+
+    .dark-neomorphic .mobile-num-field:-ms-input-placeholder{
+        color: var(--tertiary-color);                
+    }
+
+    .dark-neomorphic .mobile-num-field::-ms-input-placeholder{
         color: var(--tertiary-color);                
     }
 </style>

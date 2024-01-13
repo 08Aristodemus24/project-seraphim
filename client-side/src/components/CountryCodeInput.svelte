@@ -17,14 +17,7 @@
                 tertiary_color: "rgba(0, 0, 0, 0.267)"
             }
         },
-        'neomorphic': {
-            dark: {
-                primary_color: "white",
-                secondary_color: "rgb(38,39,43)",
-                tertiary_color: "rgba(255, 255, 255, 0.267)",
-                primary_shadow: "rgba(0, 0, 0, 0.25)",
-                secondary_shadow: "rgba(255, 255, 255, 0.5)"
-            },
+        'light-neomorphic': {
             light: {
                 primary_color: "black",
                 secondary_color: "rgb(231, 238, 246)",
@@ -32,6 +25,15 @@
                 primary_shadow: "rgba(0, 0, 0, 0.25)",
                 secondary_shadow: "rgba(255, 255, 255, 0.5)"
             }
+        },
+        'dark-neomorphic': {
+            dark: {
+                primary_color: "rgb(231, 238, 246)",
+                secondary_color: "rgb(38,39,43)",
+                tertiary_color: "rgba(255, 255, 255, 0.267)",
+                primary_shadow: "rgba(0, 0, 0, 0.25)",
+                secondary_shadow: "rgba(210, 210, 210, 0.5)"
+            },
         }
     };
 
@@ -78,7 +80,7 @@
     style:--secondary-shadow={palette[style][theme].secondary_shadow}
 >
     <label for="country-code" class="country-code-label">Country Code</label>
-    <select name="country_code" id="country-code" class="country-code-field" bind:value={country_code}>
+    <select name="country_code" id="country-code" class={`country-code-field ${style}`} bind:value={country_code}>
         {#each countries as country}
             <option value={country['dial_code']} label={`${country['name']} (${country['dial_code']})`} data-country-name={country['name']} data-country-code={country['code']} data-dial-code={country['dial_code']}></option>
         {/each}
@@ -125,7 +127,7 @@
         color: black;
     }
 
-    .neomorphic.country-code-container{
+    .light-neomorphic.country-code-container{
         /* design */
         background-color: var(--secondary-color);
 
@@ -133,7 +135,7 @@
         padding: 1em;
     }
 
-    .neomorphic .country-code-label{
+    .light-neomorphic .country-code-label{
         /* design */
         font-family: 'Poppins', sans-serif;
         font-weight: 300;
@@ -147,7 +149,7 @@
         display: block;
     }
 
-    .neomorphic .country-code-field{
+    .light-neomorphic .country-code-field{
         /* design */
         color: var(--primary-color);
         background-color: var(--secondary-color);
@@ -157,6 +159,50 @@
         box-shadow:
             3px 3px 8px 0 var(--primary-shadow),
             -3px -3px 8px 0 var(--secondary-shadow);;
+        border-radius: 10px;
+        border: none;
+
+        /* size */
+        width: 12rem;
+        padding: 0.5em 1em;
+        /* width: 30rem; */
+
+        /* display */
+        display: block;
+    }
+
+    .dark-neomorphic.country-code-container{
+        /* design */
+        background-color: var(--secondary-color);
+
+        /* size */
+        padding: 1em;
+    }
+
+    .dark-neomorphic .country-code-label{
+        /* design */
+        font-family: 'Poppins', sans-serif;
+        font-weight: 300;
+        font-size: clamp(12px, 1vw, 1rem);
+        color: var(--primary-color);
+
+        /* spacing */
+        margin-block: 1em;
+
+        /* display */
+        display: block;
+    }
+
+    .dark-neomorphic .country-code-field{
+        /* design */
+        color: var(--primary-color);
+        background-color: var(--secondary-color);
+        font-family: 'Poppins', sans-serif;
+        font-size: clamp(12px, 1vw, 1rem);
+        font-weight: 300;
+        box-shadow: 
+            3px 7px 8px 0 var(--primary-shadow),
+            -2px -2px 8px -3px var(--secondary-shadow);
         border-radius: 10px;
         border: none;
 

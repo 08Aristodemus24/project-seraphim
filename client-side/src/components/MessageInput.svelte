@@ -15,14 +15,7 @@
                 tertiary_color: "rgba(0, 0, 0, 0.267)"
             }
         },
-        'neomorphic': {
-            dark: {
-                primary_color: "white",
-                secondary_color: "rgb(38,39,43)",
-                tertiary_color: "rgba(255, 255, 255, 0.267)",
-                primary_shadow: "rgba(0, 0, 0, 0.25)",
-                secondary_shadow: "rgba(255, 255, 255, 0.5)"
-            },
+        'light-neomorphic': {
             light: {
                 primary_color: "black",
                 secondary_color: "rgb(231, 238, 246)",
@@ -30,6 +23,15 @@
                 primary_shadow: "rgba(0, 0, 0, 0.25)",
                 secondary_shadow: "rgba(255, 255, 255, 0.5)"
             }
+        },
+        'dark-neomorphic': {
+            dark: {
+                primary_color: "rgb(231, 238, 246)",
+                secondary_color: "rgb(38,39,43)",
+                tertiary_color: "rgba(255, 255, 255, 0.267)",
+                primary_shadow: "rgba(0, 0, 0, 0.25)",
+                secondary_shadow: "rgba(210, 210, 210, 0.5)"
+            },
         }
     };
 
@@ -44,7 +46,7 @@
     style:--secondary-shadow={palette[style][theme].secondary_shadow}
 >
     <label for="message" class="message-label">Message</label>
-    <textarea id="message" rows="5" name="message" class="message-field" placeholder="Your message here" bind:value={message} required></textarea>
+    <textarea id="message" rows="5" name="message" class={`message-field ${style}`} placeholder="Your message here" bind:value={message} required></textarea>
 </div>
 
 <style>
@@ -97,7 +99,7 @@
         color: var(--tertiary-color);                
     }
 
-    .neomorphic.message-container{
+    .light-neomorphic.message-container{
         /* design */
         background-color: var(--secondary-color);
 
@@ -105,7 +107,7 @@
         padding: 1em;
     }
 
-    .neomorphic .message-label{
+    .light-neomorphic .message-label{
         /* design */
         font-family: 'Poppins', sans-serif;
         font-weight: 300;
@@ -121,7 +123,7 @@
         display: block;
     }
 
-    .neomorphic .message-field{
+    .light-neomorphic .message-field{
         /* design */
         color: var(--primary-color);
         background-color: var(--secondary-color);
@@ -146,16 +148,78 @@
         resize: none;
     }
 
-    .neomorphic .message-field::placeholder{
+    .light-neomorphic .message-field::placeholder{
         color: var(--tertiary-color);
         opacity: 1;            
     }
 
-    .neomorphic .message-field:-ms-input-placeholder{
+    .light-neomorphic .message-field:-ms-input-placeholder{
         color: var(--tertiary-color);                
     }
 
-    .neomorphic .message-field::-ms-input-placeholder{
+    .light-neomorphic .message-field::-ms-input-placeholder{
+        color: var(--tertiary-color);                
+    }
+
+    .dark-neomorphic.message-container{
+        /* design */
+        background-color: var(--secondary-color);
+
+        /* size */
+        padding: 1em;
+    }
+
+    .dark-neomorphic .message-label{
+        /* design */
+        font-family: 'Poppins', sans-serif;
+        font-weight: 300;
+        font-size: clamp(12px, 1vw, 1rem);
+        color: var(--primary-color);
+        background-color: var(--secondary-color);
+        /* outline: 1px solid brown; */
+
+        /* spacing */
+        margin-block: 1em;
+    
+        /* display */
+        display: block;
+    }
+
+    .dark-neomorphic .message-field{
+        /* design */
+        color: var(--primary-color);
+        background-color: var(--secondary-color);
+        font-family: 'Poppins', sans-serif;
+        font-size: clamp(12px, 1vw, 1rem);
+        font-weight: 300;
+        box-shadow: 
+            inset 3px 7px 8px 0 var(--primary-shadow),
+            inset -2px -2px 5px -2px var(--secondary-shadow);
+        border-radius: 10px;
+        border: none;
+
+        /* size */
+        width: 12rem;
+        padding: 0.5em 1em;
+        /* width: 30rem; */
+
+        /* display */
+        display: block;
+
+        /* functionality */
+        resize: none;
+    }
+
+    .dark-neomorphic .message-field::placeholder{
+        color: var(--tertiary-color);
+        opacity: 1;            
+    }
+
+    .dark-neomorphic .message-field:-ms-input-placeholder{
+        color: var(--tertiary-color);                
+    }
+
+    .dark-neomorphic .message-field::-ms-input-placeholder{
         color: var(--tertiary-color);                
     }
 </style>

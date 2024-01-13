@@ -59,15 +59,15 @@
     method="post" 
     bind:this={form}
 >
-    <NameInput name_type="first" style="neomorphic" theme="dark"/>
-    <NameInput name_type="last" style="neomorphic" theme="dark"/>
-    <EmailInput style="neomorphic" theme="dark"/>
-    <MobileNumberInput style="neomorphic" theme="dark"/>
-    <CountryCodeInput style="neomorphic" theme="dark"/>
-    <MessageInput style="neomorphic" theme="dark"/>
-    <ModelNameInput style="neomorphic" theme="dark"/>
-    <PromptInput style="neomorphic" theme="dark"/>
-    <SequenceLengthInput style="neomorphic" theme="dark"/>
+    <NameInput name_type="first" style="dark-neomorphic" theme="dark"/>
+    <NameInput name_type="last" style="dark-neomorphic" theme="dark"/>
+    <EmailInput style="dark-neomorphic" theme="dark"/>
+    <MobileNumberInput style="dark-neomorphic" theme="dark"/>
+    <CountryCodeInput style="dark-neomorphic" theme="dark"/>
+    <MessageInput style="dark-neomorphic" theme="dark"/>
+    <ModelNameInput style="dark-neomorphic" theme="dark"/>
+    <PromptInput style="dark-neomorphic" theme="dark"/>
+    <SequenceLengthInput style="dark-neomorphic" theme="dark"/>
     <TemperatureInput style="dark-neomorphic" theme="dark"/>
     <ImageInput style="dark-neomorphic" theme="dark"/>
     <Button style="dark-neomorphic" theme="dark"/>

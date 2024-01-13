@@ -15,14 +15,7 @@
                 tertiary_color: "rgba(0, 0, 0, 0.267)"
             }
         },
-        'neomorphic': {
-            dark: {
-                primary_color: "white",
-                secondary_color: "rgb(38,39,43)",
-                tertiary_color: "rgba(255, 255, 255, 0.267)",
-                primary_shadow: "rgba(0, 0, 0, 0.25)",
-                secondary_shadow: "rgba(255, 255, 255, 0.5)"
-            },
+        'light-neomorphic': {
             light: {
                 primary_color: "black",
                 secondary_color: "rgb(231, 238, 246)",
@@ -30,6 +23,15 @@
                 primary_shadow: "rgba(0, 0, 0, 0.25)",
                 secondary_shadow: "rgba(255, 255, 255, 0.5)"
             }
+        },
+        'dark-neomorphic': {
+            dark: {
+                primary_color: "rgb(231, 238, 246)",
+                secondary_color: "rgb(38,39,43)",
+                tertiary_color: "rgba(255, 255, 255, 0.267)",
+                primary_shadow: "rgba(0, 0, 0, 0.25)",
+                secondary_shadow: "rgba(210, 210, 210, 0.5)"
+            },
         }
     };
 
@@ -44,7 +46,7 @@
     style:--secondary-shadow={palette[style][theme].secondary_shadow}
 >
     <label for="seq-len" class="seq-len-label">Sequence Length</label>
-    <input bind:value={seq_len} type="number" id="seq-len" class="seq-len-field" min={0.0} placeholder="250"/>
+    <input bind:value={seq_len} type="number" id="seq-len" class={`seq-len-field ${style}`} min={0.0} placeholder="250"/>
 </div>
 
 <style>
@@ -93,7 +95,7 @@
         color: var(--tertiary-color);                
     }
 
-    .neomorphic.seq-len-container{
+    .light-neomorphic.seq-len-container{
         /* design */
         background-color: var(--secondary-color);
 
@@ -101,7 +103,7 @@
         padding: 1em;
     }
 
-    .neomorphic .seq-len-label{
+    .light-neomorphic .seq-len-label{
         /* design */
         font-family: 'Poppins', sans-serif;
         font-weight: 300;
@@ -117,7 +119,7 @@
         display: block;
     }
 
-    .neomorphic .seq-len-field{
+    .light-neomorphic .seq-len-field{
         /* design */
         font-family: 'Poppins', sans-serif;
         font-size: clamp(12px, 1vw, 1rem);
@@ -139,16 +141,75 @@
         display: block;
     }
 
-    .neomorphic .seq-len-field::placeholder{
+    .light-neomorphic .seq-len-field::placeholder{
         color: var(--tertiary-color);
         opacity: 1;            
     }
 
-    .neomorphic .seq-len-field:-ms-input-placeholder{
+    .light-neomorphic .seq-len-field:-ms-input-placeholder{
         color: var(--tertiary-color);                
     }
 
-    .neomorphic .seq-len-field::-ms-input-placeholder{
+    .light-neomorphic .seq-len-field::-ms-input-placeholder{
+        color: var(--tertiary-color);                
+    }
+
+    .dark-neomorphic.seq-len-container{
+        /* design */
+        background-color: var(--secondary-color);
+
+        /* size */
+        padding: 1em;
+    }
+
+    .dark-neomorphic .seq-len-label{
+        /* design */
+        font-family: 'Poppins', sans-serif;
+        font-weight: 300;
+        font-size: clamp(12px, 1vw, 1rem);
+        color: var(--primary-color);
+        background-color: var(--secondary-color);
+        /* outline: 1px solid brown; */
+
+        /* spacing */
+        margin-block: 1em;
+    
+        /* display */
+        display: block;
+    }
+
+    .dark-neomorphic .seq-len-field{
+        /* design */
+        font-family: 'Poppins', sans-serif;
+        font-size: clamp(12px, 1vw, 1rem);
+        font-weight: 300;
+        color: var(--primary-color);
+        background-color: var(--secondary-color);
+        box-shadow: 
+            inset 3px 7px 8px 0 var(--primary-shadow),
+            inset -2px -2px 5px -2px var(--secondary-shadow);
+        border-radius: 50px;
+        border: none;
+
+        /* size */
+        width: 12rem;
+        padding: 0.5em 1em;
+        /* width: 30rem; */
+
+        /* display */
+        display: block;
+    }
+
+    .dark-neomorphic .seq-len-field::placeholder{
+        color: var(--tertiary-color);
+        opacity: 1;            
+    }
+
+    .dark-neomorphic .seq-len-field:-ms-input-placeholder{
+        color: var(--tertiary-color);                
+    }
+
+    .dark-neomorphic .seq-len-field::-ms-input-placeholder{
         color: var(--tertiary-color);                
     }
 </style>
