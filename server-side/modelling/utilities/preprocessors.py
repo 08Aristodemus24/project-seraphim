@@ -356,19 +356,21 @@ def decode_id_sequences(pred_ids, idx_to_char):
 
     return final_seq
 
-def decode_one_hot(Y_preds, labels=['Appropriative', 'Derogatory', 'Non-Derogatory', 'Homonym']):
+def decode_one_hot(Y_preds):
     """
     whether for image, sentiment, or general classification
     this function takes in an (m x 1) or (m x n_y) matrix of
     the predicted values of a classifier
 
-    e.g. if binary the Y_preds would be 
-    [[1], [0], [0], [1], [0], [0]] or [1 0 0 1 0 0]
+    e.g. if binary the input Y_preds would be 
+    [[0 1]
+    [1 0]
+    [1 0]
+    [0 1]
+    [1 0]
+    [1 0]]
 
-    then there would be no need to take the argmax along the
-    0th dimension/axis, and once decoded would be just two
-    binary categorial values e.g. spam/not spam, malignant/benign.
-    however if the Y_preds would be multi-class for instance...
+    if multi-class the Y_preds for instance would be...
 
     [[0 0 0 1]
     [1 0 0 0
@@ -376,32 +378,22 @@ def decode_one_hot(Y_preds, labels=['Appropriative', 'Derogatory', 'Non-Derogato
     ...
     [0 1 0 0]]
 
-    then this function would take the argmax along the 0th dimension/
-    axis of the matrix, and once decoded would result in just a vector
-
-    [4 1 3 2]
+    what this function does is it takes the argmax along the
+    1st dimension/axis, and once decoded would be just two
+    binary categorial values e.g. 0 or 1 or if multi-class
+    0, 1, 2, or 3
 
     main args:
         Y_preds - 
-        labels - the full name of the classes/labels/categories of
-        the different kinds of or binary outputs. Note this must be
-        of the same length as the number of unique classes/labels/
-        categories of the Y_pred matrix
     """
 
     # check if Y_preds is multi-class by checking if shape
     # of matrix is (m, n_y), (m, m, n_y), or just m
     if len(Y_preds.shape) >= 2:
         # take the argmax if Y_preds are multi labeled
-        pred_ids = np.argmax(Y_preds, axis=1)
-    else:
-        pred_ids = np.reshape(Y_preds, (-1,))
+        sparse_categories = np.argmax(Y_preds, axis=1)
 
-    # create vectorized decoder
-    vectorized_decoder = np.vectorize(lambda pred_id: labels[pred_id])
-
-    decoded_ids = vectorized_decoder(pred_ids)
-    return decoded_ids
+    return sparse_categories
 
 def normalize_ratings(ratings: pd.DataFrame):
     """
