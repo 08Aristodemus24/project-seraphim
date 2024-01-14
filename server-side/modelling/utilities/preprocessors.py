@@ -467,21 +467,28 @@ def encode_image(image_path: str, dimensions: tuple=(256, 256)):
     feed as input to a convolutional model
     """
 
+    # open image
     img = Image.open(image_path)
+
+    # if there are given dimensions for new image size resize image
+    if dimensions != None:
+        img = img.resize(size=dimensions)
+
+    # encode image by converting to numpy array
     encoded_img = np.asarray(img)
+
+    # close image file
+    img.close()
 
     return encoded_img
 
-def resize_image():
-    pass
 
-def normalize_image(encoded_img):
+def standardize_image(encoded_img):
     """
     rescales an encoded image's values from 0 to 255 down
     to 0 and 1
     """
 
-    rescale_layer = tf.keras.layers.Rescaling(1.0 / 255)
-    rescaled_img = rescale_layer(encode_image)
+    rescaled_img = (encoded_img * 1.0) / 255
 
     return rescaled_img
