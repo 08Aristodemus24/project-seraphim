@@ -1,18 +1,14 @@
 # model architecture will be defined here
 import tensorflow as tf
-from tensorflow.keras.utils import to_categorical
 from tensorflow.keras import Model, Sequential
 from tensorflow.keras.layers import (
-    LSTM, 
     Activation, 
     Dropout, 
     Dense, 
-    RepeatVector, 
-    Reshape, 
-    Embedding,
-    Input,
     BatchNormalization,
-    Add)
+    Conv2D, 
+    MaxPooling2D, 
+    Flatten)
 from tensorflow.keras.optimizers import Adam
 from tensorflow.keras.regularizers import L2
 from tensorflow.keras.losses import CategoricalCrossentropy as cce_loss
@@ -21,14 +17,78 @@ from tensorflow.keras.callbacks import ModelCheckpoint, EarlyStopping
 
 import numpy as np
 
+
+def load_model_a(conv_layers_options, pool_layers_options, padding, dense_layers_dims, lambda_, drop_prob, learning_rate, normalize=False):
+    
+    # define architecture
+    model = Sequential()
+
+    # build conv and poollayers
+    n_conv_layers = len(conv_layers_options)
+    for cl in range(n_conv_layers):
+        model.add(Conv2D(
+            filters=conv_layers_options[cl]['n_filters'],
+            kernel_size=conv_layers_options[cl]['kernel_size'],
+            strides=conv_layers_options[cl]['kernel_strides'],
+            kernel_regularizer=L2(lambda_)
+        ))
+        model.add(Activation(activation=tf.nn.relu))
+        model.add(MaxPooling2D(
+            pool_size=pool_layers_options[cl]['pool_size'],
+            strides=pool_layers_options[cl]['pool_strides'],
+            padding=padding
+        ))
+
+    # flatten pooled layers
+    model.add(Flatten())
+
+    # build fully connected layers
+    n_dense_layers = len(dense_layers_dims)
+    for dl in range(n_dense_layers) - 1:
+        model.add(Dense(
+            units=dense_layers_dims[dl],
+            kernel_regularizer=L2(lambda_)
+        ))
+
+        # pass dense through normalization layer if true
+        if normalize == True:
+            model.add(BatchNormalization())
+
+        # pass dense or batch normalized layer
+        model.add(Activation(activation=tf.nn.relu))
+
+    # add final dense layer with final dimension of
+    # the dense_layers_dims value
+    model.add(Dense(
+        units=dense_layers_dims[-1],
+        kernel_regularizer=L2(lambda_)
+    ))
+
+    return model
+    
+    
+
 if __name__ == "__main__":
     # hyperparameters
     m = 20000
-    T_x = 100
-    n_unique = 57
-    n_a = 64
-    emb_dim = 32
-    dense_layers_dims = [n_unique]
+    height = 256
+    width = 256
+    n_channels = 256
+    n_unique = 8
+    
+    
+    conv_layers_options = [
+        {'n_filters': 32, 'kernel_size': (5, 5), 'kernel_strides': (1, 1)},
+        {'n_filters': 64, 'kernel_size': (5, 5), 'kernel_strides': (1, 1)},
+        
+    ]
+    pool_layers_options = [
+        {'pool_size': (2, 2), 'pool_strides': (2, 2)},
+        {'pool_size': (2, 2), 'pool_strides': (1, 1)},
+    ]
+    dense_layers_dims = [64, 32, n_unique]
+    padding = 'same'
+
     lambda_ = 0.8
     drop_prob = 0.4
     learning_rate = 1e-3
@@ -36,26 +96,16 @@ if __name__ == "__main__":
     batch_size = 512
     normalize = False
 
-    # note X becomes (m, T_x, n_features) when fed to embedding layer
-    X = np.random.randint(0, n_unique, size=(m, T_x))
+    # create dummy (m, height, width, n_channels) dataset
+    X = np.random.uniform(0, 256, size=(m, height, width, n_channels))
 
-    # we have to match the output of the prediction of our 
-    # model which is a list of (100, 26) values. So instead of a 3D matrixc
-    # we create a list fo 2D matrices of shape (100, 26)
-    Y = [np.random.rand(m, n_unique) for _ in range(T_x)]
+    # create an array of labels of 8 unique values representing our
+    # different categories/classes of image of m length
+    Y = np.random.randint(0, n_unique, size=(m,))
 
-    # one hot encode our dummy (T_y, m, n_unique) probabilities
-    Y = [tf.one_hot(tf.argmax(y, axis=1), depth=n_unique) for y in Y]
-    
-    # test for computing loss with (m, T_y, n_unique) predictions
-    Y_true = tf.reshape(Y, shape=(m, T_x, n_unique))
-    dummy_logits = np.random.randn(m, T_x, n_unique)
-    loss = cce_loss(from_logits=True)(dummy_logits, Y_true)
-    print(f"computed test loss: {loss}")
+    # one hot encode our dummy labels 
+    Y = tf.one_hot(Y, depth=Y.shape[0])
 
-    # initialize hidden and cell states to shape (m, n_units)
-    h_0 = np.zeros(shape=(m, n_a))
-    c_0 = np.zeros(shape=(m, n_a))
 
     # instantiate custom model
     # model = GenPhiloTextB(emb_dim=emb_dim, n_a=n_a, n_unique=n_unique, T_x=T_x, dense_layers_dims=dense_layers_dims, lambda_=lambda_, drop_prob=drop_prob, normalize=normalize)
@@ -84,15 +134,4 @@ if __name__ == "__main__":
         callbacks=callbacks,
         validation_split=0.3,
         verbose=2,)
-    
-    # history = model.fit([X, h_0, c_0], Y_true, 
-    #     epochs=epochs,
-    #     batch_size=batch_size, 
-    #     callbacks=callbacks,
-    #     validation_split=0.3,
-    #     verbose=2,)
-    
-    # save model
-    # model.save_weights('../saved/weights/test_model_gen_philo_text.h5', save_format='h5')
-    # model.save('../saved/models/test_model_b.h5', save_format='h5')
     
