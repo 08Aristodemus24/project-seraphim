@@ -23,6 +23,8 @@ app = Flask(__name__, template_folder='static')
 CORS(app, origins=["http://localhost:5173", "http://127.0.0.1:5000",])
 
 model_names = []
+scaler = None
+encoder = None
 
 def load_models():
     """
@@ -34,7 +36,18 @@ def load_models():
     saved_lgbm = load_model('./modelling/saved/models/lgbm.pkl')
     model_names.append(type(saved_lgbm).__name__)
 
+def load_preprocessors():
+    """
+    prepares and loads the saved encoders, normalizers of
+    the dataset to later transform raw user input from
+    client-side
+    """
+    global saved_bc_scaler, saved_bc_Y_le
+    saved_bc_scaler = load_model('./modelling/misc/saved/bc_scaler.pkl')
+    saved_bc_Y_le = load_model('./modelling/misc/saved/bc_Y_le.pkl')
+
 load_models()
+load_preprocessors()
 
 
 
@@ -63,6 +76,7 @@ def retrieve_model_names():
 def predict():
     raw_data = request.json
     print(raw_data)
+
 
 
     return jsonify({})

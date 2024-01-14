@@ -123,19 +123,21 @@ specific mean and standard deviation, do I use a saved .json object with
 these hyper params, or use a sklearn object instead? But a sklearn object 
 like a normalizer I cannot save
 
+```
 def predict(self, X):
         # normalize on training mean and standard dev first
         X = (X - self.mean) / self.std_dev
 
         # predict then return prediction value
         return self.linear(X)
+```
 
-use instead your own implementation of a normalizer function and then loading
+<s>use instead your own implementation of a normalizer function and then loading
 the respective hyper params like mean and standard deviation to pass into 
-this from scratch implementation of a normalizer
+this from scratch implementation of a normalizer</s>
 
-but not only for an a normalizer, what about for OrdinalEncoder() and 
-LabelEncoder() objects? I really can't save them because it would just be too much
+<s>but not only for an a normalizer, what about for OrdinalEncoder() and 
+LabelEncoder() objects? I really can't save them because it would just be too much</s>
 
 if there is a dataset X and it has categorical variables, does we really need
 to save the encoder we used on this dataset to use on the 
@@ -151,7 +153,7 @@ X_cross
 no, bacteria
 yes, eukarya
 
-AH YES. we really need to save the encoder or find some way to use the encoders
+<s>AH YES. we really need to save the encoder or find some way to use the encoders
 information that was obtained from the whole dataset (since we do
 not split the data set if we encode the features because potential categories
 of features may be lost on splitting the data) because if we use a new encoder 
@@ -159,28 +161,31 @@ on the cross dataset the features may be such that some would be missing that
 would exist in the train data, e.g. bacteria and archaea are the only features 
 so we don't want to encode it as only 0 and 1 since and in the whole data there 
 are 3 categories for a feature nsmrly bacteria, archaea, and eukarya which are 
-encoded to 0
+encoded to 0</s>
 
-**or just save the sklearn encoders as well** using save_model()
-and load it using load_model()
+**or just save the sklearn encoders as well** using save_model() and load it using load_model()
 
-* there needs to be also a meta_data saver like this
+
+* <s>there needs to be also a meta_data saver like this
+```
 def save_weights(self):
-        meta_data = {
-            'non-bias': self.theta.tolist(),
-            'bias': self.beta.tolist()[0],
-            'mean': self.mean.tolist(),
-            'std_dev': self.std_dev.tolist()
-        }
+    meta_data = {
+        'non-bias': self.theta.tolist(),
+        'bias': self.beta.tolist()[0],
+        'mean': self.mean.tolist(),
+        'std_dev': self.std_dev.tolist()
+    }
 
-        # if directory weights does not already exist create 
-        # directory and save weights there
-        if os.path.exists('./weights') != True:
-            os.mkdir('./weights')
-        
-        with open('./weights/meta_data.json', 'w') as out_file:
-            json.dump(meta_data, out_file)
-            out_file.close()
+    # if directory weights does not already exist create 
+    # directory and save weights there
+    if os.path.exists('./weights') != True:
+        os.mkdir('./weights')
+    
+    with open('./weights/meta_data.json', 'w') as out_file:
+        json.dump(meta_data, out_file)
+        out_file.close()
+```
+</s>
 
 for both general and deep learning models. But since sklearn models can be saved directly without taking into account its hyperparams, we could only now save certain other hyperparams like again mean and standard deviation
 
