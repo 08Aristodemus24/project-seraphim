@@ -26,6 +26,8 @@ def encode_features(X):
     matrices like the set of independent variables of an X input
     """
 
+    """include encoder for multi-class labels"""
+
     enc = LabelEncoder() if len(X.shape) < 2 else OrdinalEncoder(dtype=np.int64)
     enc_feats = enc.fit_transform(X)
     return enc_feats, enc
@@ -48,21 +50,23 @@ def normalize_train_cross(X_trains, X_cross, scaler='min_max'):
     return X_trains_normed, X_cross_normed, temp
 
 
-def map_value_to_index(unique_tokens: list, inverted=False):
+def map_value_to_index(unique_tokens: list):
     """
     returns a lookup table mapping each unique value to an integer. 
     This is akin to generating a word to index dictionary where each
     unique word based on their freqeuncy will be mapped from indeces
     1 to |V|.
 
+    returns a lookup layer for each unique character/token, including
+    the [UNK] token's corresponding id
+
     args:
-        unique_tokens - 
-        inverted - 
+        unique_tokens - an array consisting of all unique tokens
     """
     char_to_idx = tf.keras.layers.StringLookup(vocabulary=unique_tokens, mask_token=None)
     idx_to_char = tf.keras.layers.StringLookup(vocabulary=char_to_idx.get_vocabulary(), invert=True, mask_token=None)
 
-    return char_to_idx if inverted == False else idx_to_char
+    return char_to_idx, idx_to_char
 
 def remove_contractions(text_string: str):
     """

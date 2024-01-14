@@ -40,6 +40,7 @@ def load_lookup_array(path: str):
 
     with open(path, 'rb') as file:
         char_to_idx = pickle.load(file)
+        file.close()
 
     return char_to_idx
 
@@ -51,6 +52,7 @@ def save_lookup_array(path: str, uniques: list):
 
     with open(path, 'wb') as file:
         pickle.dump(uniques, file)
+        file.close()
 
 def save_meta_data(path: str, meta_data: dict):
     """

@@ -117,8 +117,11 @@ Visualizers:
 # Prebuilt template functions for server-side
 * for general models
 * for tensorflow models
-* using a pipeline for preprocessing user input from client-side using a preprocessing function
-e.g. featture vector -> normalizer loaded with specific mean and standard deviation, do I use a saved .json object with these hyper params, or use a sklearn object instead? But a sklearn object like a normalizer I cannot save
+* using a pipeline for preprocessing user input from client-side using 
+a preprocessing function e.g. featture vector -> normalizer loaded with 
+specific mean and standard deviation, do I use a saved .json object with
+these hyper params, or use a sklearn object instead? But a sklearn object 
+like a normalizer I cannot save
 
 def predict(self, X):
         # normalize on training mean and standard dev first
@@ -127,7 +130,39 @@ def predict(self, X):
         # predict then return prediction value
         return self.linear(X)
 
-use instead your own implementation of a normalizer function and then loading the respective hyper params like mean and standard deviation to pass into this from scratch implementation of a normalizer
+use instead your own implementation of a normalizer function and then loading
+the respective hyper params like mean and standard deviation to pass into 
+this from scratch implementation of a normalizer
+
+but not only for an a normalizer, what about for OrdinalEncoder() and 
+LabelEncoder() objects? I really can't save them because it would just be too much
+
+if there is a dataset X and it has categorical variables, does we really need
+to save the encoder we used on this dataset to use on the 
+
+X_train
+yes, bacteria
+no, archaea
+no, eukarya
+yes, eukarya
+no, bacteria
+
+X_cross
+no, bacteria
+yes, eukarya
+
+AH YES. we really need to save the encoder or find some way to use the encoders
+information that was obtained from the whole dataset (since we do
+not split the data set if we encode the features because potential categories
+of features may be lost on splitting the data) because if we use a new encoder 
+on the cross dataset the features may be such that some would be missing that 
+would exist in the train data, e.g. bacteria and archaea are the only features 
+so we don't want to encode it as only 0 and 1 since and in the whole data there 
+are 3 categories for a feature nsmrly bacteria, archaea, and eukarya which are 
+encoded to 0
+
+**or just save the sklearn encoders as well** using save_model()
+and load it using load_model()
 
 * there needs to be also a meta_data saver like this
 def save_weights(self):
