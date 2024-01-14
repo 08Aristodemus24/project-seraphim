@@ -2,6 +2,9 @@ import numpy as np
 import pandas as pd
 
 import matplotlib.pyplot as plt
+plt.rcParams['font.family'] = 'sans-serif'
+font = {'fontname': 'Helvetica'}
+
 import matplotlib.cm as cm
 import matplotlib as mpl
 import seaborn as sb
@@ -31,8 +34,9 @@ def plot_train_cross_features(X_trains, X_cross, feature_1, feature_2, color: li
 
     axis.scatter(X_trains[:, feature_1], X_trains[:, feature_2], alpha=0.25, c=color[0], marker='p', label='training data')
     axis.scatter(X_cross[:, feature_1], X_cross[:, feature_2], alpha=0.25, c=color[1], marker='.', label='test data')
-    axis.set_xlabel(feature_1)
-    axis.set_ylabel(feature_2)
+    axis.set_xlabel(feature_1, )
+    axis.set_ylabel(feature_2, )
+    axis.set_title(img_title, )
     axis.legend()
 
     if save_img is True:
@@ -83,7 +87,7 @@ def analyze(X_trains, feature_names: list, fig_dims: tuple=(4, 2), color: str="#
         # see the features values only on the x-axis and on the 
         # 0 value only in its y-axis
         axis.scatter(curr_feature, zeros, alpha=0.25, marker='p', c=color)
-        axis.set_title(feature_names[feature_col_i])
+        axis.set_title(feature_names[feature_col_i], )
         
     if save_img:
         plt.savefig(f'./figures & images/{img_title}.png')
@@ -180,9 +184,9 @@ def view_words(word_vec: dict, word_range: int, title: str="untitled", save_img:
         x, y = coord
         axis.annotate(word, xy=(x, y), xytext=(5, 2), textcoords='offset points', ha='right', va='bottom')
 
-    axis.set_xlabel('x')
-    axis.set_ylabel('y')
-    axis.set_title(title)
+    axis.set_xlabel('x', )
+    axis.set_ylabel('y', )
+    axis.set_title(title, )
     
     if save_img:
         plt.savefig(f'./figures & images/{title}.png')
@@ -218,14 +222,14 @@ def view_value_frequency(word_counts, colormap: str="plasma", title: str="untitl
     
     if kind == 'barh':        
         axis.barh(data.index, data.values, color=cmap(np.linspace(0, 1, len(data))))
-        axis.set_xlabel('frequency')
-        axis.set_ylabel('value')
-        axis.set_title(title)
+        axis.set_xlabel('frequency', )
+        axis.set_ylabel('value', )
+        axis.set_title(title, )
         
     elif kind == 'pie':
         axis.pie(data, labels=data.index, autopct='%.2f%%', colors=cmap(np.linspace(0, 1, len(data))))
         axis.axis('equal')
-        axis.set_title(title)
+        axis.set_title(title, )
     
     if save_img:
         plt.savefig(f'./figures & images/{title}.png')
@@ -243,7 +247,7 @@ def multi_class_heatmap(conf_matrix, img_title: str="untitled", cmap: str='YlGnB
         Other values can be 'flare'
     """
     axis = sb.heatmap(conf_matrix, cmap=cmap, annot=True, fmt='g')
-    axis.set_title(img_title)
+    axis.set_title(img_title, )
 
     if save_img:
         plt.savefig(f'./figures & images/{img_title}.png')
@@ -284,7 +288,7 @@ def view_metric_values(metrics_df, img_title: str="untitled", save_img: bool=Tru
     df_exp = metrics_df.melt(id_vars='data_split', var_name='metric', value_name='score')
     
     axis = sb.barplot(data=df_exp, x='data_split', y='score', hue='metric', ax=axis)
-    axis.set_title(img_title)
+    axis.set_title(img_title, )
     axis.set_yscale('log')
     axis.legend()
 
@@ -329,7 +333,7 @@ def view_classified_labels(df, img_title: str="untitled", save_img: bool=True, c
     df_exp = df.melt(id_vars='data_split', var_name='status', value_name='score')
     
     axis = sb.barplot(data=df_exp, x='data_split', y='score', hue='status', ax=axis)
-    axis.set_title(img_title)
+    axis.set_title(img_title, )
     axis.legend()
 
     if save_img:
@@ -356,15 +360,15 @@ def view_label_freq(label_freq, img_title: str="untitled", save_img: bool=True, 
         if horizontal == True else sb.barplot(x=labels, y=label_freq.values, palette="flare")
     x_label = "frequency" if horizontal == True else "value"
     y_label = "value" if horizontal == True else "frequency"
-    axis.set_xlabel(x_label)
-    axis.set_ylabel(y_label)
-    axis.set_title(img_title)
+    axis.set_xlabel(x_label, )
+    axis.set_ylabel(y_label, )
+    axis.set_title(img_title, )
 
     if save_img:
         plt.savefig(f'./figures & images/{img_title}.png')
         plt.show()
 
-def disp_cat_feat(df, cat_cols: list, fig_dims: tuple=(3, 2)):
+def disp_cat_feat(df, cat_cols: list, fig_dims: tuple=(3, 2), img_title: str="untitled", save_img: bool=True):
     """
     suitable for all discrete input
 
@@ -405,15 +409,18 @@ def disp_cat_feat(df, cat_cols: list, fig_dims: tuple=(3, 2)):
         # annotate bars using axis.containers[0] since it contains
         # all 
         print(ax.containers[0])
-        ax.bar_label(ax.containers[0])
-        ax.set_ylabel('no. of occurences')
-        ax.set_xlabel(col)
+        ax.bar_label(ax.containers[0], )
+        ax.set_ylabel('no. of occurences', )
+        ax.set_xlabel(col, )
+        ax.set_title(img_title, )
         ax.legend()
 
         # current column
         print(col)
 
-    plt.show()
+    if save_img:
+        plt.savefig(f'./figures & images/{img_title}.png')
+        plt.show()
 
 def plot_all_features(X, hue=None, colormap: str='mako'):
     """
@@ -626,9 +633,9 @@ class ModelResults:
                 last_metric_perc = round(value[-1] * 100, 2)
                 axis.annotate(last_metric_perc, xy=(epochs[-1], value[-1] * 100), color=styles[curr_metrics_indeces[index]][1])
 
-        axis.set_ylabel('metric value')
-        axis.set_xlabel('epochs')
-        axis.set_title(img_title)
+        axis.set_ylabel('metric value', )
+        axis.set_xlabel('epochs', )
+        axis.set_title(img_title, )
         axis.legend()
 
         if save_img == True:
@@ -704,9 +711,9 @@ def plot_evolution(X, K, centroids, xs_centroids, features: list, dimension='2d'
             axis.plot(cs_of_k[-1, 0], cs_of_k[-1, 1], cs_of_k[-1, 2], 'p--', color='#ff00bf')
 
         # n_clicks, amount_discount, amount_spent
-        axis.set_xlabel(f'x: {features[0]}')
-        axis.set_ylabel(f'y: {features[1]}')
-        axis.set_zlabel(f'z: {features[2]}')
+        axis.set_xlabel(f'x: {features[0]}', )
+        axis.set_ylabel(f'y: {features[1]}', )
+        axis.set_zlabel(f'z: {features[2]}', )
 
 def view_clusters_3d(X, features: list):
     """
@@ -719,9 +726,9 @@ def view_clusters_3d(X, features: list):
     ax = fig.add_subplot(projection='3d')
 
     ax.scatter(X[features[0]], X[features[1]], X[features[2]], c=np.random.randn(X.shape[0]), marker='p',alpha=0.75, cmap='magma')
-    ax.set_xlabel(f'x: {features[0]}')
-    ax.set_ylabel(f'y: {features[1]}')
-    ax.set_zlabel(f'z: {features[2]}')
+    ax.set_xlabel(f'x: {features[0]}', )
+    ax.set_ylabel(f'y: {features[1]}', )
+    ax.set_zlabel(f'z: {features[2]}', )
     plt.show()
 
 def view_images(data_gen, grid_dims: tuple=(2, 6), size: tuple=(25, 10), model=None, img_title="untitled", save_img: bool=True):
@@ -767,7 +774,7 @@ def view_images(data_gen, grid_dims: tuple=(2, 6), size: tuple=(25, 10), model=N
         else:
             title = f"Class : {label}"
         
-        plt.title(title)
+        plt.title(title, )
     
     if save_img == True:
         plt.savefig(f'./figures & images/{img_title}.png')

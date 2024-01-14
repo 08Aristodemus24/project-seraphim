@@ -77,6 +77,7 @@ Recommendation
 General
 * normalize_train_cross
 * encode_features ~
+* translate_labels ~
 
 Visualizers:
 * plot_train_cross_features ~
@@ -139,8 +140,8 @@ this from scratch implementation of a normalizer</s>
 <s>but not only for an a normalizer, what about for OrdinalEncoder() and 
 LabelEncoder() objects? I really can't save them because it would just be too much</s>
 
-if there is a dataset X and it has categorical variables, does we really need
-to save the encoder we used on this dataset to use on the 
+<s>if there is a dataset X and it has categorical variables
+does we really need to save the encoder we used on this dataset to use on the</s>
 
 X_train
 yes, bacteria
@@ -206,3 +207,5 @@ but even if the architecture itself is saved its respective hyper params, for pr
 a. categorical vectors to image class
 b. categorical sequences of vectors to sentences
 c. categorical vectors to sentiments/emotional reactions class (such is the case for NLP)
+
+* write preprocessor for when user inputs an image from the client-side

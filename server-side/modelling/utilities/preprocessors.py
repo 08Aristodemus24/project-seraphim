@@ -4,6 +4,7 @@ from nltk.stem.porter import PorterStemmer
 from nltk.stem.snowball import SnowballStemmer
 from nltk.stem import WordNetLemmatizer
 from nltk.corpus import stopwords
+from PIL import Image
 
 from sklearn.preprocessing import StandardScaler, MinMaxScaler, OrdinalEncoder, LabelEncoder
 
@@ -239,8 +240,6 @@ def flatten_series_of_lists(column: pd.Series):
 
     return pd.Series([item for sublist in column for item in sublist])
 
-
-"""for refactorization"""
 def sentences_to_avgs(sentences, word_to_vec_dict: dict):
     """
     Converts a series object of sentences (string) into a list of words (strings) then 
@@ -395,6 +394,23 @@ def decode_one_hot(Y_preds):
 
     return sparse_categories
 
+def translate_labels(labels, translations: dict={'DER': 'Derogatory', 
+                                                 'NDG': 'Non-Derogatory', 
+                                                 'HOM': 'Homonym', 
+                                                 'APR': 'Appropriative'}):
+    """
+    transforms an array of shortened versions of the
+    labels e.g. array(['DER', 'NDG', 'DER', 'HOM', 'APR', 
+    'DER', 'NDG', 'HOM', 'HOM', 'HOM', 'DER', 'DER', 'NDG', 
+    'DER', 'HOM', 'DER', 'APR', 'APR', 'DER'] to a more lengthened
+    and understandable version to potentially send back to client
+    e.g. array(['DEROGATORY', NON-DEROGATORY, 'DEROGATORY', 'HOMONYM',
+    'APPROPRIATIVE', ...])
+    """
+
+    v_func = np.vectorize(lambda label: translations[label])
+    return v_func(labels)
+
 def normalize_ratings(ratings: pd.DataFrame):
     """
     normalizes the ratings dataframe by subtracting each original
@@ -444,3 +460,28 @@ def normalize_rating_matrix(Y, R):
     Y_mean = np.sum(Y * R, axis=1) / (np.sum(R, axis=1) + 1e-12).reshape(-1)
     Y_normed = Y - (Y_mean * R)
     return [Y_normed, Y_mean]
+
+def encode_image(image_path: str, dimensions: tuple=(256, 256)):
+    """
+    encodes an image to a 3D matrix that can be used to
+    feed as input to a convolutional model
+    """
+
+    img = Image.open(image_path)
+    encoded_img = np.asarray(img)
+
+    return encoded_img
+
+def resize_image():
+    pass
+
+def normalize_image(encoded_img):
+    """
+    rescales an encoded image's values from 0 to 255 down
+    to 0 and 1
+    """
+
+    rescale_layer = tf.keras.layers.Rescaling(1.0 / 255)
+    rescaled_img = rescale_layer(encode_image)
+
+    return rescaled_img

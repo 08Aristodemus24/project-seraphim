@@ -80,3 +80,5 @@ def predict():
 
 
     return jsonify({})
+
+# write here function that will take in all user input from client
