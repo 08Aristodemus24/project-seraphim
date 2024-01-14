@@ -40,13 +40,10 @@ def load_misc():
     """
     loads miscellaneous variables to be used by the model
     """
-    global vocab 
+    global vocab, char_to_idx, idx_to_char, hyper_params
+    
     vocab = load_lookup_table('./modelling/final/misc/char_to_idx')
-
-    global char_to_idx, idx_to_char 
     char_to_idx, idx_to_char = map_value_to_index(vocab)
-
-    global hyper_params
     hyper_params = load_hyper_params('./modelling/final/misc/hyper_params.json')
 
 def load_model():
