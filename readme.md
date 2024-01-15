@@ -210,3 +210,4 @@ c. categorical vectors to sentiments/emotional reactions class (such is the case
 
 * write preprocessor for when user inputs an image from the client-side
 * writing dropout for CNNs https://machinelearningmastery.com/dropout-for-regularizing-deep-neural-networks/
+* write tuner for each architecture
