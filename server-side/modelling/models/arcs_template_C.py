@@ -152,7 +152,7 @@ def load_tuner(hyper_model, metric='val_accuracy', objective='max', max_epochs=1
 
     return tuner
 
-def train_tuner(tuner, X, Y):
+def train_tuner(tuner, X, Y, epochs=10, batch_size=512):
     # define checkpoint and early stopping callback to save
     # best weights at each epoch and to stop if there is no 
     # improvement of validation loss for 3 consecutive epochs
@@ -163,7 +163,8 @@ def train_tuner(tuner, X, Y):
     # fit model to data
     tuner.search(
         X, Y, 
-        epochs=20, 
+        epochs=epochs, 
+        batch_size=batch_size,
         validation_split=0.3, 
         callbacks=callbacks
     )
