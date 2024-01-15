@@ -503,9 +503,7 @@ def load_inf_model_b(char_emb_layer, lstm_cell, dense_layers: list, norm_layers:
 
     return Model(inputs=[x_1, h_0, c_0], outputs=output_ids)
 
-        
-
-if __name__ == "__main__":
+def main():
     # hyperparameters
     m = 20000
     T_x = 100
@@ -581,3 +579,7 @@ if __name__ == "__main__":
     # model.save_weights('../saved/weights/test_model_gen_philo_text.h5', save_format='h5')
     # model.save('../saved/models/test_model_b.h5', save_format='h5')
     
+        
+
+if __name__ == "__main__":
+    main()

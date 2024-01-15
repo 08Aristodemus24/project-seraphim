@@ -194,11 +194,7 @@ class MKR(tf.keras.Model):
         super(MKR, self).__init__()
 
 
-
-        
-
-# acts also as a script for testing
-if __name__ == "__main__":
+def main():
     user_ids = tf.random.uniform(shape=(10, 1), minval=1, maxval=5, dtype=tf.int32)
     item_ids = tf.random.uniform(shape=(10, 1), minval=1, maxval=10, dtype=tf.int32)
     ratings = tf.random.uniform(shape=(10, 1), minval=0.5, maxval=5, dtype=tf.float32)
@@ -216,3 +212,8 @@ if __name__ == "__main__":
         ratings,
         epochs=1,
     )
+        
+
+# acts also as a script for testing
+if __name__ == "__main__":
+    main()

@@ -65,10 +65,46 @@ def load_model_a(conv_layers_options, pool_layers_options, padding, dense_layers
     ))
 
     return model
+
+def compile_model(raw_model, X, learning_rate):
+    # define loss, optimizer, and metrics then compile
+    opt = Adam(learning_rate=learning_rate, beta_1=0.9, beta_2=0.999)
+    loss = cce_loss(from_logits=True)
+    metrics = [CategoricalAccuracy(), cce_metric(from_logits=True)]    
+    raw_model.compile(optimizer=opt, loss=loss, metrics=metrics)
+    raw_model(X)
+    raw_model.summary()
+
+    return raw_model
+
+def train_model(compiled_model, X, Y, epochs, batch_size):
+    # define checkpoint and early stopping callback to save
+    # best weights at each epoch and to stop if there is no improvement
+    # of validation loss for 10 consecutive epochs
+    weights_path = f"../saved/models/test_{compiled_model.name}" + "_{epoch:02d}_{val_categorical_accuracy:.2f}.h5"
+    checkpoint = ModelCheckpoint(
+        weights_path,
+        monitor='val_categorical_accuracy',
+        verbose=1,
+        save_best_only=True,
+
+        # used if model subclass is used
+        # save_weights_only=True,
+        mode='max')
+    stopper = EarlyStopping(monitor='val_categorical_accuracy', patience=10)
+    callbacks = [checkpoint, stopper]
+
+    # begin training test model
+    history = compiled_model.fit(X, Y,
+        epochs=epochs,
+        batch_size=batch_size, 
+        callbacks=callbacks,
+        validation_split=0.3,
+        verbose=2,)
+    
+    return history
     
 def main():
-
-if __name__ == "__main__":
     # hyperparameters
     m = 20
     height = 256
@@ -91,10 +127,11 @@ if __name__ == "__main__":
 
     lambda_ = 0.8
     drop_prob = 0.4
+    normalize = False
     learning_rate = 1e-3
     epochs = 30
     batch_size = 512
-    normalize = False
+    
 
     # create dummy (m, height, width, n_channels) dataset
     X = (np.random.randint(0, 256, size=(m, height, width, n_channels)) * 1.0) / 255
@@ -106,9 +143,8 @@ if __name__ == "__main__":
     # one hot encode our dummy labels 
     Y = tf.one_hot(Y, depth=n_unique)
 
-
     # instantiate custom model
-    model = load_model_a(
+    raw_model = load_model_a(
         conv_layers_options=conv_layers_options, 
         pool_layers_options=pool_layers_options,
         dense_layers_dims=dense_layers_dims,
@@ -117,35 +153,21 @@ if __name__ == "__main__":
         normalize=False
     )
 
-    # define loss, optimizer, and metrics then compile
-    opt = Adam(learning_rate=learning_rate, beta_1=0.9, beta_2=0.999)
-    loss = cce_loss(from_logits=True)
-    metrics = [CategoricalAccuracy(), cce_metric(from_logits=True)]    
-    model.compile(optimizer=opt, loss=loss, metrics=metrics)
-    model(X)
-    model.summary()
+    compiled_model = compile_model(
+        raw_model=raw_model,
+        X=X,
+        learning_rate=learning_rate
+    )
 
-    # define checkpoint and early stopping callback to save
-    # best weights at each epoch and to stop if there is no improvement
-    # of validation loss for 10 consecutive epochs
-    weights_path = f"../saved/models/test_{model.name}" + "_{epoch:02d}_{val_categorical_accuracy:.2f}.h5"
-    checkpoint = ModelCheckpoint(
-        weights_path,
-        monitor='val_categorical_accuracy',
-        verbose=1,
-        save_best_only=True,
-
-        # used if model subclass is used
-        # save_weights_only=True,
-        mode='max')
-    stopper = EarlyStopping(monitor='val_categorical_accuracy', patience=10)
-    callbacks = [checkpoint, stopper]
-
-    # begin training test model
-    history = model.fit(X, Y,
+    history = train_model(
+        compiled_model=compiled_model,
         epochs=epochs,
-        batch_size=batch_size, 
-        callbacks=callbacks,
-        validation_split=0.3,
-        verbose=2,)
+        batch_size=batch_size
+    )
+    
+if __name__ == "__main__":
+    main()
+
+
+    
     
