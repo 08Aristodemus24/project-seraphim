@@ -66,7 +66,7 @@ def load_model_a(conv_layers_options, pool_layers_options, padding, dense_layers
 
     return model
     
-    
+def main():
 
 if __name__ == "__main__":
     # hyperparameters
