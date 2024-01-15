@@ -515,7 +515,7 @@ class ModelResults:
         """
 
         # extract the epoch attribute from the history object
-        epochs = self.epoch
+        epochs = self.epochs
         results = {}
         for metric in metrics_to_use:
             if metric not in results:
@@ -550,7 +550,7 @@ class ModelResults:
 
         # extracts the dictionary of results and the number of epochs
         results, epochs = self._build_results(metrics_to_use)
-        results_items = results.items()
+        results_items = list(results.items())
 
         # we want to leave the user with the option to 
         for index in range(0, len(metrics_to_use) - 1, 2):
@@ -560,20 +560,23 @@ class ModelResults:
             metrics_indeces = (index, index + 1)
             curr_metric, curr_metric_perf = results_items[metrics_indeces[0]]
             curr_val_metric, curr_val_metric_perf = results_items[metrics_indeces[1]]
+            print(curr_metric)
+            print(curr_val_metric)
             curr_result = {
                 curr_metric: curr_metric_perf,
                 curr_val_metric: curr_val_metric_perf
             }
+            print(curr_result)
 
             self.view_train_cross_results(
                 results=curr_result,
-                curr_metrics_indeces=metrics_indeces,
                 epochs=epochs, 
+                curr_metrics_indeces=metrics_indeces,
                 save_img=save_img,
                 img_title="model performance using {} dataset for {} metric".format(dataset_id, curr_metric)
             )
 
-    def view_train_cross_results(results: dict, epochs: list, curr_metrics_indeces: tuple, save_img: bool, img_title: str="untitled"):
+    def view_train_cross_results(self, results: dict, epochs: list, curr_metrics_indeces: tuple, save_img: bool, img_title: str="untitled"):
         """
         plots the number of epochs against the cost given cost values 
         across these epochs.
