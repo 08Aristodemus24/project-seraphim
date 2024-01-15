@@ -18,10 +18,10 @@ from tensorflow.keras.callbacks import ModelCheckpoint, EarlyStopping
 import numpy as np
 
 
-def load_model_a(conv_layers_options, pool_layers_options, padding, dense_layers_dims, lambda_, drop_prob, learning_rate, normalize=False):
+def load_model_a(conv_layers_options, pool_layers_options, padding, dense_layers_dims, lambda_=0.0, drop_prob=0.0, normalize=False):
     
     # define architecture
-    model = Sequential()
+    model = Sequential(name='architecture-A')
 
     # build conv and poollayers
     n_conv_layers = len(conv_layers_options)
@@ -42,9 +42,9 @@ def load_model_a(conv_layers_options, pool_layers_options, padding, dense_layers
     # flatten pooled layers
     model.add(Flatten())
 
-    # build fully connected layers
-    n_dense_layers = len(dense_layers_dims)
-    for dl in range(n_dense_layers) - 1:
+    # build fully connected layers, excluding final layer
+    n_dense_layers = len(dense_layers_dims) - 1
+    for dl in range(n_dense_layers):
         model.add(Dense(
             units=dense_layers_dims[dl],
             kernel_regularizer=L2(lambda_)
@@ -70,7 +70,7 @@ def load_model_a(conv_layers_options, pool_layers_options, padding, dense_layers
 
 if __name__ == "__main__":
     # hyperparameters
-    m = 20000
+    m = 20
     height = 256
     width = 256
     n_channels = 256
@@ -78,37 +78,44 @@ if __name__ == "__main__":
     
     
     conv_layers_options = [
-        {'n_filters': 32, 'kernel_size': (5, 5), 'kernel_strides': (1, 1)},
-        {'n_filters': 64, 'kernel_size': (5, 5), 'kernel_strides': (1, 1)},
+        {'n_filters': 8, 'kernel_size': (5, 5), 'kernel_strides': (1, 1)},
+        {'n_filters': 16, 'kernel_size': (5, 5), 'kernel_strides': (1, 1)},
         
     ]
     pool_layers_options = [
         {'pool_size': (2, 2), 'pool_strides': (2, 2)},
         {'pool_size': (2, 2), 'pool_strides': (1, 1)},
     ]
-    dense_layers_dims = [64, 32, n_unique]
+    dense_layers_dims = [32, 16, n_unique]
     padding = 'same'
 
     lambda_ = 0.8
     drop_prob = 0.4
     learning_rate = 1e-3
-    epochs = 100
+    epochs = 30
     batch_size = 512
     normalize = False
 
     # create dummy (m, height, width, n_channels) dataset
-    X = np.random.uniform(0, 256, size=(m, height, width, n_channels))
+    X = (np.random.randint(0, 256, size=(m, height, width, n_channels)) * 1.0) / 255
 
     # create an array of labels of 8 unique values representing our
     # different categories/classes of image of m length
     Y = np.random.randint(0, n_unique, size=(m,))
 
     # one hot encode our dummy labels 
-    Y = tf.one_hot(Y, depth=Y.shape[0])
+    Y = tf.one_hot(Y, depth=n_unique)
 
 
     # instantiate custom model
-    # model = GenPhiloTextB(emb_dim=emb_dim, n_a=n_a, n_unique=n_unique, T_x=T_x, dense_layers_dims=dense_layers_dims, lambda_=lambda_, drop_prob=drop_prob, normalize=normalize)
+    model = load_model_a(
+        conv_layers_options=conv_layers_options, 
+        pool_layers_options=pool_layers_options,
+        dense_layers_dims=dense_layers_dims,
+        padding=padding,
+        lambda_=lambda_,
+        normalize=False
+    )
 
     # define loss, optimizer, and metrics then compile
     opt = Adam(learning_rate=learning_rate, beta_1=0.9, beta_2=0.999)
@@ -116,19 +123,26 @@ if __name__ == "__main__":
     metrics = [CategoricalAccuracy(), cce_metric(from_logits=True)]    
     model.compile(optimizer=opt, loss=loss, metrics=metrics)
     model(X)
-    # model([X, h_0, c_0])
     model.summary()
 
     # define checkpoint and early stopping callback to save
     # best weights at each epoch and to stop if there is no improvement
     # of validation loss for 10 consecutive epochs
-    weights_path = f"../saved/weights/test_{model.name}" + "_{epoch:02d}_{val_loss:.4f}.h5"
-    checkpoint = ModelCheckpoint(weights_path, monitor='val_loss', verbose=1, save_best_only=True, save_weights_only=True, mode='min')
-    stopper = EarlyStopping(monitor='val_loss', patience=10)
+    weights_path = f"../saved/models/test_{model.name}" + "_{epoch:02d}_{val_categorical_accuracy:.2f}.h5"
+    checkpoint = ModelCheckpoint(
+        weights_path,
+        monitor='val_categorical_accuracy',
+        verbose=1,
+        save_best_only=True,
+
+        # used if model subclass is used
+        # save_weights_only=True,
+        mode='max')
+    stopper = EarlyStopping(monitor='val_categorical_accuracy', patience=10)
     callbacks = [checkpoint, stopper]
 
     # begin training test model
-    history = model.fit(X, Y_true, 
+    history = model.fit(X, Y,
         epochs=epochs,
         batch_size=batch_size, 
         callbacks=callbacks,
