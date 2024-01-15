@@ -160,7 +160,9 @@ def main():
     )
 
     history = train_model(
-        compiled_model=compiled_model,
+        compiled_model,
+        X, 
+        Y,
         epochs=epochs,
         batch_size=batch_size
     )

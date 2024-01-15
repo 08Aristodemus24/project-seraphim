@@ -13,7 +13,9 @@ import numpy as np
 import ast
 import tensorflow as tf
 
-
+# download stopwords and wordnet if not already downloaded
+nltk.download('stopwords')
+nltk.download('wordnet')
 
 def encode_features(X):
     """
@@ -68,6 +70,14 @@ def map_value_to_index(unique_tokens: list):
     idx_to_char = tf.keras.layers.StringLookup(vocabulary=char_to_idx.get_vocabulary(), invert=True, mask_token=None)
 
     return char_to_idx, idx_to_char
+
+def lower_words(corpus: str):
+    """
+    lowers all chars in corpus
+    """
+    print(corpus)
+
+    return corpus.lower()
 
 def remove_contractions(text_string: str):
     """
@@ -128,6 +138,7 @@ def remove_contractions(text_string: str):
     
     text_string = re.sub(r"i'm", "i am ", text_string)
     text_string = re.sub(r"%", " percent ", text_string)
+    print(text_string)
 
     return text_string
 
@@ -135,12 +146,18 @@ def rem_non_alpha_num(corpus: str):
     """
     removes all non-alphanumeric values in the given corpus
     """
+    print(corpus)
     return re.sub(r"[^0-9a-zA-ZñÑ.\"]+", ' ', corpus)
+
+def rem_numeric(corpus: str):
+    print(corpus)
+    return re.sub(r"[0-9]+", ' ', corpus)
 
 def capitalize(corpus: str):
     """
     capitalizes all individual words in the corpus
     """
+    print(corpus)
     return corpus.title()
 
 def filter_valid(corpus: str, to_exclude: list=
@@ -171,6 +188,7 @@ def partition_corpus(corpus: str):
     splits a corpus like name, phrase, sentence, 
     paragraph, or corpus into individual strings
     """
+    print(corpus)
 
     return corpus.split()
 
@@ -178,8 +196,6 @@ def rem_stop_words(corpus: str, other_exclusions: list=["#ff", "ff", "rt", "amp"
     """
     removes stop words of a given corpus
     """
-    # download stopwords if not already downloaded
-    nltk.download('stopwords')
 
     # get individual words of corpus
     words = corpus.split()
@@ -194,6 +210,7 @@ def rem_stop_words(corpus: str, other_exclusions: list=["#ff", "ff", "rt", "amp"
 
     # rejoin the individual words of the now removed stop words
     corpus = " ".join(words)
+    print(corpus)
 
     return corpus
 
@@ -201,14 +218,23 @@ def stem_corpus_words(corpus: str):
     """
     stems individual words of a given corpus
     """
-    nltk.download
+    # get individual words of corpus
+    words = corpus.split()
+
+    # stem each individual word in corpus
+    snowball = SnowballStemmer("english", ignore_stopwords=True)
+    words = [snowball.stem(word) for word in words]
+
+    # rejoin the now lemmatized individual words
+    corpus = " ".join(words)
+    print(corpus)
+
+    return corpus
 
 def lemmatize_corpus_words(corpus: str):
     """
     lemmatizes individual words of a given corpus
     """
-    # download wordnet if not already downloaded
-    nltk.download('wordnet')
 
     # get individual words of corpus
     words = corpus.split()
@@ -219,8 +245,94 @@ def lemmatize_corpus_words(corpus: str):
 
     # rejoin the now lemmatized individual words
     corpus = " ".join(words)
+    print(corpus)
 
     return corpus
+
+def clean_tweets(corpus):
+    """
+    Accepts a text string or corpus and replaces:
+    1) urls with URLHERE
+    2) lots of whitespace with one instance
+    3) mentions with MENTIONHERE
+
+    This allows us to get standardized counts of urls and mentions
+    Without caring about specific people mentioned
+    """
+
+    space_pattern = '\s+'
+
+    giant_url_regex = ('http[s]?://(?:[a-zA-Z]|[0-9]|[$-_@.&+]|'
+    '[!*\(\),]|(?:%[0-9a-fA-F][0-9a-fA-F]))+')
+    
+    mention_regex = '@[\w\-]+'
+
+    text_string = re.sub(space_pattern, ' ', corpus)
+    text_string = re.sub(giant_url_regex, '', text_string)
+    text_string = re.sub(mention_regex, '', text_string)
+    print(text_string)
+    
+    return text_string
+
+def strip_final_corpus(corpus):
+    """
+    ideally used in final phase of preprocessing corpus/text string
+    which strips the final corpus of all its white spaces
+    """
+    
+    return corpus.strip()
+
+def join_word_list(word_list):
+    return " ".join(word_list)
+
+def sentences2tok_sequences(n_unique, sents: pd.Series):
+    """
+    takes in a list or pandas series of sentences of str
+    type and converts them to their respective unique indeces
+
+    returns the sequence of now tokenized words as well as the
+    word_to_index and index_to_word dictionaries/mappings
+    """
+
+    tokenizer = tf.keras.preprocessing.text.Tokenizer(
+        num_words=n_unique, 
+        split=' '
+    )
+    tokenizer.fit_on_texts(sents)
+    # the bug is here that's why there are wrong indeces
+
+    seqs = tokenizer.texts_to_sequences(sents)
+    word_to_index = tokenizer.word_index
+    index_to_word = tokenizer.index_word
+
+    return seqs, word_to_index, index_to_word
+
+def pad_token_sequences(seqs, n_time_steps: int=50):
+    """
+    pads the tokenized sequences with zeroes so that the resulting
+    dataset are tokenized sequences of the same length, the length
+    defined by the user through the number of time steps argument
+    or the maximum length each tokenized sequence should have
+
+    args:
+        n_time_steps - a user defined argument that can represents
+        how long must the sequences of tokens/ids be, for most cases
+        it would be the length of the longest sentence or the number
+        of words in that longest sentence or just a shorter sequence
+        for optimal performance without losing time efficiency
+
+
+    """
+    # post means place padding of 0's on the tail or ending of the sequence
+    # and truncating removes the values of a sequence that is greater than the max length given
+    seqs_padded = tf.keras.preprocessing.sequence.pad_sequences(
+        seqs, 
+        maxlen=n_time_steps, 
+        padding='post', 
+        truncating='post'
+    )
+
+    return seqs_padded
 
 def string_list_to_list(column: pd.Series):
     """
