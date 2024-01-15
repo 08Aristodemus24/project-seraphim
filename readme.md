@@ -211,3 +211,23 @@ c. categorical vectors to sentiments/emotional reactions class (such is the case
 * write preprocessor for when user inputs an image from the client-side
 * writing dropout for CNNs https://machinelearningmastery.com/dropout-for-regularizing-deep-neural-networks/
 
+
+
+
+now I understand
+lambda
+n_rnn_units
+tuner/epochs
+tuner/initial_epoch
+tuner/bracket
+are all hyperparameters
+that is why we can have a max epoch parameter for kt.HyperBand that means the number of epochs to find the best for example accuracy can be at minimum 1 and at maximum the value of max epoch we have defined
+
+but my question is if we already have max epochs for e.g. 1 epoch for model 1 with 0.1 lambda, 0.5 dropout, and 2 epoch
+
+why do we still have in tuner.search a set number of epochs which is higher than the max epochs of the kt.Hyperband object
+
+
+maybe max_epochs is just really meant to be the MAXIMUM epochs tuner.search would go sincei t is after all a hyper param that needs to be tuned only in this RANGE
+
+I have 30 trials over all so maybe the max epochs 10 and factor 3 is multiplied to trial 30 times different hyper params

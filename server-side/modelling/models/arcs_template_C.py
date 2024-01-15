@@ -85,43 +85,89 @@ def train_model(compiled_model, X, Y, epochs, batch_size):
 
 class HOSClassifierHyperModel(kt.HyperModel):
     def __init__(self, vocab_len, emb_matrix, name=None, tunable=True):
+        """
+        this will be the model builder that will be used
+        for the tuner to find the optimal hyper parameters
+        of the baseline architecture above
+
+        the architecture of this model will of course be delimited
+        to or example number of layers since deep language models
+        are computationally expensive and so not all hyper params
+        like number of layers will be tuned
+
+        all in all this will still have a similar architecture
+        to that of the baseline
+        """
         super().__init__(name, tunable)
         self.vocab_len = vocab_len
         self.emb_matrix = emb_matrix
 
     def build(self, hp):
+        # the drop probability values, instead of keep probability
+        hp_dropout = hp.Choice('dropout', values=[0.1, 0.2, 0.3, 0.4, 0.5])
+
+        # learning rate alpha
+        hp_learning_rate = hp.Choice('learning_rate', values=[1.2, 0.03, 0.01, 0.0075, 0.003, 0.001])
+
+        # regularization value lambda
+        hp_lambda = hp.Choice('lambda', values=[1.2, 1.0, 0.9, 0.8, 0.7, 0.6, 0.5, 0.25, 0.125, 0.01])
+
+        hp_num_rnn_units = hp.Choice('n_rnn_units', values=[16, 32, 64, 128, 256])
+
+        # build architecture
         model = Sequential(name='hate-offensive-speech-classifier')
 
-        model
+        model.add(init_embedding_layer(self.vocab_len, self.emb_matrix))
+        model.add(Bidirectional(LSTM(units=hp_num_rnn_units, return_sequences=True)))
+        model.add(Dropout(hp_dropout))
+        model.add(Bidirectional(LSTM(units=hp_num_rnn_units, return_sequences=False)))
+        model.add(Dropout(hp_dropout))
+        model.add(Dense(units=3, kernel_regularizer=L2(hp_lambda)))
+        model.add(Activation(activation=tf.nn.softmax))
+
+        # define loss, optimizer, and metrics
+        loss = cce_loss()
+        opt = Adam(learning_rate=hp_learning_rate)
+        metrics = [cce_metric(), CategoricalAccuracy()]
+        model.compile(
+            loss=loss,
+            optimizer=opt,
+            metrics=metrics
+        )
+
         return model
+    
+def load_tuner(hyper_model, metric='val_accuracy', objective='max', max_epochs=10, factor=3):
+    
+    obj = kt.Objective(metric, objective)
 
-def model_builder(hp):
-    """
-    this will be the mojdel builder that will be used
-    for the tuner to find the optimal hyper parameters
-    of the baseline architecture above
+    tuner = kt.Hyperband(
+        hyper_model, 
+        objective=obj, 
+        max_epochs=max_epochs,
+        factor=factor,
+        directory='./saved/tuned_models',
+        project_name='model'
+    )
 
-    the architecture of this model will of course be delimited
-    to or example number of layers since deep language models
-    are computationally expensive and so not all hyper params
-    like number of layers will be tuned
+    return tuner
 
-    all in all this will still have a similar architecture
-    to that of the baseline
-    """
+def train_tuner(tuner, X, Y):
+    # define checkpoint and early stopping callback to save
+    # best weights at each epoch and to stop if there is no 
+    # improvement of validation loss for 3 consecutive epochs
+    # since we are only using a tuner
+    stopper = EarlyStopping(monitor='val_categorical_accuracy', patience=3)
+    callbacks = [stopper]
+    
+    # fit model to data
+    tuner.search(
+        X, Y, 
+        epochs=20, 
+        validation_split=0.3, 
+        callbacks=callbacks
+    )
 
+    best_params = tuner.get_best_hyperparameters()[0]
 
-    # the drop probability values, instead of keep probability
-    hp_dropout = hp.Choice('dropout', values=[0.1, 0.2, 0.3, 0.4, 0.5, 0.6, 0.7, 0.8, 0.9])
-
-    # learning rate alpha
-    hp_learning_rate = hp.Choice('learning_rate', values=[1.2, 0.03, 0.01, 0.0075, 0.003, 0.001,])
-
-    # regularization value lambda
-    hp_lambda = hp.Choice('lambda', values=[10.0, 1.0, 0.9, 0.8, 0.7, 0.6, 0.5, 0.25, 0.125, 0.01,])
-
-    hp_num_rnn_units = hp.Choice('n_rnn_units', values=[16, 32, 64, 128, 256])
-
-    # define architecture
-    model = Sequential()
-    model.add(init_embedding_layer())
+    return best_params
