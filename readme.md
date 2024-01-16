@@ -264,11 +264,11 @@ just in case a model only saves its weights, and not the whole model architectur
 
 but even if the architecture itself is saved its respective hyper params, for preprocessing input in order to feed to the trained model it is important that such hyperparams used in preprocessing the input for having even trained the model in the first place is important, this being vocab, char_to_idx, and idx_to_char for instance
 
-* writing decoders functions for the predictions of our model
+* <s>writing decoders functions for the predictions of our model
 - decoder for categorical data which can range from:
 a. categorical vectors to image class
 b. categorical sequences of vectors to sentences
-c. categorical vectors to sentiments/emotional reactions class (such is the case for NLP)
+c. categorical vectors to sentiments/emotional reactions class (such is the case for NLP)</s>
 
 * write preprocessor for when user inputs an image from the client-side
 * writing dropout for CNNs https://machinelearningmastery.com/dropout-for-regularizing-deep-neural-networks/
@@ -277,9 +277,19 @@ c. categorical vectors to sentiments/emotional reactions class (such is the case
 # Tuner template for image processing model
 * only thing that is left now is to build a tuner for this
 * then figure out a way to upload the these modules so I can access these models on a notebook on collab easily
-* 
+
+
+
+# Instructions for loading, preprocessing, and visualizing data as well as training and tuning models
+* collab is where you will import only the basic libraries for reading and splitting data since data is highly variable and cannot be loaded by a single function
+* collab is where I will load, preprocess, and visualize data using loaders, processors, and visualizers
 * collab is where I will train the baseline
-* collab is where I will 
+* collab is where I will save the baseline
+* collab is where I will serach optimal hyperparams of model
+* collab is where I will train tuned model with optimal hyperparams
+* collab is where I will save the tuned model
+
+
 
 # Insights
 now I understand

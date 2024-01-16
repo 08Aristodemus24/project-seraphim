@@ -27,9 +27,10 @@ def encode_features(X):
     dimensions. Usually this will be a the target column of 1 
     dimension. Otherwise use the ordinal encoder which is suitable for
     matrices like the set of independent variables of an X input
-    """
 
-    """include encoder for multi-class labels"""
+    used during training, validation, and testing/deployment (since
+    encoder is saved and later used)
+    """
 
     enc = LabelEncoder() if len(X.shape) < 2 else OrdinalEncoder(dtype=np.int64)
     enc_feats = enc.fit_transform(X)
@@ -44,6 +45,9 @@ def normalize_train_cross(X_trains, X_cross, scaler='min_max'):
         X_trains - 
         X_cross - 
         scaler - scaler to use which can either be 'min_max' or 'standard'
+
+    used during training, validation, and testing/deployment (since
+    scaler is saved and later used)
     """
 
     temp = MinMaxScaler() if scaler is 'min_max' else StandardScaler()
@@ -60,11 +64,14 @@ def map_value_to_index(unique_tokens: list):
     unique word based on their freqeuncy will be mapped from indeces
     1 to |V|.
 
-    returns a lookup layer for each unique character/token, including
-    the [UNK] token's corresponding id
-
     args:
         unique_tokens - an array consisting of all unique tokens
+
+    returns:
+        a lookup layer for each unique character/token, including
+        the [UNK] token's corresponding id
+
+    used during training, validation, and testing/deployment
     """
     char_to_idx = tf.keras.layers.StringLookup(vocabulary=unique_tokens, mask_token=None)
     idx_to_char = tf.keras.layers.StringLookup(vocabulary=char_to_idx.get_vocabulary(), invert=True, mask_token=None)
@@ -74,6 +81,8 @@ def map_value_to_index(unique_tokens: list):
 def lower_words(corpus: str):
     """
     lowers all chars in corpus
+
+    used during training, validation, and testing/deployment
     """
     print(corpus)
 
@@ -83,6 +92,8 @@ def remove_contractions(text_string: str):
     """
     removes contractions and replace them e.g. don't becomes
     do not and so on
+
+    used during training, validation, and testing/deployment
     """
 
     text_string = re.sub(r"don't", "do not ", text_string)
@@ -145,6 +156,8 @@ def remove_contractions(text_string: str):
 def rem_non_alpha_num(corpus: str):
     """
     removes all non-alphanumeric values in the given corpus
+
+    used during training, validation, and testing/deployment
     """
     print(corpus)
     return re.sub(r"[^0-9a-zA-ZñÑ.\"]+", ' ', corpus)
@@ -156,6 +169,8 @@ def rem_numeric(corpus: str):
 def capitalize(corpus: str):
     """
     capitalizes all individual words in the corpus
+
+    used during training, validation, and testing/deployment
     """
     print(corpus)
     return corpus.title()
@@ -170,6 +185,8 @@ def filter_valid(corpus: str, to_exclude: list=
     joins only the words that is valid in the profile
     name e.g. 'Christian Cachola Chrp Crsp'
     results only in 'Christian Cachola'
+
+    used during training, validation, and testing/deployment
     """
 
     # filter and remove the words in the sequence
@@ -184,9 +201,10 @@ def filter_valid(corpus: str, to_exclude: list=
 
 def partition_corpus(corpus: str):
     """
-    
     splits a corpus like name, phrase, sentence, 
     paragraph, or corpus into individual strings
+
+    used during training, validation, and testing/deployment
     """
     print(corpus)
 
@@ -195,6 +213,8 @@ def partition_corpus(corpus: str):
 def rem_stop_words(corpus: str, other_exclusions: list=["#ff", "ff", "rt", "amp"]):
     """
     removes stop words of a given corpus
+
+    used during training, validation, and testing/deployment
     """
 
     # get individual words of corpus
@@ -217,6 +237,8 @@ def rem_stop_words(corpus: str, other_exclusions: list=["#ff", "ff", "rt", "amp"
 def stem_corpus_words(corpus: str):
     """
     stems individual words of a given corpus
+
+    used during training, validation, and testing/deployment
     """
     # get individual words of corpus
     words = corpus.split()
@@ -234,6 +256,8 @@ def stem_corpus_words(corpus: str):
 def lemmatize_corpus_words(corpus: str):
     """
     lemmatizes individual words of a given corpus
+
+    used during training, validation, and testing/deployment
     """
 
     # get individual words of corpus
@@ -258,6 +282,8 @@ def clean_tweets(corpus):
 
     This allows us to get standardized counts of urls and mentions
     Without caring about specific people mentioned
+
+    used during training, validation, and testing/deployment
     """
 
     space_pattern = '\s+'
@@ -278,6 +304,8 @@ def strip_final_corpus(corpus):
     """
     ideally used in final phase of preprocessing corpus/text string
     which strips the final corpus of all its white spaces
+
+    used during training, validation, and testing/deployment
     """
     
     return corpus.strip()
@@ -292,6 +320,9 @@ def sentences2tok_sequences(n_unique, sents: pd.Series):
 
     returns the sequence of now tokenized words as well as the
     word_to_index and index_to_word dictionaries/mappings
+
+    used during training, validation, and testing/deployment
+    (since tokenizer is saved)
     """
 
     tokenizer = tf.keras.preprocessing.text.Tokenizer(
@@ -321,7 +352,7 @@ def pad_token_sequences(seqs, n_time_steps: int=50):
         of words in that longest sentence or just a shorter sequence
         for optimal performance without losing time efficiency
 
-
+    used during training, validation, and testing/deployment
     """
     # post means place padding of 0's on the tail or ending of the sequence
     # and truncating removes the values of a sequence that is greater than the max length given
@@ -340,6 +371,8 @@ def string_list_to_list(column: pd.Series):
     does not preserve its type and is converted instead to an
     str so convert first str to list or series "["a", "b", 
     "hello"]" to ["a", "b", "hello"]
+
+    used only during training and validation
     """
     column = column.apply(lambda comment: ast.literal_eval(comment))
 
@@ -348,6 +381,8 @@ def string_list_to_list(column: pd.Series):
 def flatten_series_of_lists(column: pd.Series):
     """this converts the series or column of a df
     of lists to a flattened version of it
+
+    used only during training and validation
     """
 
     return pd.Series([item for sublist in column for item in sublist])
@@ -359,13 +394,15 @@ def sentences_to_avgs(sentences, word_to_vec_dict: dict):
     vector encoding the meaning of the sentence. Return a 2D numpy array representing 
     all sentences vector representations
     
-    Arguments:
-    sentences -- a series object of sentences
-    word_to_vec_map -- dictionary mapping every word in a vocabulary into its 50-dimensional vector representation
+    args:
+        sentences -- a series object of sentences
+        word_to_vec_map -- dictionary mapping every word in a vocabulary into its 50-dimensional vector representation
     
-    Returns:
-    avg -- average vector encoding information about each sentence, numpy-array of shape (m, d), where m is the
-    number of sentences in the dataframe and d is the number of dimensions or the length of a word's vector rep
+    returns:
+        avg -- average vector encoding information about each sentence, numpy-array of shape (m, d), where m is the
+        number of sentences in the dataframe and d is the number of dimensions or the length of a word's vector rep
+
+    used only during training and validation
     """
     
     # Initialize the average word vector, should have the same shape
@@ -414,7 +451,9 @@ def init_sequences(corpus: str, char_to_idx: dict, T_x: int):
     output/target sequence the model needs to learn
 
     A sequence length of 0 will not be permitted and this
-    funciton will raise an error should T_x be 0
+    function will raise an error should T_x be 0
+
+    used only during training and validation
     """
 
     if T_x == 0:
@@ -458,6 +497,8 @@ def decode_id_sequences(pred_ids, idx_to_char):
     decodes the sequence of id predictions by inference 
     model and converts them into the full generated sentence 
     itself
+
+    used during training, validation, and testing/deployment
     """
 
     char_list = idx_to_char(pred_ids)
@@ -466,6 +507,25 @@ def decode_id_sequences(pred_ids, idx_to_char):
     final_seq = joined_seq.decode('UTF-8')
 
     return final_seq
+
+def one_hot_encode(sparse_labels):
+    """
+    one hot encodes a sparse multi-class label
+    e.g. if in sparse labels contain [0 1 2 0 3]
+    one hot encoding would be
+    [[1 0 0 0]
+    [0 1 0 0]
+    [0 0 1 0]
+    [1 0 0 0]
+    [0 0 0 1]]
+
+    used only during training and validation
+    """
+
+    n_unique = np.unique(sparse_labels).shape[0]
+    one_hot_encoding = tf.one_hot(sparse_labels, depth=n_unique)
+
+    return one_hot_encoding
 
 def decode_one_hot(Y_preds):
     """
@@ -496,6 +556,8 @@ def decode_one_hot(Y_preds):
 
     main args:
         Y_preds - 
+
+    used during training, validation, and testing/deployment
     """
 
     # check if Y_preds is multi-class by checking if shape
@@ -516,6 +578,8 @@ def re_encode_sparse_labels(sparse_labels, new_labels: list=['DER', 'APR', 'NDG'
     upon reencoding this can be used by other encoders
     such as encode_features() which allows us to save
     the encoder to be used later on in model training
+
+    used only during training and validation
     """
 
     # return use as index the sparse_labels to the new labels
@@ -536,6 +600,8 @@ def translate_labels(labels, translations: dict={'DER': 'Derogatory',
     and understandable version to potentially send back to client
     e.g. array(['DEROGATORY', NON-DEROGATORY, 'DEROGATORY', 'HOMONYM',
     'APPROPRIATIVE', ...])
+
+    used during training, validation, and testing/deployment
     """
 
     v_func = np.vectorize(lambda label: translations[label])
@@ -596,6 +662,10 @@ def encode_image(image_path: str, dimensions: tuple=(256, 256)):
     """
     encodes an image to a 3D matrix that can be used to
     feed as input to a convolutional model
+
+    used primarily during testing/deployment to encode
+    given image from client but image encoder for training
+    is done by create_image_set() from loaders.py
     """
 
     # open image
@@ -618,6 +688,10 @@ def standardize_image(encoded_img):
     """
     rescales an encoded image's values from 0 to 255 down
     to 0 and 1
+
+    used primarily during testing/deployment to encode
+    given image from client but image standardization for
+    training is done by create_image_set() from loaders.py
     """
 
     rescaled_img = (encoded_img * 1.0) / 255
