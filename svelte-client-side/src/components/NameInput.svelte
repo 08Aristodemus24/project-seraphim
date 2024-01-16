@@ -38,7 +38,7 @@
     
     let name_code = name_type === 'first' ? 'f' : 'l';
     let placeholder = name_type === 'first' ? 'John Smith' : 'Meyer';
-    let name;
+    export let name;
 
     const capitalize = (string) => string[0].toUpperCase() + string.substring(1);
 </script>

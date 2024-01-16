@@ -35,7 +35,7 @@
         }
     };
 
-    let mobile_num = "";
+    export let mobile_num = "";
     const phone_reg = `[0-9]{'{'}3{'}'}-[0-9]{'{'}3{'}'}-[0-9]{'{'}4{'}'}`;
 </script>
 

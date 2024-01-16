@@ -38,7 +38,7 @@
     };
 
     let model_names = ['------------------------'];
-    let model_name = "";
+    export let model_name = "";
 
     const get_model_names = async () => {
         try{

@@ -46,7 +46,7 @@
 
         /* design */
         content: '';
-        background-image: url('https://raw.githubusercontent.com/08Aristodemus24/project-seraphim/master/client-side/src/assets/mediafiles/journey-painting-wallpaper.jpg');
+        background-image: url('https://raw.githubusercontent.com/08Aristodemus24/project-seraphim/master/svelte-client-side/src/assets/mediafiles/journey-painting-wallpaper.jpg');
         background-attachment: fixed;
         background-position: center;
         background-repeat: no-repeat;

@@ -17,6 +17,7 @@
         try {
             // extract data from form element
             const raw_data = event.detail;
+            console.log(raw_data);
 
             // once data is validated submitted and then extracted
             // reset form components form element

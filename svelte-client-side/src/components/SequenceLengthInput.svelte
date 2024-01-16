@@ -35,7 +35,7 @@
         }
     };
 
-    let seq_len = 250;
+    export let seq_len = 250;
 </script>
 
 <div class={`seq-len-container ${style}`} 

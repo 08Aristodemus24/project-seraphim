@@ -35,7 +35,7 @@
         }
     };
 
-    let prompt = "";
+    export let prompt = "";
 </script>
 
 <div class={`prompt-container ${style}`} 

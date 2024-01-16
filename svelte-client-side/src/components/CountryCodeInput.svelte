@@ -38,7 +38,7 @@
     };
 
     let countries = [];
-    let country_code = "";
+    export let country_code = "";
 
     const get_country_codes = async () => {
         try{

@@ -46,7 +46,7 @@
         }
     } : null;
 
-    let images = null;
+    export let images = null;
 
     afterUpdate(async () => {
         console.log(images);
