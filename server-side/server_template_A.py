@@ -42,6 +42,7 @@ def load_preprocessors():
     the dataset to later transform raw user input from
     client-side
     """
+    
     global saved_bc_scaler, saved_bc_Y_le
     saved_bc_scaler = load_model('./modelling/misc/saved/bc_scaler.pkl')
     saved_bc_Y_le = load_model('./modelling/misc/saved/bc_Y_le.pkl')

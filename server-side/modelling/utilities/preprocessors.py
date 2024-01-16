@@ -506,6 +506,24 @@ def decode_one_hot(Y_preds):
 
     return sparse_categories
 
+def re_encode_sparse_labels(sparse_labels, new_labels: list=['DER', 'APR', 'NDG']):
+    """
+    sometimes a dataset will only have its target values 
+    be sparse values such as 0, 1, 2 right at the start
+    so this function re encodes these sparse values/labels
+    to a more understandable representation
+
+    upon reencoding this can be used by other encoders
+    such as encode_features() which allows us to save
+    the encoder to be used later on in model training
+    """
+
+    # return use as index the sparse_labels to the new labels
+    v_func = np.vectorize(lambda sparse_label: new_labels[sparse_label])
+    re_encoded_labels = v_func(sparse_labels)
+
+    return re_encoded_labels
+
 def translate_labels(labels, translations: dict={'DER': 'Derogatory', 
                                                  'NDG': 'Non-Derogatory', 
                                                  'HOM': 'Homonym', 
@@ -521,7 +539,8 @@ def translate_labels(labels, translations: dict={'DER': 'Derogatory',
     """
 
     v_func = np.vectorize(lambda label: translations[label])
-    return v_func(labels)
+    translated_labels = v_func(labels)
+    return translated_labels
 
 def normalize_ratings(ratings: pd.DataFrame):
     """

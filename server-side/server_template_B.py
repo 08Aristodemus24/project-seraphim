@@ -13,8 +13,24 @@ import os
 
 # import and load model architectures as well as decoder
 from modelling.models.arcs import GenPhiloTextA, generate
-from modelling.utilities.preprocessors import decode_predictions, map_value_to_index, preprocess
-from modelling.utilities.loaders import load_lookup_table, load_hyper_params
+from modelling.utilities.preprocessors import (
+    decode_id_sequences, 
+    map_value_to_index, 
+    lower_words, 
+    clean_tweets, 
+    remove_contractions, 
+    rem_non_alpha_num, 
+    rem_numeric, 
+    rem_stop_words, 
+    stem_corpus_words, 
+    lemmatize_corpus_words, 
+    strip_final_corpus,
+    pad_token_sequences)
+    
+from modelling.utilities.loaders import (
+    load_lookup_table, 
+    load_hyper_params, 
+    load_tokenizer)
 
 import tensorflow as tf
 
@@ -34,7 +50,7 @@ idx_to_char = None
 hyper_params = None
 model = None
 tuned_model = None
-
+tokenizer = None
 
 # functions to load miscellaneous variables, hyperparameters, and the model itself
 def load_misc():
@@ -46,6 +62,16 @@ def load_misc():
     vocab = load_lookup_table('./modelling/final/misc/char_to_idx')
     char_to_idx, idx_to_char = map_value_to_index(vocab)
     hyper_params = load_hyper_params('./modelling/final/misc/hyper_params.json')
+
+def load_preprocessors():
+    """
+    prepares and loads the saved encoders, normalizers,
+    and tokenizers of the dataset to later transform 
+    raw user input from client-side
+    """
+
+    global tokenizer
+    tokenizer = load_tokenizer('./saved/misc/tokenizer.json')
 
 def load_model():
     """
@@ -82,6 +108,7 @@ def load_model_2():
     weights in order to quickly load both architecture
     and its optimized coefficeints/weights/parameters
     """
+
     global tuned_model
     tuned_model = tf.keras.models.load_model('./modelling/saved/models/tuned_hate-speech-lstm.h5')
 
@@ -98,13 +125,18 @@ def index():
 @app.route('/predict', methods=['POST'])
 def predict():
     raw_data = request.json
-    prompt = [preprocess(raw_data['prompt'])]
+
+    # encoder
+    prompt = [remove_contractions(raw_data['prompt'])]
     temperature = float(raw_data['temperature'])
     T_x = int(raw_data['sequence_length'])
     print(raw_data)
 
+    # predictor
     pred_ids = generate(model, prompts=prompt, char_to_idx=char_to_idx, T_x=T_x, temperature=temperature)
-    decoded_ids = decode_predictions(pred_ids, idx_to_char=idx_to_char)
+
+    # decoder
+    decoded_ids = decode_id_sequences(pred_ids, idx_to_char=idx_to_char)
 
     return jsonify({'message': decoded_ids})
 
@@ -115,21 +147,25 @@ def tuned_predict():
     tweet = raw_data['tweet']
 
     # preprocess tweet using preprocessors used in training
-    # tweet = lower_words(tweet)
-    # clean_tweets()
-    # remove_contractions()
-    # rem_non_alpha_num
-    # rem_numeric
-    # rem_stop_words
-    # stem_corpus_words
-    # lemmatize_corpus_words
-    # strip_final_corpus
+    # which is the encoder part of this pipeline
+    corpus = lower_words(tweet)
+    corpus = clean_tweets(corpus)
+    corpus = remove_contractions(corpus)
+    corpus = rem_non_alpha_num(corpus)
+    corpus = rem_numeric(corpus)
+    corpus = rem_stop_words(corpus)
+    corpus = stem_corpus_words(corpus)
+    corpus = lemmatize_corpus_words(corpus)
+    corpus = strip_final_corpus(corpus)
 
     # this is where we will need to access the Tokenizer we
     # trained on the training data by saving it prior to
     # usage on server
+    seqs = tokenizer.texts_to_sequences([corpus])
+    padded_seqs = pad_token_sequences(seqs)
 
-
+    # predictor
+    Y_preds = tuned_model.predict(padded_seqs)
 
 
 @app.errorhandler(404)

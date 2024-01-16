@@ -9,6 +9,7 @@ import pandas as pd
 from pathlib import Path
 from splitfolders import ratio
 from tensorflow.keras.preprocessing.image import ImageDataGenerator
+from tensorflow.keras.preprocessing.text import tokenizer_from_json
 
 
 # for NLP data
@@ -97,6 +98,26 @@ def load_model(path: str):
         file.close()
 
     return model
+
+def save_tokenizer(path: str, tokenizer):
+    """
+    saves the tokenizer fitted on the NLP training data 
+    """
+    tokenizer_json = tokenizer.to_json()
+    with open(path, 'w', encoding='utf-8') as file:
+        json.dump(tokenizer_json, file, ensure_ascii=False)
+        file.close()
+
+def load_tokenizer(path: str):
+    """
+    The data can be loaded using tokenizer_from_json function 
+    from keras_preprocessing.text
+    """
+    with open(path, 'r') as f:
+        data = json.load(f)
+        tokenizer = tokenizer_from_json(data)
+
+    return tokenizer
 
 def construct_embedding_dict(emb_path):
     """
