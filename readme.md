@@ -20,17 +20,52 @@
 # File structure:
 ```
 |- client-side
+    |- public
+    |- src
+        |- assets
+            |- mediafiles
+        |- boards
+            |- *.png/jpg/jpeg/gig
+        |- components
+            |- *.svelte/jsx
+        |- App.svelte/jsx
+        |- index.css
+        |- main.js
+        |- vite-env.d.ts
+    |- index.html
+    |- package.json
+    |- package-lock.json
+    |- ...
 |- server-side
     |- modelling
         |- data
         |- figures & images
+            |- *.png/jpg/jpeg/gif
         |- final
+            |- misc
+            |- models
+            |- weights
         |- metrics
+            |- __init__.py
+            |- custom.py
         |- models
+            |- __init__.py
+            |- arcs.py
         |- research papers & articles
+            |- *.pdf
         |- saved
+            |- misc
+            |- models
+            |- weights
         |- utilities
+            |- __init__.py
+            |- loaders.py
+            |- preprocessors.py
+            |- visualizers.py
         |- __init__.py
+        |- experimentation.ipynb
+        |- testing.ipynb
+        |- training.ipynb
     |- static
         |- assets
             |- *.js
