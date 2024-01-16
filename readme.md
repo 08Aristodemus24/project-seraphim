@@ -17,7 +17,34 @@
 # App usage:
 1. control panel of app will have 3 inputs: prompt, temperature, and sequence length. Prompt can be understood as the starting point in which our model will append certain words during generation for instance if the prompt given is "jordan" then model might generate "jordan is a country in the middle east" and so on. Temperature input can be understood as "how much the do you want the model to generate diverse sequences or words?" e.g. if a diversity of 2 (this is the max value for diversity/temperature by the way) then then the model might potentially generate incomprehensible words (almost made up words) e.g. "jordan djanna sounlava kianpo". And lastly Sequence Length is how long do you want the generated sequence to be in terms of character length for isntance if sequence length is 10 then generated sequence would be "jordan is."
 
-# Articles
+# File structure:
+```
+|- client-side
+|- server-side
+    |- modelling
+        |- data
+        |- figures & images
+        |- final
+        |- metrics
+        |- models
+        |- research papers & articles
+        |- saved
+        |- utilities
+        |- __init__.py
+    |- static
+        |- assets
+            |- *.js
+            |- *.css
+        |- index.html
+    |- index.py
+    |- server.py
+    |- requirements.txt
+|- demo-video.mp5
+|- .gitignore
+|- readme.md
+```
+
+# Articles:
 1. multiple/ensemble model training: 
 * https://www.geeksforgeeks.org/lazy-predict-library-in-python-for-machine-learning/
 * https://medium.com/omics-diary/how-to-use-the-lazy-predict-library-to-select-the-best-machine-learning-model-65378bf4568e
@@ -116,8 +143,8 @@ Visualizers:
 * fix image upload fields image height ! needs to be responsive from 1600px to 320px
 
 # Prebuilt template functions for server-side
-* for general models
-* for tensorflow models
+* <s>for general models</s>
+* <s>for tensorflow models</s>
 * using a pipeline for preprocessing user input from client-side using 
 a preprocessing function e.g. featture vector -> normalizer loaded with 
 specific mean and standard deviation, do I use a saved .json object with
@@ -212,6 +239,12 @@ c. categorical vectors to sentiments/emotional reactions class (such is the case
 * writing dropout for CNNs https://machinelearningmastery.com/dropout-for-regularizing-deep-neural-networks/
 
 
+# Tuner template for image processing model
+* only thing that is left now is to build a tuner for this
+* then figure out a way to upload the these modules so I can access these models on a notebook on collab easily
+* 
+* collab is where I will train the baseline
+* collab is where I will 
 
 # Insights
 now I understand

@@ -18,7 +18,7 @@ from tensorflow.keras.callbacks import ModelCheckpoint, EarlyStopping
 import numpy as np
 
 
-def load_model_a(conv_layers_options, pool_layers_options, padding, dense_layers_dims, lambda_=0.0, drop_prob=0.0, normalize=False):
+def load_baseline_a(conv_layers_options, pool_layers_options, padding, dense_layers_dims, lambda_=0.0, drop_prob=0.0, normalize=False):
     
     # define architecture
     model = Sequential(name='architecture-A')
@@ -144,7 +144,7 @@ def main():
     Y = tf.one_hot(Y, depth=n_unique)
 
     # instantiate custom model
-    raw_model = load_model_a(
+    raw_model = load_baseline_a(
         conv_layers_options=conv_layers_options, 
         pool_layers_options=pool_layers_options,
         dense_layers_dims=dense_layers_dims,
