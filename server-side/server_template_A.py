@@ -42,7 +42,7 @@ def load_preprocessors():
     the dataset to later transform raw user input from
     client-side
     """
-    
+
     global saved_bc_scaler, saved_bc_Y_le
     saved_bc_scaler = load_model('./modelling/misc/saved/bc_scaler.pkl')
     saved_bc_Y_le = load_model('./modelling/misc/saved/bc_Y_le.pkl')
@@ -75,9 +75,40 @@ def retrieve_model_names():
 
 @app.route('/predict', methods=['POST'])
 def predict():
+    # extract raw data from client
     raw_data = request.json
+    raw_data['']
+
+    # min is -124 and max is -114
+    longitude = float(raw_data['longitude'])
+
+    # min is 32.5 and max is 42
+    latitude = float(raw_data['latitude'])
+
+    # 1 and 52
+    house_med_age = float(raw_data['housing-median-age'])
+
+    # 1 and 39300
+    total_rooms = float(raw_data['total-rooms'])
+
+    # 1 and 6450
+    total_bedrooms = float(raw_data['total-bedrooms'])
+
+    # 3 and 35700
+    population = float(raw_data['population'])
+
+    # 1 and 6080
+    households = float(raw_data['households'])
+
+    # 0.5 and 15
+    med_income = float(raw_data['median-income'])
+
+    print(f"{longitude}, {latitude}, {house_med_age}, {total_rooms}, {total_bedrooms}, {population}, {households}, {med_income}")
+    X = np.array([longitude, latitude, house_med_age, total_rooms, total_bedrooms, population, households, med_income])
     print(raw_data)
 
+    # preprocess raw data from user
+    
 
 
     return jsonify({})
