@@ -12,7 +12,7 @@ from pathlib import Path
 import os
 
 # import and load model architectures as well as decoder
-from modelling.models.arcs import GenPhiloTextA, generate
+from modelling.models.arcs_template_B import GenPhiloTextA, generate
 from modelling.utilities.preprocessors import (
     decode_id_sequences, 
     map_value_to_index, 
@@ -25,12 +25,16 @@ from modelling.utilities.preprocessors import (
     stem_corpus_words, 
     lemmatize_corpus_words, 
     strip_final_corpus,
-    pad_token_sequences)
+    pad_token_sequences,
+    decode_one_hot, 
+    translate_labels,
+)
     
 from modelling.utilities.loaders import (
     load_lookup_table, 
     load_hyper_params, 
-    load_tokenizer)
+    load_tokenizer,
+    load_model as model_loader)
 
 import tensorflow as tf
 
@@ -70,10 +74,12 @@ def load_preprocessors():
     raw user input from client-side
     """
 
-    global tokenizer
-    tokenizer = load_tokenizer('./saved/misc/tokenizer.json')
+    global saved_tokenizer, saved_hos_Y_le
+    saved_tokenizer = load_tokenizer('./saved/misc/tokenizer.json')
+    saved_hos_Y_le = model_loader('./saved/misc/hos_Y_le.pkl')
 
-def load_model():
+
+def load_model_weights():
     """
     prepares and loads sample input and custom model in
     order to use trained weights/parameters/coefficients
@@ -102,7 +108,7 @@ def load_model():
     # load weights
     model.load_weights('./modelling/final/weights/notes_gen_philo_text_a_100_3.0299.h5')
 
-def load_model_2():
+def load_model():
     """
     prepares and loads a saved .h5 model instead iof its
     weights in order to quickly load both architecture
@@ -114,6 +120,8 @@ def load_model_2():
 
 
 load_misc()
+load_preprocessors()
+load_model_weights()
 load_model()
 
 
@@ -124,13 +132,19 @@ def index():
 
 @app.route('/predict', methods=['POST'])
 def predict():
+    # extract raw data from client
     raw_data = request.json
-
-    # encoder
-    prompt = [remove_contractions(raw_data['prompt'])]
-    temperature = float(raw_data['temperature'])
-    T_x = int(raw_data['sequence_length'])
     print(raw_data)
+
+    # encoder to preprocess prompt input from client
+    prompt = remove_contractions(raw_data['prompt'])
+    prompt = rem_non_alpha_num(prompt)
+    prompt = [prompt]
+
+    temperature = float(raw_data['temperature'])
+
+    T_x = int(raw_data['sequence_length'])
+    
 
     # predictor
     pred_ids = generate(model, prompts=prompt, char_to_idx=char_to_idx, T_x=T_x, temperature=temperature)
@@ -142,7 +156,7 @@ def predict():
 
 @app.route('/tuned-predict', methods=['POST'])
 def tuned_predict():
-    # 
+    # extract raw data from client
     raw_data = request.json
     tweet = raw_data['tweet']
 
@@ -166,7 +180,11 @@ def tuned_predict():
 
     # predictor
     Y_preds = tuned_model.predict(padded_seqs)
+    sparse_Y_preds = decode_one_hot(Y_preds)
+    decoded_sparse_Y_preds = saved_hos_Y_le.inverse_transform(sparse_Y_preds)
+    translated_labels = translate_labels(decoded_sparse_Y_preds)
 
+    jsonify({'prediction': translated_labels})
 
 @app.errorhandler(404)
 def page_not_found(error):

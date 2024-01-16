@@ -89,8 +89,8 @@ def save_model(model, path: str):
 
 def load_model(path: str):
     """
-    loads the sklearn model stored in a .pkl file
-    for later testing
+    loads the sklearn model, scaler, or encoder stored
+    in a .pkl file for later testing and deployment
     """
 
     with open(path, 'rb') as file:
