@@ -180,6 +180,8 @@ def tuned_predict():
 
     # predictor
     Y_preds = tuned_model.predict(padded_seqs)
+
+    # decoder
     sparse_Y_preds = decode_one_hot(Y_preds)
     decoded_sparse_Y_preds = saved_hos_Y_le.inverse_transform(sparse_Y_preds)
     translated_labels = translate_labels(decoded_sparse_Y_preds)

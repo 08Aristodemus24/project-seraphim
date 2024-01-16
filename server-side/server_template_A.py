@@ -12,8 +12,11 @@ from pathlib import Path
 import os
 
 from modelling.utilities.loaders import load_model
+from modelling.utilities.preprocessors import (
+    translate_labels,
+)
 
-# # configure location of build file and the static html template file
+# configure location of build file and the static html template file
 app = Flask(__name__, template_folder='static')
 
 # since simple html from url http://127.0.0.1:5000 requests to
@@ -23,6 +26,7 @@ app = Flask(__name__, template_folder='static')
 CORS(app, origins=["http://localhost:5173", "http://127.0.0.1:5000",])
 
 model_names = []
+models = []
 scaler = None
 encoder = None
 
@@ -35,6 +39,7 @@ def load_models():
     # recreate model architecture
     saved_lgbm = load_model('./modelling/saved/models/lgbm.pkl')
     model_names.append(type(saved_lgbm).__name__)
+    models.append(saved_lgbm)
 
 def load_preprocessors():
     """
@@ -77,40 +82,23 @@ def retrieve_model_names():
 def predict():
     # extract raw data from client
     raw_data = request.json
-    raw_data['']
-
-    # min is -124 and max is -114
-    longitude = float(raw_data['longitude'])
-
-    # min is 32.5 and max is 42
-    latitude = float(raw_data['latitude'])
-
-    # 1 and 52
-    house_med_age = float(raw_data['housing-median-age'])
-
-    # 1 and 39300
-    total_rooms = float(raw_data['total-rooms'])
-
-    # 1 and 6450
-    total_bedrooms = float(raw_data['total-bedrooms'])
-
-    # 3 and 35700
-    population = float(raw_data['population'])
-
-    # 1 and 6080
-    households = float(raw_data['households'])
-
-    # 0.5 and 15
-    med_income = float(raw_data['median-income'])
-
-    print(f"{longitude}, {latitude}, {house_med_age}, {total_rooms}, {total_bedrooms}, {population}, {households}, {med_income}")
-    X = np.array([longitude, latitude, house_med_age, total_rooms, total_bedrooms, population, households, med_income])
     print(raw_data)
 
-    # preprocess raw data from user
+    # encoding and preprocessing
+    radius_mean = float(raw_data['radius-mean'])
+    texture_mean = float(raw_data['texture-mean'])
+    perimeter_mean = float(raw_data['perimeter-mean'])
+    area_mean = float(raw_data['area-mean'])
+    smoothness_mean = float(raw_data['smoothness-mean'])
+
+    # once x features are collected normalize the array on the 
+    # saved scaler
+    X = [radius_mean, texture_mean, perimeter_mean, area_mean, smoothness_mean]
+    X_normed = saved_bc_scaler.transform(X)
     
+    # predictor
+    Y_preds = models[0].predict(X_normed)
+    decoded_sparse_Y_preds = saved_bc_Y_le.inverse_transform(Y_preds)
+    translated_labels = translate_labels(decoded_sparse_Y_preds, translations={'M': 'Malignant', 'B': 'Benign'})
 
-
-    return jsonify({})
-
-# write here function that will take in all user input from client
+    return jsonify({'diagnosis': translated_labels})
