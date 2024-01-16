@@ -213,7 +213,7 @@ c. categorical vectors to sentiments/emotional reactions class (such is the case
 
 
 
-
+# Insights
 now I understand
 lambda
 n_rnn_units
@@ -231,3 +231,13 @@ why do we still have in tuner.search a set number of epochs which is higher than
 maybe max_epochs is just really meant to be the MAXIMUM epochs tuner.search would go sincei t is after all a hyper param that needs to be tuned only in this RANGE
 
 I have 30 trials over all so maybe the max epochs 10 and factor 3 is multiplied to trial 30 times different hyper params
+
+The algorithm trains a large number of models for a few epochs e.g. 1 epoch for the first trial and carries forward only the top-performing half of models to the next round/trial/bracket
+
+Hyperband determines the number of models to train in a bracket by computing 1 + logfactor(max_epochs) and rounding it up to the nearest integer.
+
+so if factor is 3 and the max_epochs is 10 then $log_{3}(10)$ would be 2.09590 and when added to 1 is 3.09590 which when rounded is 3
+
+so if we have 3 models per round/trial/bracket and we take only the top performing half of these 3 models
+
+for maxepochs of 5 and factor of 3 the number of trials were 10

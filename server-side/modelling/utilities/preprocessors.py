@@ -305,7 +305,7 @@ def sentences2tok_sequences(n_unique, sents: pd.Series):
     word_to_index = tokenizer.word_index
     index_to_word = tokenizer.index_word
 
-    return seqs, word_to_index, index_to_word
+    return seqs, tokenizer, word_to_index, index_to_word
 
 def pad_token_sequences(seqs, n_time_steps: int=50):
     """

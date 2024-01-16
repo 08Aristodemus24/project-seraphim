@@ -33,6 +33,7 @@ char_to_idx = None
 idx_to_char = None
 hyper_params = None
 model = None
+tuned_model = None
 
 
 # functions to load miscellaneous variables, hyperparameters, and the model itself
@@ -75,6 +76,16 @@ def load_model():
     # load weights
     model.load_weights('./modelling/final/weights/notes_gen_philo_text_a_100_3.0299.h5')
 
+def load_model_2():
+    """
+    prepares and loads a saved .h5 model instead iof its
+    weights in order to quickly load both architecture
+    and its optimized coefficeints/weights/parameters
+    """
+    global tuned_model
+    tuned_model = tf.keras.models.load_model('./modelling/saved/models/tuned_hate-speech-lstm.h5')
+
+
 load_misc()
 load_model()
 
@@ -96,6 +107,30 @@ def predict():
     decoded_ids = decode_predictions(pred_ids, idx_to_char=idx_to_char)
 
     return jsonify({'message': decoded_ids})
+
+@app.route('/tuned-predict', methods=['POST'])
+def tuned_predict():
+    # 
+    raw_data = request.json
+    tweet = raw_data['tweet']
+
+    # preprocess tweet using preprocessors used in training
+    # tweet = lower_words(tweet)
+    # clean_tweets()
+    # remove_contractions()
+    # rem_non_alpha_num
+    # rem_numeric
+    # rem_stop_words
+    # stem_corpus_words
+    # lemmatize_corpus_words
+    # strip_final_corpus
+
+    # this is where we will need to access the Tokenizer we
+    # trained on the training data by saving it prior to
+    # usage on server
+
+
+
 
 @app.errorhandler(404)
 def page_not_found(error):

@@ -586,9 +586,6 @@ class ModelResults:
             function build_results()
         """
 
-        # use matplotlib backend
-        mpl.use('Agg')
-
         figure = plt.figure(figsize=(15, 10))
         axis = figure.add_subplot()
 
@@ -616,7 +613,15 @@ class ModelResults:
                 # e.g. loss, val_loss has indeces 0 and 1
                 # binary_cross_entropy, val_binary_cross_entropy 
                 # has indeces 2 and 3
-                axis.plot(np.arange(len(epochs)), value, styles[curr_metrics_indeces[index]][0], color=styles[curr_metrics_indeces[index]][1], alpha=0.5, label=key)
+                axis.plot(
+                    np.arange(len(epochs)), 
+                    value, 
+                    styles[curr_metrics_indeces[index]][0], 
+                    color=styles[curr_metrics_indeces[index]][1], 
+                    alpha=0.5, 
+                    label=key, 
+                    markersize=10, 
+                    linewidth=3)
             else:
                 # here if the metric value is not hte loss or 
                 # validation loss each element is rounded by 2 
@@ -625,16 +630,24 @@ class ModelResults:
                 # to get much accurate depiction of metric value
                 # that is not in decimal format
                 metric_perc = [round(val * 100, 2) for val in value]
-                axis.plot(np.arange(len(epochs)), metric_perc, styles[curr_metrics_indeces[index]][0], color=styles[curr_metrics_indeces[index]][1], alpha=0.5, label=key)
+                axis.plot(
+                    np.arange(len(epochs)), 
+                    metric_perc, 
+                    styles[curr_metrics_indeces[index]][0], 
+                    color=styles[curr_metrics_indeces[index]][1], 
+                    alpha=0.5, 
+                    label=key, 
+                    markersize=10, 
+                    linewidth=3)
 
         # annotate end of lines
         for index, (key, value) in enumerate(results.items()):        
             if key == "loss" or key == "val_loss":
                 last_loss_rounded = round(value[-1], 2)
-                axis.annotate(last_loss_rounded, xy=(epochs[-1], value[-1]), color=styles[curr_metrics_indeces[index]][1])
+                axis.annotate(last_loss_rounded, xy=(epochs[-1], value[-1]), color='black', alpha=1)
             else: 
                 last_metric_perc = round(value[-1] * 100, 2)
-                axis.annotate(last_metric_perc, xy=(epochs[-1], value[-1] * 100), color=styles[curr_metrics_indeces[index]][1])
+                axis.annotate(last_metric_perc, xy=(epochs[-1], value[-1] * 100), color='black', alpha=1)
 
         axis.set_ylabel('metric value', )
         axis.set_xlabel('epochs', )
@@ -780,5 +793,39 @@ def view_images(data_gen, grid_dims: tuple=(2, 6), size: tuple=(25, 10), model=N
         plt.title(title, )
     
     if save_img == True:
+        plt.savefig(f'./figures & images/{img_title}.png')
+        plt.show()
+
+
+def view_all_splits_results(history_dict: dict, save_img: bool=True, img_title: str="untitled"):
+    """
+    
+    """
+    history_df = pd.DataFrame(history_dict)
+    print(history_df)
+
+    palettes = np.array(['#f54949', '#f59a45', '#afb809', '#51ad00', '#03a65d', '#035aa6', '#03078a', '#6902e6', '#c005e6', '#fa69a3', '#240511', '#052224', '#402708', '#000000'])
+    markers = np.array(['o', 'v', '^', '8', '*', 'p', 'h', ])#'x', '+', '>', 'd', 'H', '3', '4'])
+
+    sampled_indeces = np.random.choice(list(range(len(markers))), size=history_df.shape[1], replace=False)
+
+    print(palettes[sampled_indeces])
+    print(markers[sampled_indeces])
+
+    figure = plt.figure(figsize=(15, 10))
+    axis = sb.lineplot(data=history_df, 
+        palette=palettes[sampled_indeces].tolist(),
+        markers=markers[sampled_indeces].tolist(), 
+        linewidth=3.0,
+        markersize=9,
+        alpha=0.75)
+    
+    axis.set_ylabel('metric value', )
+    axis.set_xlabel('epochs', )
+    axis.set_title(img_title, )
+    axis.legend()
+
+    if save_img == True:
+        print(save_img)
         plt.savefig(f'./figures & images/{img_title}.png')
         plt.show()

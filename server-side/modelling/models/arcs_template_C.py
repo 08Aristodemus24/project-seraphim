@@ -137,7 +137,7 @@ class HOSClassifierHyperModel(kt.HyperModel):
 
         return model
     
-def load_tuner(hyper_model, metric='val_accuracy', objective='max', max_epochs=10, factor=3):
+def load_tuner(hyper_model, metric='val_accuracy', objective='max', max_epochs=10, factor=3, save_path: str='./saved/tuned_models'):
     
     obj = kt.Objective(metric, objective)
 
@@ -146,7 +146,7 @@ def load_tuner(hyper_model, metric='val_accuracy', objective='max', max_epochs=1
         objective=obj, 
         max_epochs=max_epochs,
         factor=factor,
-        directory='./saved/tuned_models',
+        directory=save_path,
         project_name='model'
     )
 
