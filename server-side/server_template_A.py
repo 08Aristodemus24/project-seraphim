@@ -49,8 +49,8 @@ def load_preprocessors():
     """
 
     global saved_bc_scaler, saved_bc_Y_le
-    saved_bc_scaler = load_model('./modelling/misc/saved/bc_scaler.pkl')
-    saved_bc_Y_le = load_model('./modelling/misc/saved/bc_Y_le.pkl')
+    saved_bc_scaler = load_model('./modelling/saved/misc/bc_scaler.pkl')
+    saved_bc_Y_le = load_model('./modelling/saved/misc/bc_Y_le.pkl')
 
 load_models()
 load_preprocessors()
@@ -102,3 +102,12 @@ def predict():
     translated_labels = translate_labels(decoded_sparse_Y_preds, translations={'M': 'Malignant', 'B': 'Benign'})
 
     return jsonify({'diagnosis': translated_labels})
+
+@app.route('/send-data', methods=['POST'])
+def test_predict_a():
+    # extract raw data from client
+    raw_data = request.json
+    print(raw_data)
+
+
+    return jsonify({'test': 0})

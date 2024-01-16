@@ -40,47 +40,58 @@
     let country_code = "";
     let mobile_num = "";
     let message = "";
+    let model_name = "";
+    let prompt = "";
+    let seq_len = 250;
+    let temperature = 1.0;
+    let images = null;
 
-    const handle_submit = (event) => {
-        console.log('hello');
+    const handle_submit =  (event) => {
         const data = {
             first_name: first_name,
             last_name: last_name,
             email_address: email_address,
             country_code: country_code,
             mobile_num: mobile_num,
-            message: message
+            message: message,
+            model_name: model_name,
+            prompt: prompt,
+            seq_len: seq_len,
+            temperature: temperature,
         };
 
         dispatch('sendData', data);
     };
 
+    afterUpdate(() => {
+        console.log(images)
+    })
+
     
 </script>
 
 <div class="form-container">
-    <form 
+    <form
         class={`form ${style}`}
         style:--primary-color={palette[theme].primary_color} 
         style:--secondary-color={palette[theme].secondary_color} 
         style:--tertiary-color={palette[theme].tertiary_color}
-        on:submit={handle_submit}
+        on:submit|preventDefault={handle_submit}
         bind:this={form}
-        method="POST" 
+        method="post" 
     >
-        <NameInput name_type="first" style="dark-neomorphic" theme="dark" name={first_name}/>
-        <NameInput name_type="last" style="dark-neomorphic" theme="dark" name={last_name}/>
-        <EmailInput style="dark-neomorphic" theme="dark" email_address={email_address}/>
-        <MobileNumberInput style="dark-neomorphic" theme="dark" mobile_num={mobile_num}/>
-        <CountryCodeInput style="dark-neomorphic" theme="dark" country_code={country_code}/>
-        <MessageInput style="dark-neomorphic" theme="dark" message={message}/>
-        <ModelNameInput style="dark-neomorphic" theme="dark"/>
-        <PromptInput style="dark-neomorphic" theme="dark"/>
-        <SequenceLengthInput style="dark-neomorphic" theme="dark"/>
-        <TemperatureInput style="dark-neomorphic" theme="dark"/>
-        <ImageInput style="dark-neomorphic" theme="dark"/>
+        <NameInput name_type="first" style="dark-neomorphic" theme="dark" bind:name={first_name}/>
+        <NameInput name_type="last" style="dark-neomorphic" theme="dark" bind:name={last_name}/>
+        <EmailInput style="dark-neomorphic" theme="dark" bind:email_address={email_address}/>
+        <MobileNumberInput style="dark-neomorphic" theme="dark" bind:mobile_num={mobile_num}/>
+        <CountryCodeInput style="dark-neomorphic" theme="dark" bind:country_code={country_code}/>
+        <MessageInput style="dark-neomorphic" theme="dark" bind:message={message}/>
+        <ModelNameInput style="dark-neomorphic" theme="dark" bind:model_name={model_name}/>
+        <PromptInput style="dark-neomorphic" theme="dark" bind:prompt={prompt}/>
+        <SequenceLengthInput style="dark-neomorphic" theme="dark" bind:seq_len={seq_len}/>
+        <TemperatureInput style="dark-neomorphic" theme="dark" bind:temperature={temperature}/>
+        <ImageInput style="dark-neomorphic" theme="dark" bind:images={images}/>
         <Button style="dark-neomorphic" theme="dark"/>
-        <button type="submit">test</button>
     </form>
 </div>
 

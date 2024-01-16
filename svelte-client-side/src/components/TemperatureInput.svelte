@@ -35,7 +35,7 @@
         }
     };
 
-    export let temperature = 1.0;
+    export let temperature;
 </script>
 
 <div 
