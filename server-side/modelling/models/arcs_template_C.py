@@ -147,7 +147,7 @@ def load_tuner(hyper_model, metric='val_accuracy', objective='max', max_epochs=1
         max_epochs=max_epochs,
         factor=factor,
         directory=save_path,
-        project_name='model'
+        project_name='tuned_model'
     )
 
     return tuner

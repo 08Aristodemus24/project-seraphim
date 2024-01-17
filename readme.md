@@ -277,7 +277,7 @@ c. categorical vectors to sentiments/emotional reactions class (such is the case
 # Tuner template for image processing model
 * only thing that is left now is to build a tuner for this
 * then figure out a way to upload the these modules so I can access these models on a notebook on collab easily
-
+* also how do I encode labels for each category? No wait it is already done by the create_image_set() loader
 
 
 # Instructions for loading, preprocessing, and visualizing data as well as training and tuning models

@@ -1,5 +1,6 @@
 /server-side/modelling/weights/
 /server-side/modelling/data/
+/server-side/modelling/tuned_model/
 /shop-visual-aids/*.mp4
 /shop-visual-aids/*.mov
 /.env
@@ -29,27 +30,3 @@
 /svelte-client-side/*.sln
 /svelte-client-side/*.sw?
 
-# Logs
-/svelte-client-side-2/logs
-/svelte-client-side-2/*.log
-/svelte-client-side-2/npm-debug.log*
-/svelte-client-side-2/yarn-debug.log*
-/svelte-client-side-2/yarn-error.log*
-/svelte-client-side-2/pnpm-debug.log*
-/svelte-client-side-2/lerna-debug.log*
-
-/svelte-client-side-2/node_modules
-/svelte-client-side-2/dist
-/svelte-client-side-2/dist-ssr
-/svelte-client-side-2/*.local
-
-# Editor directories and files
-/svelte-client-side-2/.vscode/*
-/svelte-client-side-2/!.vscode/extensions.json
-/svelte-client-side-2/.idea
-/svelte-client-side-2/.DS_Store
-/svelte-client-side-2/*.suo
-/svelte-client-side-2/*.ntvs*
-/svelte-client-side-2/*.njsproj
-/svelte-client-side-2/*.sln
-/svelte-client-side-2/*.sw?

@@ -91,121 +91,107 @@ def train_model(compiled_model, training_data, validation_data, epochs, batch_si
         verbose=2,)
     
     return history
-    
-def main():
-    # hyperparameters
-    m = 20
-    height = 256
-    width = 256
-    n_channels = 256
-    n_unique = 8
-    
-    
-    conv_layers_options = [
-        {'n_filters': 8, 'kernel_size': (5, 5), 'kernel_strides': (1, 1)},
-        {'n_filters': 16, 'kernel_size': (5, 5), 'kernel_strides': (1, 1)},
-        
-    ]
-    pool_layers_options = [
-        {'pool_size': (2, 2), 'pool_strides': (2, 2)},
-        {'pool_size': (2, 2), 'pool_strides': (1, 1)},
-    ]
-    dense_layers_dims = [32, 16, n_unique]
-    padding = 'same'
-
-    lambda_ = 0.8
-    drop_prob = 0.4
-    normalize = False
-    learning_rate = 1e-3
-    epochs = 30
-    batch_size = 512
-    
-
-    # create dummy (m, height, width, n_channels) dataset
-    X = (np.random.randint(0, 256, size=(m, height, width, n_channels)) * 1.0) / 255
-
-    # create an array of labels of 8 unique values representing our
-    # different categories/classes of image of m length
-    Y = np.random.randint(0, n_unique, size=(m,))
-
-    # one hot encode our dummy labels 
-    Y = tf.one_hot(Y, depth=n_unique)
-
-    # instantiate custom model
-    raw_model = load_baseline_a(
-        conv_layers_options=conv_layers_options, 
-        pool_layers_options=pool_layers_options,
-        dense_layers_dims=dense_layers_dims,
-        padding=padding,
-        lambda_=lambda_,
-        normalize=False
-    )
-
-    compiled_model = compile_model(
-        raw_model=raw_model,
-        X=X,
-        learning_rate=learning_rate
-    )
-
-    history = train_model(
-        compiled_model,
-        X, 
-        Y,
-        epochs=epochs,
-        batch_size=batch_size
-    )
 
 class MOClassifierHyperModel(kt.HyperModel):
-    def __init__(self, name=None, tunable=True):
+    def __init__(self, n_classes, name=None, tunable=True):
         super().__init__(name, tunable)
+        self.n_classes = n_classes
 
     def build(self, hp):
+        # convolutional layers hyper parameters
+        hp_filter = hp.Choice('n_filter', values=[8, 16, 32, 64])
+        hp_kernel_size = hp.Choice('kernel_size', values=[(3, 3), (4, 4), (5, 5)])
+        hp_padding = hp.Choice('padding', values=['same', 'valid'])
+
+        # pooling layers hyper parameters
+        hp_pool_size = hp.Choice('pool_size', values=[(2, 2), (3, 3)])
+        hp_pool_strides = hp.Choice('pool_strides', values=[(1, 1), (2, 2)])
+
+        # fully connected layers hyper params
+        hp_num_dense_units = hp.Choice('n_dense_units', values=[64, 32])
+
+        # learning rate alpha
+        hp_learning_rate = hp.Choice('learning_rate', values=[1.2, 0.03, 0.01, 0.0075, 0.003, 0.001])
+
+        # regularization value lambda
+        hp_lambda = hp.Choice('lambda', values=[1.2, 1.0, 0.9, 0.8, 0.7, 0.6, 0.5, 0.25, 0.125, 0.01])
+
+        # the drop probability values, instead of keep probability
+        hp_dropout = hp.Choice('dropout', values=[0.1, 0.2, 0.3, 0.4, 0.5])
+
          # define architecture
         model = Sequential(name='architecture-A')
 
         # build conv and poollayers
-        n_conv_layers = len(conv_layers_options)
-        for cl in range(n_conv_layers):
-            model.add(Conv2D(
-                filters=conv_layers_options[cl]['n_filters'],
-                kernel_size=conv_layers_options[cl]['kernel_size'],
-                strides=conv_layers_options[cl]['kernel_strides'],
-                kernel_regularizer=L2(lambda_)
-            ))
-            model.add(Activation(activation=tf.nn.relu))
-            model.add(MaxPooling2D(
-                pool_size=pool_layers_options[cl]['pool_size'],
-                strides=pool_layers_options[cl]['pool_strides'],
-                padding=padding
-            ))
+        model.add(Conv2D(filters=hp_filter, kernel_size=hp_kernel_size, strides=(1, 1), kernel_regularizer=L2(hp_lambda)))
+        model.add(Activation(activation=tf.nn.relu))
+        model.add(MaxPooling2D(pool_size=hp_pool_size, strides=hp_pool_strides, padding=hp_padding))
+        model.add(Conv2D(filters=hp_filter, kernel_size=hp_kernel_size, strides=(1, 1), kernel_regularizer=L2(hp_lambda)))
+        model.add(Activation(activation=tf.nn.relu))
+        model.add(MaxPooling2D(pool_size=hp_pool_size, strides=hp_pool_strides, padding=hp_padding))
 
         # flatten pooled layers
         model.add(Flatten())
 
-        # build fully connected layers, excluding final layer
-        n_dense_layers = len(dense_layers_dims) - 1
-        for dl in range(n_dense_layers):
-            model.add(Dense(
-                units=dense_layers_dims[dl],
-                kernel_regularizer=L2(lambda_)
-            ))
+        # build fully connected layers
+        model.add(Dense(units=hp_num_dense_units, kernel_regularizer=L2(hp_lambda)))
+        model.add(BatchNormalization())
 
-            # pass dense through normalization layer if true
-            if normalize == True:
-                model.add(BatchNormalization())
-
-            # pass dense or batch normalized layer
-            model.add(Activation(activation=tf.nn.relu))
+        # pass dense or batch normalized layer
+        model.add(Activation(activation=tf.nn.relu))
+        model.add(Dropout(rate=hp_dropout))
 
         # add final dense layer with final dimension of
         # the dense_layers_dims value
-        model.add(Dense(
-            units=dense_layers_dims[-1],
-            kernel_regularizer=L2(lambda_)
-        ))
+        model.add(Dense(units=self.n_classes, kernel_regularizer=L2(hp_lambda)))
+
+        # define loss, optimizer, and metrics
+        loss = cce_loss(from_logits=True)
+        opt = Adam(learning_rate=hp_learning_rate)
+        metrics = [cce_metric(from_logits=True), CategoricalAccuracy()]
+        model.compile(
+            loss=loss,
+            optimizer=opt,
+            metrics=metrics
+        )
 
         return model
 
+def load_tuner(hyper_model, metric='val_categorical_accuracy', objective='max', max_epochs=10, factor=3, save_path: str='./saved/tuned_models'):
+    
+    obj = kt.Objective(metric, objective)
+
+    tuner = kt.Hyperband(
+        hyper_model, 
+        objective=obj, 
+        max_epochs=max_epochs,
+        factor=factor,
+        directory=save_path,
+        project_name='tuned_models'
+    )
+
+    return tuner
+
+def train_tuner(tuner, training_data, validation_data, epochs=10, batch_size=128):
+    # define checkpoint and early stopping callback to save
+    # best weights at each epoch and to stop if there is no 
+    # improvement of validation loss for 3 consecutive epochs
+    # since we are only using a tuner
+    stopper = EarlyStopping(monitor='val_categorical_accuracy', patience=5)
+    callbacks = [stopper]
+    
+    # fit model to data
+    tuner.search(
+        training_data,
+        epochs=epochs, 
+        batch_size=batch_size,
+        validation_data=validation_data,
+        callbacks=callbacks
+    )
+
+    best_params = tuner.get_best_hyperparameters()[0]
+
+    return best_params
 
     
     
