@@ -281,7 +281,12 @@ c. categorical vectors to sentiments/emotional reactions class (such is the case
 
 
 # Instructions for loading, preprocessing, and visualizing data as well as training and tuning models
+* clone project-seraphim
 * collab is where you will import only the basic libraries for reading and splitting data since data is highly variable and cannot be loaded by a single function
+* delete uneccessary libraries and cells in experimentation.ipynb
+* delete uneccessary libraries and functions in loaders.py
+* delete uneccessary libraries and functions in preprocessors.py
+* delete uneccessary libraries and functions in visualizers.py
 * collab is where I will load, preprocess, and visualize data using loaders, processors, and visualizers
 * collab is where I will train the baseline
 * collab is where I will save the baseline
