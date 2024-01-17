@@ -829,3 +829,6 @@ def view_all_splits_results(history_dict: dict, save_img: bool=True, img_title: 
         print(save_img)
         plt.savefig(f'./figures & images/{img_title}.png')
         plt.show()
+
+def show_image(img):
+    plt.imshow(img)

@@ -42,29 +42,31 @@
     let message = "";
     let model_name = "";
     let prompt = "";
-    let seq_len = 250;
-    let temperature = 1.0;
-    let images = null;
+    let seq_len = "250";
+    let temperature = "1.0";
+    let image = null;
 
-    const handle_submit =  (event) => {
-        const data = {
-            first_name: first_name,
-            last_name: last_name,
-            email_address: email_address,
-            country_code: country_code,
-            mobile_num: mobile_num,
-            message: message,
-            model_name: model_name,
-            prompt: prompt,
-            seq_len: seq_len,
-            temperature: temperature,
-        };
-
-        dispatch('sendData', data);
+    const handle_submit = async () => {
+        const form_data = new FormData();
+        form_data.append('first_name', first_name);
+        form_data.append('last_name', last_name);
+        form_data.append('email_address', email_address);
+        form_data.append('country_code', country_code);
+        form_data.append('mobile_num', mobile_num);
+        form_data.append('message', message);
+        form_data.append('model_name', model_name);
+        form_data.append('prompt', prompt);
+        form_data.append('seq_len', seq_len);
+        form_data.append('temperature', temperature);
+        form_data.append('image', image);
+        for(var pair of form_data.entries()) {
+            console.log(pair[0]+', '+pair[1]);
+        }
+        dispatch('sendData', form_data);
     };
 
     afterUpdate(() => {
-        console.log(images)
+        console.log(image);
     })
 
     
@@ -90,7 +92,7 @@
         <PromptInput style="dark-neomorphic" theme="dark" bind:prompt={prompt}/>
         <SequenceLengthInput style="dark-neomorphic" theme="dark" bind:seq_len={seq_len}/>
         <TemperatureInput style="dark-neomorphic" theme="dark" bind:temperature={temperature}/>
-        <ImageInput style="dark-neomorphic" theme="dark" bind:images={images}/>
+        <ImageInput style="dark-neomorphic" theme="dark" bind:image={image}/>
         <Button style="dark-neomorphic" theme="dark"/>
     </form>
 </div>

@@ -35,7 +35,7 @@
         }
     };
 
-    export let email_address = "";
+    export let email_address;
 </script>
 
 <div class={`email-container ${style}`} 

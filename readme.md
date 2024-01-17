@@ -322,3 +322,8 @@ for maxepochs of 5 and factor of 3 the number of trials were 10
 
 * deleting latest commit or any commit can be done by `git reset --hard HEAD~<nth commit e.g. 1 (means latest commit 2 means second latest commit)> to delete latest commit`
 * pushing new files that conflicts with current master branch can be forced by `git push origin <your_branch_name> --force`
+
+* https://stackoverflow.com/questions/55627884/react-fetch-api-getting-415-unsupported-media-type-using-post
+* https://dev.to/brunooliveira/uploading-a-file-svelte-form-and-springboot-backend-18m6
+* https://muffinman.io/blog/uploading-files-using-fetch-multipart-form-data/
+* https://stackoverflow.com/questions/35192841/how-do-i-post-with-multipart-form-data-using-fetch

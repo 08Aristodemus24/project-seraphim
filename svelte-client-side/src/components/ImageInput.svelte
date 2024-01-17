@@ -1,6 +1,7 @@
 <script>
     import { afterUpdate } from "svelte";
 
+
     export let style = "sharp-minimal";
     export let theme = "dark";
 
@@ -46,10 +47,18 @@
         }
     } : null;
 
-    export let images;
+    export let image;
+    let image_obj;
+    $: src = image_obj != null ? image_obj.length != 0 ? URL.createObjectURL(image_obj[0]) : null : null;
+
+    const handle_upload = async (event) => {
+        image_obj = event.target.files;
+        image = image_obj[0];
+        console.log('image uploaded');
+    }
 
     afterUpdate(async () => {
-        console.log(images);
+        console.log(image_obj);
     });
 </script>
 
@@ -64,10 +73,10 @@
     <!-- when image is uploaded images becomes are not null anymore
     but when another upload occurs and is cancelled images becomes
     a list of length 0 -->
-    <img class={`uploaded-image ${style}`} src={images != null ? images.length != 0 ? URL.createObjectURL(images[0]) : null : null} alt=" ">
+    <img class={`uploaded-image ${style}`} src={src} alt=" ">
     <div class="image-upload-field-wrapper">
         <label for="image-upload" class="image-upload-label">Image</label>    
-        <input type="file" id="image-upload" class={`image-upload-field ${style}`} bind:files={images} on:mousedown={toggler} on:mouseup={toggler}>
+        <input type="file" accept="image/*" id="image-upload" class={`image-upload-field ${style}`} on:change={handle_upload} on:mousedown={toggler} on:mouseup={toggler}>
     </div>
 </div>
 

@@ -15,6 +15,11 @@ from modelling.utilities.loaders import load_model
 from modelling.utilities.preprocessors import (
     translate_labels,
 )
+from modelling.utilities.visualizers import (
+    show_image
+)
+
+from PIL import Image
 
 # configure location of build file and the static html template file
 app = Flask(__name__, template_folder='static')
@@ -106,8 +111,26 @@ def predict():
 @app.route('/send-data', methods=['POST'])
 def test_predict_a():
     # extract raw data from client
-    raw_data = request.json
+    raw_data = request.form
+    raw_files = request.files
     print(raw_data)
+    print(raw_files)
+
+    first_name = raw_data['first_name']
+    last_name = raw_data['last_name']
+    email_address = raw_data['email_address']
+    country_code = raw_data['country_code']
+    mobile_num = raw_data['mobile_num']
+    message = raw_data['message']
+    model_name = raw_data['model_name']
+    prompt = raw_data['prompt']
+    seq_len = raw_data['seq_len']
+    temperature = raw_data['temperature']
+    image = raw_files['image']
+
+    # parse image data
+    img = Image.open(image.stream)
+    img.save('./modelling/figures & images/uploaded image.jpg')
 
 
     return jsonify({'test': 0})

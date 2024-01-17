@@ -35,7 +35,7 @@
         }
     };
 
-    export let message = "";
+    export let message;
 </script>
 
 <div class={`message-container ${style}`} 
