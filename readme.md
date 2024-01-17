@@ -270,7 +270,7 @@ a. categorical vectors to image class
 b. categorical sequences of vectors to sentences
 c. categorical vectors to sentiments/emotional reactions class (such is the case for NLP)</s>
 
-* write preprocessor for when user inputs an image from the client-side
+* <s>write preprocessor for when user inputs an image from the client-side</s>
 * writing dropout for CNNs https://machinelearningmastery.com/dropout-for-regularizing-deep-neural-networks/
 
 

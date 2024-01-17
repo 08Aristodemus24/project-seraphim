@@ -14,6 +14,8 @@ import os
 from modelling.utilities.loaders import load_model
 from modelling.utilities.preprocessors import (
     translate_labels,
+    encode_image,
+    standardize_image
 )
 from modelling.utilities.visualizers import (
     show_image
@@ -124,13 +126,18 @@ def test_predict_a():
     message = raw_data['message']
     model_name = raw_data['model_name']
     prompt = raw_data['prompt']
-    seq_len = raw_data['seq_len']
-    temperature = raw_data['temperature']
+    seq_len = int(raw_data['seq_len'])
+    temperature = float(raw_data['temperature'])
     image = raw_files['image']
 
-    # parse image data
-    img = Image.open(image.stream)
-    img.save('./modelling/figures & images/uploaded image.jpg')
+    # preprocessing/encoding image stream into a matrix
+    encoded_img = encode_image(image.stream)
+    rescaled_img = standardize_image(encoded_img)
+    print(rescaled_img.max())
+    print(rescaled_img.shape)
+
+    # predictor
+    
 
 
     return jsonify({'test': 0})
