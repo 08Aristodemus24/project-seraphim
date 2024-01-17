@@ -8,9 +8,21 @@ import pandas as pd
 
 from pathlib import Path
 from splitfolders import ratio
+
+import tensorflow as tf
 from tensorflow.keras.preprocessing.image import ImageDataGenerator
 from tensorflow.keras.preprocessing.text import tokenizer_from_json
 
+
+def device_exists():
+    """
+    returns true if gpu device exists
+    """
+
+    device_name = tf.test.gpu_device_name()
+    if device_name != '/device:GPU:0':
+        return False
+    return True
 
 # for NLP data
 def load_corpus(path: str):

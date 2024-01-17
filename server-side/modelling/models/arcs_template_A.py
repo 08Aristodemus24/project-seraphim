@@ -140,6 +140,10 @@ class MOClassifierHyperModel(kt.HyperModel):
         # pass dense or batch normalized layer
         model.add(Activation(activation=tf.nn.relu))
         model.add(Dropout(rate=hp_dropout))
+        model.add(Dense(units=hp_num_dense_units, kernel_regularizer=L2(hp_lambda)))
+        model.add(BatchNormalization())
+        model.add(Activation(activation=tf.nn.relu))
+        model.add(Dropout(rate=hp_dropout))
 
         # add final dense layer with final dimension of
         # the dense_layers_dims value
