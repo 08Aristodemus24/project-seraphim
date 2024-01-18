@@ -176,6 +176,7 @@ Visualizers:
 * <s>implement dark</s>
 * <s>tweak light shadow of light theme</s>
 * fix image upload fields image height ! needs to be responsive from 1600px to 320px
+* copy svelte component templates and write it in react
 
 # Prebuilt template functions for server-side
 * <s>for general models</s>
@@ -324,6 +325,8 @@ so if factor is 3 and the max_epochs is 10 then $log_{3}(10)$ would be 2.09590 a
 so if we have 3 models per round/trial/bracket and we take only the top performing half of these 3 models
 
 for maxepochs of 5 and factor of 3 the number of trials were 10
+
+* it is better to tune a model first in colab to not waste gpu resources and to determine as fast as possible the best model with the best hyper parameters
 
 * deleting latest commit or any commit can be done by `git reset --hard HEAD~<nth commit e.g. 1 (means latest commit 2 means second latest commit)> to delete latest commit`
 * pushing new files that conflicts with current master branch can be forced by `git push origin <your_branch_name> --force`

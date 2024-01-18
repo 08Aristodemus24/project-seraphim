@@ -30,3 +30,27 @@
 /svelte-client-side/*.sln
 /svelte-client-side/*.sw?
 
+# Logs
+/react-client-side/logs
+/react-client-side/*.log
+/react-client-side/npm-debug.log*
+/react-client-side/yarn-debug.log*
+/react-client-side/yarn-error.log*
+/react-client-side/pnpm-debug.log*
+/react-client-side/lerna-debug.log*
+
+/react-client-side/node_modules
+/react-client-side/dist
+/react-client-side/dist-ssr
+/react-client-side/*.local
+
+# Editor directories and files
+/react-client-side/.vscode/*
+/react-client-side/!.vscode/extensions.json
+/react-client-side/.idea
+/react-client-side/.DS_Store
+/react-client-side/*.suo
+/react-client-side/*.ntvs*
+/react-client-side/*.njsproj
+/react-client-side/*.sln
+/react-client-side/*.sw?
