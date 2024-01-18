@@ -1,7 +1,6 @@
 <script>
     import { afterUpdate } from "svelte";
 
-
     export let style = "sharp-minimal";
     export let theme = "dark";
 
