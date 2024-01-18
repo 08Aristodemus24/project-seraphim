@@ -1,13 +1,20 @@
 import { useState } from 'react';
 import Section from './components/Section';
 import './App.css';
+import { ThemeContext } from './contexts/ThemeContext';
+import { DesignsContext } from './contexts/DesignsContext';
+
 
 function App() {
   return (
-    <Section section-name={"data-form"}>
+    <DesignsContext>      
+      <ThemeContext.Provider value={{design: 'light-neomorphic'}}>
+        <Section section-name={"data-form"}>
 
-    </Section>
-  )
+        </Section>
+      </ThemeContext.Provider>
+    </DesignsContext>
+  );
 }
 
-export default App
+export default App;
