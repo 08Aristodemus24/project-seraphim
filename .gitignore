@@ -54,3 +54,28 @@
 /react-client-side/*.njsproj
 /react-client-side/*.sln
 /react-client-side/*.sw?
+
+# Logs
+/react-client-side-2/logs
+/react-client-side-2/*.log
+/react-client-side-2/npm-debug.log*
+/react-client-side-2/yarn-debug.log*
+/react-client-side-2/yarn-error.log*
+/react-client-side-2/pnpm-debug.log*
+/react-client-side-2/lerna-debug.log*
+
+/react-client-side-2/node_modules
+/react-client-side-2/dist
+/react-client-side-2/dist-ssr
+/react-client-side-2/*.local
+
+# Editor directories and files
+/react-client-side-2/.vscode/*
+/react-client-side-2/!.vscode/extensions.json
+/react-client-side-2/.idea
+/react-client-side-2/.DS_Store
+/react-client-side-2/*.suo
+/react-client-side-2/*.ntvs*
+/react-client-side-2/*.njsproj
+/react-client-side-2/*.sln
+/react-client-side-2/*.sw?

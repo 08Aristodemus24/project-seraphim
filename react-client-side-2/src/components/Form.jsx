@@ -13,6 +13,7 @@ import NameInput from "./NameInput";
 import { useContext, useState } from "react";
 import { ThemeContext } from "../contexts/ThemeContext";
 import { DesignsContext } from "../contexts/DesignsContext";
+import { DesignsContext2 } from '../contexts/DesignsContext2';
 import { FormInputsContext } from "../contexts/FormInputsContext";
 
 
@@ -22,44 +23,48 @@ export default function Form(){
     let [email, setEmail] = useState();
 
     let style;
-    const designs = useContext(DesignsContext);
-    if('theme' in useContext(ThemeContext)){
-        const { design, theme } = useContext(ThemeContext);
+    const designs = useContext(DesignsContext2);
+    const themes = useContext(ThemeContext);
+    if('theme' in themes){
+        const { design, theme } = themes;
         style = designs[design][theme];
-    }else{
-        const { design } = useContext(ThemeContext);
+        console.log(style)
+    }
+    else{
+        const { design } = theme;
         style = designs[design];
+        console.log(style);
     }
 
-    const handleSubmit = async (event) => {
-        event.preventDefault();
-        const form_data = new FormData();
-        form_data.append('first_name', first_name);
-        form_data.append('last_name', last_name);
-        form_data.append('email_address', email_address);
-        form_data.append('country_code', country_code);
-        form_data.append('mobile_num', mobile_num);
-        form_data.append('message', message);
-        form_data.append('model_name', model_name);
-        form_data.append('prompt', prompt);
-        form_data.append('seq_len', seq_len);
-        form_data.append('temperature', temperature);
-        form_data.append('image', image);
-        for(var pair of form_data.entries()) {
-            console.log(pair[0]+', '+pair[1]);
-        }
-    };
+    // const handleSubmit = async (event) => {
+    //     event.preventDefault();
+    //     const form_data = new FormData();
+    //     form_data.append('first_name', first_name);
+    //     form_data.append('last_name', last_name);
+    //     form_data.append('email_address', email_address);
+    //     form_data.append('country_code', country_code);
+    //     form_data.append('mobile_num', mobile_num);
+    //     form_data.append('message', message);
+    //     form_data.append('model_name', model_name);
+    //     form_data.append('prompt', prompt);
+    //     form_data.append('seq_len', seq_len);
+    //     form_data.append('temperature', temperature);
+    //     form_data.append('image', image);
+    //     for(var pair of form_data.entries()) {
+    //         console.log(pair[0]+', '+pair[1]);
+    //     }
+    // };
 
     return (
-        <FormInputsContext.Provider value={{fname, setFname, lname, setlname, email, setEmail, handleSubmit}}>
-            <div class="form-container">
+        <FormInputsContext.Provider value={{fname, setFname, lname, setlname, email, setEmail}}>
+            <div className="form-container">
                 <form
-                    class={`form ${style}`}
+                    className={`form ${style}`}
                     style={style}
                     method="POST"
                 >
-                    <NameInput name_type="first"/>
-                    <NameInput name_type="last"/>
+                    <NameInput name-type="first"/>
+                    <NameInput name-type="last"/>
                     {/* <EmailInput/>
                     <MobileNumberInput/>
                     <CountryCodeInput/>
