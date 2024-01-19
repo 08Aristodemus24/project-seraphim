@@ -6,7 +6,6 @@ export default function Correspondence(){
 
     return (
         <Section section-name={"data-form"}>
-            <div>hello</div>
             <Form/>
             {/* <Alert/> */}
         </Section>

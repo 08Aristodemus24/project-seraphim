@@ -76,7 +76,7 @@
   
     /* design */
     /* outline: 2px solid red; */
-    background-color: var(--primary-color);
+    background-color: var(--secondary-color);
   }
   
   .sharp-minimal label[class*="name-label"]{

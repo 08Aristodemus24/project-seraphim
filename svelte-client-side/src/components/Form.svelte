@@ -82,18 +82,18 @@
         bind:this={form}
         method="post" 
     >
-        <NameInput name_type="first" style="dark-neomorphic" theme="dark" bind:name={first_name}/>
-        <NameInput name_type="last" style="dark-neomorphic" theme="dark" bind:name={last_name}/>
-        <EmailInput style="dark-neomorphic" theme="dark" bind:email_address={email_address}/>
-        <MobileNumberInput style="dark-neomorphic" theme="dark" bind:mobile_num={mobile_num}/>
-        <CountryCodeInput style="dark-neomorphic" theme="dark" bind:country_code={country_code}/>
-        <MessageInput style="dark-neomorphic" theme="dark" bind:message={message}/>
-        <ModelNameInput style="dark-neomorphic" theme="dark" bind:model_name={model_name}/>
-        <PromptInput style="dark-neomorphic" theme="dark" bind:prompt={prompt}/>
-        <SequenceLengthInput style="dark-neomorphic" theme="dark" bind:seq_len={seq_len}/>
-        <TemperatureInput style="dark-neomorphic" theme="dark" bind:temperature={temperature}/>
-        <ImageInput style="dark-neomorphic" theme="dark" bind:image={image}/>
-        <Button style="dark-neomorphic" theme="dark"/>
+        <NameInput name_type="first" style="light-neomorphic" theme="light" bind:name={first_name}/>
+        <NameInput name_type="last" style="light-neomorphic" theme="light" bind:name={last_name}/>
+        <EmailInput style="light-neomorphic" theme="light" bind:email_address={email_address}/>
+        <MobileNumberInput style="light-neomorphic" theme="light" bind:mobile_num={mobile_num}/>
+        <CountryCodeInput style="light-neomorphic" theme="light" bind:country_code={country_code}/>
+        <MessageInput style="light-neomorphic" theme="light" bind:message={message}/>
+        <ModelNameInput style="light-neomorphic" theme="light" bind:model_name={model_name}/>
+        <PromptInput style="light-neomorphic" theme="light" bind:prompt={prompt}/>
+        <SequenceLengthInput style="light-neomorphic" theme="light" bind:seq_len={seq_len}/>
+        <TemperatureInput style="light-neomorphic" theme="light" bind:temperature={temperature}/>
+        <ImageInput style="light-neomorphic" theme="light" bind:image={image}/>
+        <Button style="light-neomorphic" theme="light"/>
     </form>
 </div>
 

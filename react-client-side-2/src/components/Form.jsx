@@ -13,27 +13,25 @@ import NameInput from "./NameInput";
 import { useContext, useState } from "react";
 import { ThemeContext } from "../contexts/ThemeContext";
 import { DesignsContext } from "../contexts/DesignsContext";
-import { DesignsContext2 } from '../contexts/DesignsContext2';
 import { FormInputsContext } from "../contexts/FormInputsContext";
 
 
 export default function Form(){
-    let [fname, setFname] = useState();
-    let [lname, setlname] = useState();
-    let [email, setEmail] = useState();
+    let [fname, setFname] = useState("");
+    let [lname, setLname] = useState("");
+    let [email, setEmail] = useState("");
 
     let style;
-    const designs = useContext(DesignsContext2);
+    const designs = useContext(DesignsContext);
     const themes = useContext(ThemeContext);
+    const { design, theme } = themes;
+    
+    // sometimes themes context will contain only the design 
+    // and not the theme key so check if theme key is in themes
     if('theme' in themes){
-        const { design, theme } = themes;
         style = designs[design][theme];
-        console.log(style)
-    }
-    else{
-        const { design } = theme;
+    }else{
         style = designs[design];
-        console.log(style);
     }
 
     // const handleSubmit = async (event) => {
@@ -54,12 +52,14 @@ export default function Form(){
     //         console.log(pair[0]+', '+pair[1]);
     //     }
     // };
+    console.log(`first name: ${fname}`);
+    console.log(`last name: ${lname}`);
 
     return (
-        <FormInputsContext.Provider value={{fname, setFname, lname, setlname, email, setEmail}}>
+        <FormInputsContext.Provider value={{fname, setFname, lname, setLname, email, setEmail}}>
             <div className="form-container">
                 <form
-                    className={`form ${style}`}
+                    className={`form ${design}`}
                     style={style}
                     method="POST"
                 >

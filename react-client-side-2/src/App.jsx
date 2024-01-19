@@ -1,6 +1,5 @@
 import { ThemeContext } from './contexts/ThemeContext';
-import { DesignsContext } from './contexts/DesignsContext';
-import { DesignsProvider2 } from './contexts/DesignsContext2';
+import { DesignsProvider } from './contexts/DesignsContext';
 
 import './App.css'
 import NameInput from './components/NameInput';
@@ -11,13 +10,11 @@ import Correspondence from './components/Correspondence';
 function App() {
 
   return (
-    <DesignsProvider2>
-      {/* <DesignsContext.Provider> */}
-        <ThemeContext.Provider value={{design: "sharp-minimal", theme: "dark"}}>
-          <Correspondence/>
-        </ThemeContext.Provider>  
-      {/* </DesignsContext.Provider> */}
-    </DesignsProvider2>
+    <DesignsProvider>
+      <ThemeContext.Provider value={{design: "light-neomorphic"}}>
+        <Correspondence/>
+      </ThemeContext.Provider>  
+    </DesignsProvider>
     
     
   );

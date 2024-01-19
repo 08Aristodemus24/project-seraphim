@@ -177,6 +177,7 @@ Visualizers:
 * <s>tweak light shadow of light theme</s>
 * fix image upload fields image height ! needs to be responsive from 1600px to 320px
 * copy svelte component templates and write it in react
+* embed alert instead in form instead of it being a separate component to form
 
 # Prebuilt template functions for server-side
 * <s>for general models</s>
