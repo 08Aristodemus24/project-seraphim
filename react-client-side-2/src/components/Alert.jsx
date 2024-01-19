@@ -1,4 +1,4 @@
-export default function Alert({ msg_status, error_type, response }){
+export default function Alert({ 'msg-status': msg_status, 'error-type': error_type, response }){
 
     return (
         <div class="alert-container" class:show={msg_status !== undefined} on:click={(event) => {

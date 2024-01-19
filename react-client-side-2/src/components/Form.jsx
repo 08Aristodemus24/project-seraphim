@@ -2,15 +2,15 @@ import NameInput from "./NameInput";
 import EmailInput from './EmailInput';
 import MobileNumberInput from './MobileNumberInput';
 import CountryCodeInput from './CountryCodeInput';
-// import MessageInput from './MessageInput';
-// import ModelNameInput from './ModelNameInput';
-// import PromptInput from './PromptInput';
-// import SequenceLengthInput from './SequenceLengthInput';
-// import TemperatureInput from './TemperatureInput';
-// import ImageInput from './ImageInput';
-// import Button from "./Button";
+import MessageInput from './MessageInput';
+import ModelNameInput from './ModelNameInput';
+import PromptInput from './PromptInput';
+import SequenceLengthInput from './SequenceLengthInput';
+import TemperatureInput from './TemperatureInput';
+import ImageInput from './ImageInput';
+import Button from "./Button";
 
-import { useContext, useState } from "react";
+import { useContext, useRef, useState } from "react";
 import { ThemeContext } from "../contexts/ThemeContext";
 import { DesignsContext } from "../contexts/DesignsContext";
 import { FormInputsContext } from "../contexts/FormInputsContext";
@@ -22,6 +22,12 @@ export default function Form(){
     let [email, setEmail] = useState("");
     let [mobileNum, setMobileNum] = useState("");
     let [countryCode, setCountryCode] = useState("");
+    let [message, setMessage] = useState("");
+    let [modelName, setModelName] = useState("");
+    let [prompt, setPrompt] = useState("");
+    let [seqLen, setSeqLen] = useState("250");
+    let [temperature, setTemperature] = useState("1.0");
+    let [image, setImage] = useState(null);
 
     let style;
     const designs = useContext(DesignsContext);
@@ -36,34 +42,94 @@ export default function Form(){
         style = designs[design];
     }
 
-    // const handleSubmit = async (event) => {
-    //     event.preventDefault();
-    //     const form_data = new FormData();
-    //     form_data.append('first_name', first_name);
-    //     form_data.append('last_name', last_name);
-    //     form_data.append('email_address', email_address);
-    //     form_data.append('country_code', country_code);
-    //     form_data.append('mobile_num', mobile_num);
-    //     form_data.append('message', message);
-    //     form_data.append('model_name', model_name);
-    //     form_data.append('prompt', prompt);
-    //     form_data.append('seq_len', seq_len);
-    //     form_data.append('temperature', temperature);
-    //     form_data.append('image', image);
-    //     for(var pair of form_data.entries()) {
-    //         console.log(pair[0]+', '+pair[1]);
-    //     }
-    // };
-    console.log(`first name: ${fname}`);
-    console.log(`last name: ${lname}`);
-    console.log(`email: ${email}`);
-    console.log(`mobile number: ${mobileNum}`);
-    console.log(`country code: ${countryCode}`);
+    let [response, setResponse] = useState(null);
+    let [msgStatus, setMsgStatus] = useState(null);
+    let [errorType, setErrorType] = useState(null);
+    const formRef = useRef();
+    const handleSubmit = async (event) => {
+        try {
+            event.preventDefault();
+            const form_data = new FormData();
+            form_data.append('first_name', fname);
+            form_data.append('last_name', lname);
+            form_data.append('email_address', email);
+            form_data.append('country_code', mobileNum);
+            form_data.append('mobile_num', countryCode);
+            form_data.append('message', message);
+            form_data.append('model_name', modelName);
+            form_data.append('prompt', prompt);
+            form_data.append('seq_len', seqLen);
+            form_data.append('temperature', temperature);
+            form_data.append('image', image);
+
+            // once data is validated submitted and then extracted
+            // reset form components form element
+            setFname("")
+            setLname("")
+            setEmail("")
+            setMobileNum("")
+            setCountryCode("")
+            setMessage("")
+            setModelName("")
+            setPrompt("")
+            setSeqLen("250")
+            setTemperature("1.0")
+            setImage(null)
+            for(var pair of form_data.entries()) {
+                console.log(pair[0] + ', ' + pair[1]);
+            }
+
+            // send here the data from the contact component to 
+            // the backend proxy server
+            // // for development
+            const url = 'http://127.0.0.1:5000/send-data';
+            // for production
+            // const url = 'https://project-alexander.vercel.app/send-data';
+
+            resp = await fetch(url, {
+                'method': 'POST',
+                'body': form_data,
+            });
+            setResponse(resp);
+
+            // if response.status is 200 then that means contact information
+            // has been successfully sent to the email.js api
+            if(resp.status === 200){
+                setMsgStatus("success");
+                console.log(`message has been sent with code ${resp.status}`);
+
+            }else{
+                setMsgStatus("failure");
+                console.log(`message submission unsucessful. Response status '${resp.status}' occured`);
+            }
+
+        }catch(error){
+            setMsgStatus("denied");
+            setErrorType(error);
+            console.log(`Submission denied. Error '${error}' occured`);
+        }
+    };
+
+    console.log(msgStatus, errorType, response);
 
     return (
-        <FormInputsContext.Provider value={{fname, setFname, lname, setLname, email, setEmail, mobileNum, setMobileNum, countryCode, setCountryCode}}>
+        <FormInputsContext.Provider value={{
+            fname, setFname, 
+            lname, setLname, 
+            email, setEmail, 
+            mobileNum, setMobileNum, 
+            countryCode, setCountryCode,
+            message, setMessage,
+            modelName, setModelName,
+            prompt, setPrompt,
+            seqLen, setSeqLen,
+            temperature, setTemperature,
+            image, setImage,
+            handleSubmit
+        }}>
             <div className="form-container">
                 <form
+                    ref={formRef}
                     className={`form ${design}`}
                     style={style}
                     method="POST"
@@ -73,13 +139,13 @@ export default function Form(){
                     <EmailInput/>
                     <MobileNumberInput/>
                     <CountryCodeInput/>
-                    {/* <MessageInput/>
+                    <MessageInput/>
                     <ModelNameInput/>
                     <PromptInput/>
                     <SequenceLengthInput/>
                     <TemperatureInput/>
                     <ImageInput/>
-                    <Button/> */}
+                    <Button/>
                 </form>
             </div>
         </FormInputsContext.Provider>

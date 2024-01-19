@@ -3,7 +3,7 @@ import { ThemeContext } from "../contexts/ThemeContext";
 import { DesignsContext } from "../contexts/DesignsContext";
 import { FormInputsContext } from "../contexts/FormInputsContext";
 
-export default function EmailInput({ children }){
+export default function MobileNumberInput({ children }){
     // regex of mobile number field to follow
     const phone_reg = `[0-9]{'{'}3{'}'}-[0-9]{'{'}3{'}'}-[0-9]{'{'}4{'}'}`;
 
@@ -23,7 +23,7 @@ export default function EmailInput({ children }){
     }
 
     // based on the context provider of wrapped Form containing
-    // all its states we use the state appropriate to the EmailInput
+    // all its states we use the state appropriate to the MobileNumberInput
     // component and its setter to set from this component the state of
     // the form
     let { mobileNum, setMobileNum } = useContext(FormInputsContext);

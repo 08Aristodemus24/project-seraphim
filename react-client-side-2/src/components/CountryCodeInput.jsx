@@ -20,7 +20,7 @@ export default function CountryCodeInput({ children }){
     }
 
     // based on the context provider of wrapped Form containing
-    // all its states we use the state appropriate to the EmailInput
+    // all its states we use the state appropriate to the CountryCodeInput
     // component and its setter to set from this component the state of
     // the form
     let { countryCode, setCountryCode } = useContext(FormInputsContext);
