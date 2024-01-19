@@ -4,10 +4,18 @@ import { DesignsContext } from "../contexts/DesignsContext";
 import { FormInputsContext } from "../contexts/FormInputsContext";
 
 
-export default function NameInput({ 'name-type': name_type }){
+export default function NameInput({ 'name-type': name_type, children }){
+    // This is to reduce redundancy of using virtually the
+    // same component but different in name code like first 
+    // and last name. 
     let name_code = name_type === 'first' ? 'f' : 'l';
     let placeholder = name_type === 'first' ? 'John Smith' : 'Meyer';
+    const capitalize = (string) => string[0].toUpperCase() + string.substring(1);
 
+    // series of logic are to decide what proper state and state setter
+    // to use based on the given name type given to the NameInput component
+    // and the context we have provided the Form component with which both
+    // contain the fname or lname states and their state setters
     let field_value;
     let setter;
     if(name_type === 'first'){
@@ -19,9 +27,6 @@ export default function NameInput({ 'name-type': name_type }){
         field_value = lname;
         setter = setLname;
     }
-
-    const capitalize = (string) => string[0].toUpperCase() + string.substring(1);
-    
 
     // initialize and define theme of component by using
     // context

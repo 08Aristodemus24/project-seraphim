@@ -1,14 +1,14 @@
 import NameInput from "./NameInput";
-// import EmailInput from './EmailInput.svelte';
-// import MobileNumberInput from './MobileNumberInput.svelte';
-// import CountryCodeInput from './CountryCodeInput.svelte';
-// import MessageInput from './MessageInput.svelte';
-// import ModelNameInput from './ModelNameInput.svelte';
-// import PromptInput from './PromptInput.svelte';
-// import SequenceLengthInput from './SequenceLengthInput.svelte';
-// import TemperatureInput from './TemperatureInput.svelte';
-// import ImageInput from './ImageInput.svelte';
-// import Button from "./Button.svelte";
+import EmailInput from './EmailInput';
+import MobileNumberInput from './MobileNumberInput';
+import CountryCodeInput from './CountryCodeInput';
+// import MessageInput from './MessageInput';
+// import ModelNameInput from './ModelNameInput';
+// import PromptInput from './PromptInput';
+// import SequenceLengthInput from './SequenceLengthInput';
+// import TemperatureInput from './TemperatureInput';
+// import ImageInput from './ImageInput';
+// import Button from "./Button";
 
 import { useContext, useState } from "react";
 import { ThemeContext } from "../contexts/ThemeContext";
@@ -20,6 +20,8 @@ export default function Form(){
     let [fname, setFname] = useState("");
     let [lname, setLname] = useState("");
     let [email, setEmail] = useState("");
+    let [mobileNum, setMobileNum] = useState("");
+    let [countryCode, setCountryCode] = useState("");
 
     let style;
     const designs = useContext(DesignsContext);
@@ -54,9 +56,12 @@ export default function Form(){
     // };
     console.log(`first name: ${fname}`);
     console.log(`last name: ${lname}`);
+    console.log(`email: ${email}`);
+    console.log(`mobile number: ${mobileNum}`);
+    console.log(`country code: ${countryCode}`);
 
     return (
-        <FormInputsContext.Provider value={{fname, setFname, lname, setLname, email, setEmail}}>
+        <FormInputsContext.Provider value={{fname, setFname, lname, setLname, email, setEmail, mobileNum, setMobileNum, countryCode, setCountryCode}}>
             <div className="form-container">
                 <form
                     className={`form ${design}`}
@@ -65,10 +70,10 @@ export default function Form(){
                 >
                     <NameInput name-type="first"/>
                     <NameInput name-type="last"/>
-                    {/* <EmailInput/>
+                    <EmailInput/>
                     <MobileNumberInput/>
                     <CountryCodeInput/>
-                    <MessageInput/>
+                    {/* <MessageInput/>
                     <ModelNameInput/>
                     <PromptInput/>
                     <SequenceLengthInput/>
