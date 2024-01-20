@@ -1,13 +1,11 @@
 import Section from './Section';
-import Form from './Form';
-// import { Alert } from './Alert';
+import Form from './Form';  
 
 export default function Correspondence(){
 
     return (
         <Section section-name={"data-form"}>
             <Form/>
-            {/* <Alert/> */}
         </Section>
     )
 }

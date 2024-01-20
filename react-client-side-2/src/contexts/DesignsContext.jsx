@@ -13,12 +13,14 @@ export const DesignsProvider = ({ children }) => {
                 dark: {
                     '--primary-color': "white",
                     '--secondary-color': "black",
-                    '--tertiary-color': "rgba(255, 255, 255, 0.267)"
+                    '--tertiary-color': "rgba(255, 255, 255, 0.267)",
+                    '--primary-background': "black",
                 },
                 light: {
                     '--primary-color': "black",
                     '--secondary-color': "white",
-                    '--tertiary-color': "rgba(0, 0, 0, 0.267)"
+                    '--tertiary-color': "rgba(0, 0, 0, 0.267)",
+                    '--primary-background': "white",
                 }
             },
             'light-neomorphic': {
@@ -26,14 +28,16 @@ export const DesignsProvider = ({ children }) => {
                 '--secondary-color': "rgb(231, 238, 246)",
                 '--tertiary-color': "rgba(0, 0, 0, 0.267)",
                 '--primary-shadow': "rgba(0, 0, 0, 0.25)",
-                '--secondary-shadow': "rgba(255, 255, 255, 0.5)"
+                '--secondary-shadow': "rgba(255, 255, 255, 0.5)",
+                '--primary-background': "rgb(231, 238, 246)",
             },
             'dark-neomorphic': {
                 '--primary-color': "rgb(231, 238, 246)",
-                '--secondary-color': "rgb(38,39,43)",
+                '--secondary-color': "rgb(38, 39, 43)",
                 '--tertiary-color': "rgba(255, 255, 255, 0.267)",
                 '--primary-shadow': "rgba(0, 0, 0, 0.25)",
-                '--secondary-shadow': "rgba(210, 210, 210, 0.5)"
+                '--secondary-shadow': "rgba(210, 210, 210, 0.5)",
+                '--primary-background': "rgb(38, 39, 43)",
             }
           }}>
             {children}

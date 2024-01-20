@@ -5,10 +5,24 @@
 
 </script>
 
+<div class="alert" class:show={msg_status !== undefined} on:click={(event) => {
+    // remove class from alert container to hide it again
+    event.target.classList.remove('show');
 
+    // reset msg_status to undefined in case of another submission
+    msg_status = undefined;
+}}>
+    <div class="alert-wrapper">
+        {#if msg_status === "success" || msg_status === "failed"}
+            <span class="alert-message">Message has been sent with code {response?.status}</span>    
+        {:else}
+            <span class="alert-message">Submission denied. Error '{error_type?.message}'' occured</span>
+        {/if}
+    </div>
+</div>
 
 <style>
-    .alert-container{
+    .alert{
         /* position */
         position: fixed;
         inset: 0;
@@ -26,7 +40,7 @@
             visibility 0.25s ease-in-out;
     }
 
-    .alert-container.show{
+    .alert.show{
         opacity: 100%;
         visibility: visible;
     }
@@ -45,7 +59,8 @@
 
         /* size */
         height: 12.5%;
-        width: 25%;
+        width: max(10rem, 25%);
+        padding: 1rem;
 
         /* design */
         color: black;

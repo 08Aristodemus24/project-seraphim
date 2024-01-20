@@ -7,12 +7,14 @@
             dark: {
                 primary_color: "white",
                 secondary_color: "black",
-                tertiary_color: "rgba(255, 255, 255, 0.267)"    
+                tertiary_color: "rgba(255, 255, 255, 0.267)",
+                primary_background: "black",
             },
             light: {
                 primary_color: "black",
                 secondary_color: "white",
-                tertiary_color: "rgba(0, 0, 0, 0.267)"
+                tertiary_color: "rgba(0, 0, 0, 0.267)",
+                primary_background: "white",
             }
         },
         'light-neomorphic': {
@@ -21,16 +23,18 @@
                 secondary_color: "rgb(231, 238, 246)",
                 tertiary_color: "rgba(0, 0, 0, 0.267)",
                 primary_shadow: "rgba(0, 0, 0, 0.25)",
-                secondary_shadow: "rgba(255, 255, 255, 0.5)"
+                secondary_shadow: "rgba(255, 255, 255, 0.5)",
+                primary_background: "rgb(231, 238, 246)",
             }
         },
         'dark-neomorphic': {
             dark: {
                 primary_color: "rgb(231, 238, 246)",
-                secondary_color: "rgb(38,39,43)",
+                secondary_color: "rgb(38, 39, 43)",
                 tertiary_color: "rgba(255, 255, 255, 0.267)",
                 primary_shadow: "rgba(0, 0, 0, 0.25)",
-                secondary_shadow: "rgba(210, 210, 210, 0.5)"
+                secondary_shadow: "rgba(210, 210, 210, 0.5)",
+                primary_background: "rgb(38, 39, 43)",
             },
         }
     };
