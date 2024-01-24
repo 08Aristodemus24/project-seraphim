@@ -1,6 +1,7 @@
 import numpy as np
 import pandas as pd
 
+import matplotlib as mplt
 import matplotlib.pyplot as plt
 plt.rcParams['font.family'] = 'sans-serif'
 font = {'fontname': 'Helvetica'}
@@ -10,7 +11,14 @@ import matplotlib as mpl
 import seaborn as sb
 import networkx as nx
 
-from sklearn.metrics import accuracy_score, precision_score, recall_score, f1_score
+from sklearn.metrics import (
+  accuracy_score, 
+  precision_score, 
+  recall_score, 
+  f1_score, 
+  roc_auc_score, 
+  mean_squared_error, 
+  mean_absolute_error)
 from sklearn.manifold import TSNE
 
 import itertools
@@ -93,7 +101,7 @@ def analyze(X_trains, feature_names: list, fig_dims: tuple=(4, 2), color: str="#
         plt.savefig(f'./figures & images/{img_title}.png')
         plt.show()
 
-def data_split_metric_values(Y_true, Y_pred):
+def data_split_metric_values(Y_true, Y_pred, metrics_to_use: list=['accuracy', 'precision', 'recall', 'f1', 'roc-auc']):
     """
     args:
         Y_true - a vector of the real Y values of a data split e.g. the 
@@ -110,26 +118,24 @@ def data_split_metric_values(Y_true, Y_pred):
         metrics in evaluating an ML model e.g. accuracy, precision,
         recall, and f1-score.
     """
-
     unique_labels = np.unique(Y_true)
 
-    # accuracy: (tp + tn) / (p + n)
-    accuracy = accuracy_score(Y_true, Y_pred)
-    print('Accuracy: {:.2%}'.format(accuracy))
+    metrics = {
+        'accuracy': accuracy_score(Y_true, Y_pred),
+        'rmse': np.sqrt(mean_squared_error(Y_true, Y_pred)),
+        'mse': mean_squared_error(Y_true, Y_pred),
+        'precision': precision_score(Y_true, Y_pred, labels=unique_labels, average='weighted'),
+        'recall': recall_score(Y_true, Y_pred, labels=unique_labels, average='weighted'),
+        'f1': f1_score(Y_true, Y_pred, labels=unique_labels, average='weighted'),
+        'roc-auc': roc_auc_score(Y_true, Y_pred, labels=unique_labels, average='weighted')
+    }
 
-    # precision tp / (tp + fp)
-    precision = precision_score(Y_true, Y_pred, labels=unique_labels, average='weighted')
-    print('Precision: {:.2%}'.format(precision))
+    # create metric_values dictionary
+    metric_values = {}
+    for index, metric in enumerate(metrics_to_use):
+      metric_values[metric] = metrics[metric]
 
-    # recall: tp / (tp + fn)
-    recall = recall_score(Y_true, Y_pred, labels=unique_labels,average='weighted')
-    print('Recall: {:.2%}'.format(recall))
-
-    # f1: 2 tp / (2 tp + fp + fn)
-    f1 = f1_score(Y_true, Y_pred, labels=unique_labels,average='weighted')
-    print('F1 score: {:.2%}\n'.format(f1))
-
-    return accuracy, precision, recall, f1
+    return metric_values
 
 def view_words(word_vec: dict, word_range: int, title: str="untitled", save_img: bool=True):
     """
@@ -253,7 +259,7 @@ def multi_class_heatmap(conf_matrix, img_title: str="untitled", cmap: str='YlGnB
         plt.savefig(f'./figures & images/{img_title}.png')
         plt.show()
 
-def view_metric_values(metrics_df, img_title: str="untitled", save_img: bool=True, colors: list=['#2ac5b9', '#1ca3b6', '#0a557a', '#01363e',]):
+def view_metric_values(metrics_df, img_title: str="untitled", save_img: bool=True, colormap: str='mako'):
     """
     given a each list of the training, validation, and testing set
     groups accuracy, precision, recall, and f1-score, plot a bar
@@ -275,12 +281,25 @@ def view_metric_values(metrics_df, img_title: str="untitled", save_img: bool=Tru
         'f1-score': [train_f1, val_f1, test_f1]
     })
     """
+    colors = []
+
+    # excludes the data split column
+    n_metrics = metrics_df.shape[1] - 1
+    rgb_colors = cm.get_cmap(colormap, n_metrics)
+    for i in range(rgb_colors.N):
+        rgb_color = rgb_colors(i)
+        colors.append(str(mplt.colors.rgb2hex(rgb_color)))
+    colors = np.array(colors)
+
+    # sample n ids based on number of metrics of metrics df
+    sampled_ids = np.random.choice(list(range(colors.shape[0])), size=n_metrics, replace=False)
+    sampled_colors = colors[sampled_ids]
 
     fig = plt.figure(figsize=(15, 10))
     axis = fig.add_subplot()
 
     # uses the given array of the colors you want to use
-    sb.set_palette(sb.color_palette(colors))
+    sb.set_palette(sb.color_palette(sampled_colors))
 
     # create accuracy, precision, recall, f1-score of training group
     # create accuracy, precision, recall, f1-score of validation group
