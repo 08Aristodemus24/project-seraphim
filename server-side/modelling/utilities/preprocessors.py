@@ -7,6 +7,7 @@ from nltk.corpus import stopwords
 from PIL import Image
 
 from sklearn.preprocessing import StandardScaler, MinMaxScaler, OrdinalEncoder, LabelEncoder
+from sklearn.feature_extraction.text import TfidfVectorizer, CountVectorizer
 
 import pandas as pd
 import numpy as np
@@ -607,6 +608,23 @@ def translate_labels(labels, translations: dict={'DER': 'Derogatory',
     v_func = np.vectorize(lambda label: translations[label])
     translated_labels = v_func(labels)
     return translated_labels
+
+def vectorize_sent(X_trains, X_cross, X_tests):
+    """
+    vectorizes a set of sentences either using term frequency
+    inverse document frequency or by count/frequency of a word
+    in the sentence/s
+
+    returns a vectorizer object for later saving
+    """
+
+    vectorizer = TfidfVectorizer()
+    vectorizer.fit(X_trains)
+    X_trains_vec = vectorizer.transform(X_trains).toarray()
+    X_cross_vec = vectorizer.transform(X_cross).toarray()
+    X_tests_vec = vectorizer.transform(X_tests).toarray()
+    
+    return X_trains_vec, X_cross_vec, X_tests_vec, vectorizer
 
 def normalize_ratings(ratings: pd.DataFrame):
     """

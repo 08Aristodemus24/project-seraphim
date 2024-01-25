@@ -24,7 +24,7 @@ from sklearn.manifold import TSNE
 import itertools
 
 
-def plot_train_cross_features(X_trains, X_cross, feature_1, feature_2, color: list=['#4248f5', '#f542a1'], img_title: str="untitled", save_img: bool=True):
+def plot_train_cross_features(X_trains, X_cross, feature_1, feature_2, color: list=['#4248f5', '#f542a1'], img_title: str="untitled", save_img: bool=True, style: str='dark'):
     """
     suitable for all continuous input
 
@@ -36,6 +36,14 @@ def plot_train_cross_features(X_trains, X_cross, feature_1, feature_2, color: li
         color - 
         img_title - 
     """
+    styles = {
+        'dark': 'dark_background',
+        'solarized': 'Solarized_Light2',
+        '538': 'fivethirtyeight',
+        'ggplot': 'ggplot',
+    }
+
+    plt.style.use(styles.get(style, 'default'))
 
     fig = plt.figure(figsize=(15, 10))
     axis = fig.add_subplot()
@@ -51,7 +59,7 @@ def plot_train_cross_features(X_trains, X_cross, feature_1, feature_2, color: li
         plt.savefig(f'./figures & images/{img_title}.png')
         plt.show()
 
-def analyze(X_trains, feature_names: list, fig_dims: tuple=(4, 2), color: str="#036bfc", img_title: str="untitled", save_img: bool=True):
+def analyze(X_trains, feature_names: list, fig_dims: tuple=(4, 2), color: str="#036bfc", img_title: str="untitled", save_img: bool=True, style: str='dark'):
     """
     suitable for all continuous input
 
@@ -72,6 +80,14 @@ def analyze(X_trains, feature_names: list, fig_dims: tuple=(4, 2), color: str="#
         which case it would not contain any meta data such as the name of each
         feature, column, or variable
     """
+    styles = {
+        'dark': 'dark_background',
+        'solarized': 'Solarized_Light2',
+        '538': 'fivethirtyeight',
+        'ggplot': 'ggplot',
+    }
+
+    plt.style.use(styles.get(style, 'default'))
 
     # see where each feature lies
     # sees the range where each feature lies
@@ -101,7 +117,7 @@ def analyze(X_trains, feature_names: list, fig_dims: tuple=(4, 2), color: str="#
         plt.savefig(f'./figures & images/{img_title}.png')
         plt.show()
 
-def data_split_metric_values(Y_true, Y_pred, metrics_to_use: list=['accuracy', 'precision', 'recall', 'f1', 'roc-auc']):
+def data_split_metric_values(Y_true, Y_pred, metrics_to_use: list=['accuracy', 'precision', 'recall', 'f1', 'roc-auc'], style: str='dark'):
     """
     args:
         Y_true - a vector of the real Y values of a data split e.g. the 
@@ -118,6 +134,15 @@ def data_split_metric_values(Y_true, Y_pred, metrics_to_use: list=['accuracy', '
         metrics in evaluating an ML model e.g. accuracy, precision,
         recall, and f1-score.
     """
+    styles = {
+        'dark': 'dark_background',
+        'solarized': 'Solarized_Light2',
+        '538': 'fivethirtyeight',
+        'ggplot': 'ggplot',
+    }
+
+    plt.style.use(styles.get(style, 'default'))
+
     unique_labels = np.unique(Y_true)
 
     metrics = {
@@ -137,7 +162,7 @@ def data_split_metric_values(Y_true, Y_pred, metrics_to_use: list=['accuracy', '
 
     return metric_values
 
-def view_words(word_vec: dict, word_range: int, title: str="untitled", save_img: bool=True):
+def view_words(word_vec: dict, word_range: int, title: str="untitled", save_img: bool=True, style: str='dark'):
     """
     suitable for all discrete input
 
@@ -151,6 +176,14 @@ def view_words(word_vec: dict, word_range: int, title: str="untitled", save_img:
         
         word_range: int | bool=50
     """
+    styles = {
+        'dark': 'dark_background',
+        'solarized': 'Solarized_Light2',
+        '538': 'fivethirtyeight',
+        'ggplot': 'ggplot',
+    }
+
+    plt.style.use(styles.get(style, 'default'))
 
     # slice the dictionary to a particular range
     sliced_word_vec = dict(itertools.islice(word_vec.items(), word_range))
@@ -198,7 +231,7 @@ def view_words(word_vec: dict, word_range: int, title: str="untitled", save_img:
         plt.savefig(f'./figures & images/{title}.png')
         plt.show()
 
-def view_value_frequency(word_counts, colormap: str="plasma", title: str="untitled", save_img: bool=True, kind: str='barh', limit: int=6):
+def view_value_frequency(word_counts, colormap: str="plasma", title: str="untitled", save_img: bool=True, kind: str='barh', limit: int=6, asc: bool=False, style: str='dark'):
     """
     suitable for all discrete input
 
@@ -218,9 +251,17 @@ def view_value_frequency(word_counts, colormap: str="plasma", title: str="untitl
 
         colormap - can be "viridis" | "crest" also
     """
+    styles = {
+        'dark': 'dark_background',
+        'solarized': 'Solarized_Light2',
+        '538': 'fivethirtyeight',
+        'ggplot': 'ggplot',
+    }
+
+    plt.style.use(styles.get(style, 'default'))
 
     # get either last few words or first feww words
-    data = word_counts.sort_values(ascending=True)[:limit]
+    data = word_counts[:limit].sort_values(ascending=asc)
 
     cmap = cm.get_cmap(colormap)
     fig = plt.figure(figsize=(15, 10))
@@ -241,7 +282,7 @@ def view_value_frequency(word_counts, colormap: str="plasma", title: str="untitl
         plt.savefig(f'./figures & images/{title}.png')
         plt.show()
 
-def multi_class_heatmap(conf_matrix, img_title: str="untitled", cmap: str='YlGnBu', save_img: bool=True):
+def multi_class_heatmap(conf_matrix, img_title: str="untitled", cmap: str='YlGnBu', save_img: bool=True, style: str='dark'):
     """
     takes in the confusion matrix returned by the confusion_matrix()
     function from sklearn e.g. conf_matrix_train = confusion_matrix(
@@ -251,7 +292,17 @@ def multi_class_heatmap(conf_matrix, img_title: str="untitled", cmap: str='YlGnB
     other args:
         cmap - the color map you want the confusion matrix chart to have.
         Other values can be 'flare'
+
+        style - the background of the plot e.g. dark or light
     """
+    styles = {
+        'dark': 'dark_background',
+        'solarized': 'Solarized_Light2',
+        '538': 'fivethirtyeight',
+        'ggplot': 'ggplot',
+    }
+
+    plt.style.use(styles.get(style, 'default'))
     axis = sb.heatmap(conf_matrix, cmap=cmap, annot=True, fmt='g')
     axis.set_title(img_title, )
 
@@ -259,7 +310,7 @@ def multi_class_heatmap(conf_matrix, img_title: str="untitled", cmap: str='YlGnB
         plt.savefig(f'./figures & images/{img_title}.png')
         plt.show()
 
-def view_metric_values(metrics_df, img_title: str="untitled", save_img: bool=True, colormap: str='mako'):
+def view_metric_values(metrics_df, img_title: str="untitled", save_img: bool=True, colormap: str='mako', style: str='dark'):
     """
     given a each list of the training, validation, and testing set
     groups accuracy, precision, recall, and f1-score, plot a bar
@@ -281,8 +332,18 @@ def view_metric_values(metrics_df, img_title: str="untitled", save_img: bool=Tru
         'f1-score': [train_f1, val_f1, test_f1]
     })
     """
-    colors = []
+    styles = {
+        'dark': 'dark_background',
+        'solarized': 'Solarized_Light2',
+        '538': 'fivethirtyeight',
+        'ggplot': 'ggplot',
+    }
 
+    plt.style.use(styles.get(style, 'default'))
+
+    # initialize empty array to be later converted to numpy
+    colors = []
+    
     # excludes the data split column
     n_metrics = metrics_df.shape[1] - 1
     rgb_colors = cm.get_cmap(colormap, n_metrics)
@@ -315,7 +376,7 @@ def view_metric_values(metrics_df, img_title: str="untitled", save_img: bool=Tru
         plt.savefig(f'./figures & images/{img_title}.png')
         plt.show()
 
-def view_classified_labels(df, img_title: str="untitled", save_img: bool=True, colors: list=['#db7f8e', '#b27392']):
+def view_classified_labels(df, img_title: str="untitled", save_img: bool=True, colors: list=['#db7f8e', '#b27392'], style: str='dark'):
     """
     given a each list of the training, validation, and testing set
     groups accuracy, precision, recall, and f1-score, plot a bar
@@ -339,6 +400,14 @@ def view_classified_labels(df, img_title: str="untitled", save_img: bool=True, c
         'misclassified': [num_wrong_cm_train, num_wrong_cm_val, num_wrong_cm_test]}, 
         index=["training set", "validation set", "testing set"])
     """
+    styles = {
+        'dark': 'dark_background',
+        'solarized': 'Solarized_Light2',
+        '538': 'fivethirtyeight',
+        'ggplot': 'ggplot',
+    }
+
+    plt.style.use(styles.get(style, 'default'))
 
     fig = plt.figure(figsize=(15, 10))
     axis = fig.add_subplot()
@@ -359,7 +428,7 @@ def view_classified_labels(df, img_title: str="untitled", save_img: bool=True, c
         plt.savefig(f'./figures & images/{img_title}.png')
         plt.show()
 
-def view_label_freq(label_freq, img_title: str="untitled", save_img: bool=True, labels: list | pd.Series | np.ndarray=["DER", "NDG", "OFF", "HOM"], horizontal: bool=True):
+def view_label_freq(label_freq, img_title: str="untitled", save_img: bool=True, labels: list | pd.Series | np.ndarray=["DER", "NDG", "OFF", "HOM"], horizontal: bool=True, style: str='dark'):
     """
     suitable for all discrete input
 
@@ -372,6 +441,14 @@ def view_label_freq(label_freq, img_title: str="untitled", save_img: bool=True, 
         labels - a list of all the labels we want to use in the 
         vertical bar graph
     """
+    styles = {
+        'dark': 'dark_background',
+        'solarized': 'Solarized_Light2',
+        '538': 'fivethirtyeight',
+        'ggplot': 'ggplot',
+    }
+
+    plt.style.use(styles.get(style, 'default'))
 
     # plots the unique labels against the count of these unique labels
 
@@ -387,12 +464,20 @@ def view_label_freq(label_freq, img_title: str="untitled", save_img: bool=True, 
         plt.savefig(f'./figures & images/{img_title}.png')
         plt.show()
 
-def disp_cat_feat(df, cat_cols: list, fig_dims: tuple=(3, 2), img_title: str="untitled", save_img: bool=True):
+def disp_cat_feat(df, cat_cols: list, fig_dims: tuple=(3, 2), img_title: str="untitled", save_img: bool=True, style: str='dark'):
     """
     suitable for all discrete input
 
     displays frequency of categorical features of a dataframe
     """
+    styles = {
+        'dark': 'dark_background',
+        'solarized': 'Solarized_Light2',
+        '538': 'fivethirtyeight',
+        'ggplot': 'ggplot',
+    }
+
+    plt.style.use(styles.get(style, 'default'))
 
     # unpack dimensions of figure
     rows, cols = fig_dims
@@ -403,6 +488,7 @@ def disp_cat_feat(df, cat_cols: list, fig_dims: tuple=(3, 2), img_title: str="un
     axes = axes.flat
     fig.tight_layout(pad=7)
 
+    # helper function
     def hex_color_gen():
         rgb_gen = lambda: np.random.randint(0, 255)
         color = "#%02X%02X%02X" % (rgb_gen(), rgb_gen(), rgb_gen())
@@ -441,7 +527,7 @@ def disp_cat_feat(df, cat_cols: list, fig_dims: tuple=(3, 2), img_title: str="un
         plt.savefig(f'./figures & images/{img_title}.png')
         plt.show()
 
-def plot_all_features(X, hue=None, colormap: str='mako'):
+def plot_all_features(X, hue=None, colormap: str='mako', style: str='dark'):
     """
     suitable for: all discrete inputs, both discrete and continuous inputs,
     and all continuous inputs
@@ -453,13 +539,20 @@ def plot_all_features(X, hue=None, colormap: str='mako'):
         hue - a string that if provided will make the diagonals
         of the pairplot to be bell curves of the provided string feature
     """
-    
+    styles = {
+        'dark': 'dark_background',
+        'solarized': 'Solarized_Light2',
+        '538': 'fivethirtyeight',
+        'ggplot': 'ggplot',
+    }
+
+    plt.style.use(styles.get(style, 'default'))
 
     sb.set_palette(colormap)
     sb.pairplot(X, hue=hue, plot_kws={'marker': 'p', 'linewidth': 1})
 
 # for recommendation
-def describe_col(df: pd.DataFrame, column: str):
+def describe_col(df: pd.DataFrame, column: str, style: str='dark'):
     """
     args:
         df - pandas data frame
@@ -471,7 +564,7 @@ def describe_col(df: pd.DataFrame, column: str):
     unique_ids = df[column].unique()
     print(f'total unique values: {len(unique_ids)}')
 
-def visualize_graph(kg, node_limit: str=500, edge: str='film.film.genre', node_color: str='skyblue', img_title: str="untitled", save_img: bool=True):
+def visualize_graph(kg, node_limit: str=500, edge: str='film.film.genre', node_color: str='skyblue', img_title: str="untitled", save_img: bool=True, style: str='dark'):
     """
     args:
         kg - is the knowledge graph represented as a dataframe with columns head, relation, tail
@@ -486,8 +579,15 @@ def visualize_graph(kg, node_limit: str=500, edge: str='film.film.genre', node_c
         e.g. 
         | head | relation | tail |
         | brad | acted_in | fury |
-
     """
+    styles = {
+        'dark': 'dark_background',
+        'solarized': 'Solarized_Light2',
+        '538': 'fivethirtyeight',
+        'ggplot': 'ggplot',
+    }
+
+    plt.style.use(styles.get(style, 'default'))
     
     # see first 500 rows
     G = nx.from_pandas_edgelist(kg[:node_limit].loc[kg['relation'] == edge], source='head', target='tail', edge_attr=True, create_using=nx.MultiDiGraph())
@@ -503,7 +603,7 @@ def visualize_graph(kg, node_limit: str=500, edge: str='film.film.genre', node_c
         plt.show()
 
 class ModelResults:
-    def __init__(self, history, epochs):
+    def __init__(self, history, epochs, style: str='dark'):
         """
         args:
             history - the history dictionary attribute extracted 
@@ -516,6 +616,7 @@ class ModelResults:
         """
         self.history = history
         self.epochs = epochs
+        self.style = style
 
     def _build_results(self, metrics_to_use: list):
         """
@@ -604,6 +705,14 @@ class ModelResults:
             results - is a dictionary created by the utility preprocessor
             function build_results()
         """
+        styles = {
+            'dark': 'dark_background',
+            'solarized': 'Solarized_Light2',
+            '538': 'fivethirtyeight',
+            'ggplot': 'ggplot',
+        }
+
+        plt.style.use(styles.get(self.style, 'default'))
 
         figure = plt.figure(figsize=(15, 10))
         axis = figure.add_subplot()
@@ -680,7 +789,7 @@ class ModelResults:
         # delete figure
         del figure
 
-def plot_evolution(X, K, centroids, xs_centroids, features: list, dimension='2d'):
+def plot_evolution(X, K, centroids, xs_centroids, features: list, dimension='2d', style: str='dark'):
     """
     args:
         X - is the set of unlabeled datapoints of (m, n) dimensionality,
@@ -702,6 +811,14 @@ def plot_evolution(X, K, centroids, xs_centroids, features: list, dimension='2d'
         features - a list of all the names of each feature/column/variable
         of the dataset
     """
+    styles = {
+        'dark': 'dark_background',
+        'solarized': 'Solarized_Light2',
+        '538': 'fivethirtyeight',
+        'ggplot': 'ggplot',
+    }
+
+    plt.style.use(styles.get(style, 'default'))
 
     # define figure size
     fig = plt.figure(figsize=(11, 11))
@@ -750,12 +867,20 @@ def plot_evolution(X, K, centroids, xs_centroids, features: list, dimension='2d'
         axis.set_ylabel(f'y: {features[1]}', )
         axis.set_zlabel(f'z: {features[2]}', )
 
-def view_clusters_3d(X, features: list):
+def view_clusters_3d(X, features: list, style: str='dark'):
     """
     args:
         X - set of unlabeled data points of (m, n) dimensionality
         features - e.g. ['n_clicks', 'n_visits', 'amount_spent']
     """
+    styles = {
+        'dark': 'dark_background',
+        'solarized': 'Solarized_Light2',
+        '538': 'fivethirtyeight',
+        'ggplot': 'ggplot',
+    }
+
+    plt.style.use(styles.get(style, 'default'))
 
     fig = plt.figure(figsize=(12, 12))
     ax = fig.add_subplot(projection='3d')
@@ -766,7 +891,7 @@ def view_clusters_3d(X, features: list):
     ax.set_zlabel(f'z: {features[2]}', )
     plt.show()
 
-def view_images(data_gen, grid_dims: tuple=(2, 6), size: tuple=(25, 10), model=None, img_title="untitled", save_img: bool=True):
+def view_images(data_gen, grid_dims: tuple=(2, 6), size: tuple=(25, 10), model=None, img_title="untitled", save_img: bool=True, style: str='dark'):
     """
     views images created by the ImageGenerator() class 
     from tensorflow.keras.preprocessing.image
@@ -775,6 +900,15 @@ def view_images(data_gen, grid_dims: tuple=(2, 6), size: tuple=(25, 10), model=N
         data_gen - the data generator created from the ImageGenerator()
         method self.flow_from_directory()
     """
+    styles = {
+        'dark': 'dark_background',
+        'solarized': 'Solarized_Light2',
+        '538': 'fivethirtyeight',
+        'ggplot': 'ggplot',
+    }
+
+    plt.style.use(styles.get(style, 'default'))
+
     class_names = list(data_gen.class_indices.keys())
     
     # The plotting configurations
@@ -816,10 +950,19 @@ def view_images(data_gen, grid_dims: tuple=(2, 6), size: tuple=(25, 10), model=N
         plt.show()
 
 
-def view_all_splits_results(history_dict: dict, save_img: bool=True, img_title: str="untitled"):
+def view_all_splits_results(history_dict: dict, save_img: bool=True, img_title: str="untitled", style: str='dark'):
     """
     
     """
+    styles = {
+        'dark': 'dark_background',
+        'solarized': 'Solarized_Light2',
+        '538': 'fivethirtyeight',
+        'ggplot': 'ggplot',
+    }
+    plt.style.use(styles.get(style, 'default'))
+
+    # create the history dataframe using tensorflow history attribute
     history_df = pd.DataFrame(history_dict)
     print(history_df)
 
@@ -849,5 +992,14 @@ def view_all_splits_results(history_dict: dict, save_img: bool=True, img_title: 
         plt.savefig(f'./figures & images/{img_title}.png')
         plt.show()
 
-def show_image(img):
+def show_image(img, style: str='dark'):
+    styles = {
+        'dark': 'dark_background',
+        'solarized': 'Solarized_Light2',
+        '538': 'fivethirtyeight',
+        'ggplot': 'ggplot',
+    }
+
+    plt.style.use(styles.get(style, 'default'))
+
     plt.imshow(img)
