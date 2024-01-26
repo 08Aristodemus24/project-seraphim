@@ -1643,7 +1643,7 @@ div[class*="name-container"].dark-neomorphic{
       inset 3px 7px 8px 0 var(--primary-shadow),
       inset -2px -2px 5px 0 var(--secondary-shadow);
   border-radius: 20px;
-  outline: 1px solid rebeccapurple;
+  /* outline: 1px solid rebeccapurple; */
 
   /* size */
   height: 500px;

@@ -8,7 +8,7 @@ function App() {
 
   return (
     <DesignsProvider>
-      <ThemeContext.Provider value={{design: "sharp-minimal", theme: 'dark'}}>
+      <ThemeContext.Provider value={{design: "sharp-minimal", theme: 'light'}}>
         <Correspondence/>
       </ThemeContext.Provider>  
     </DesignsProvider> 
