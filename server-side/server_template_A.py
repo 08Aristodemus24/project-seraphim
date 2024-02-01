@@ -15,11 +15,16 @@ from modelling.utilities.loaders import load_model
 from modelling.utilities.preprocessors import (
     translate_labels,
     encode_image,
-    standardize_image
+    standardize_image,
+    activate_logits,
+    decode_one_hot,
+    translate_labels,
+    re_encode_sparse_labels
 )
 from modelling.utilities.visualizers import (
     show_image
 )
+import numpy as np
 
 from PIL import Image
 
@@ -138,6 +143,18 @@ def test_predict_a():
 
     # predictor
     
+    # reshape the image since the model takes in an (m, 256, 256, 3)
+    # input, or in this case a single (1, 256, 256, 3) input
+    img_shape = rescaled_img.shape
+    reshaped_img = np.reshape(rescaled_img, newshape=(1, img_shape[0], img_shape[1], img_shape[2]))
+    
+    # predictor
+    logits = models[0].predict(reshaped_img)
 
-
-    return jsonify({'test': 0})
+    # decoding stage
+    Y_preds = activate_logits(logits)
+    Y_preds = decode_one_hot(Y_preds)
+    final_preds = re_encode_sparse_labels(Y_preds, new_labels=['Amoeba', 'Euglena', 'Hydra', 'Paramecium', 'Rod_bacteria', 'Spherical_bacteria', 'Spiral_bacteria', 'Yeast'])
+    print(final_preds)
+    
+    return jsonify({'prediction': final_preds.tolist()})
